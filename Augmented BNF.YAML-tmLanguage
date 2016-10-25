@@ -1,0 +1,102 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: Augmented BNF
+scopeName: source.abnf
+fileTypes: ['abnf']
+uuid: d167af74-1db4-48ea-ba12-2c31a07add3a
+patterns:
+- comment: Operators
+  name: keyword.operator.abnf
+  match: ([=\.,|*]|::=)
+- comment: Operators
+  match: '\s+-|-\s+'
+  name: keyword.operator.abnf
+- comment: Conditional Separator
+  match: /
+  name: keyword.control.abnf
+- comment: Comments
+  name: comment.line.semicolon.abnf
+  match: (;.*)
+- comment: Keywords
+  name: support.constant.abnf
+  match: (WSP|LWSP|ALPHA|DIGIT|HEXDIG|DQUOTE|SP|HTAB|VCHAR|CHAR|OCTET|CTL|CR|LF|CRLF|BIT)
+- comment: Number
+  name: constant.numeric.abnf
+  match: \d+(?:\h)*
+
+- comment: Optional
+  name: meta.optional.abnf
+  begin: (\[)
+  beginCaptures:
+    '1': {name: keyword.control.abnf}
+  end: (\])
+  endCaptures:
+    '1': {name: keyword.control.abnf}
+  patterns:
+    - include: $self
+    - match: '(%x\h{2}(?:[-.]\h{2})?)'
+      name: constant.character.escape.abnf
+- comment: Repetition
+  name: meta.repetition.abnf
+  begin: (\{)
+  beginCaptures:
+    '1': {name: keyword.operator.abnf}
+  end: (\})
+  endCaptures:
+    '1': {name: keyword.operator.abnf}
+  patterns:
+    - include: $self
+    - match: '(%x\h{2}(?:[-.]\h{2})?)'
+      name: constant.character.escape.abnf
+- comment: Grouping
+  name: meta.grouping.abnf
+  begin: (\()
+  beginCaptures:
+    '1': {name: keyword.control.abnf}
+  end: (\))
+  endCaptures:
+    '1': {name: keyword.control.abnf}
+  patterns:
+    - include: $self
+    - match: '(%x\h{2}(?:[-.]\h{2})?)'
+      name: constant.character.escape.abnf
+- comment: Terminal String
+  name: meta.string.abnf
+  contentName: string.quoted.double.abnf
+  begin: (\")
+  beginCaptures:
+    '1': {name: string.quoted.double.abnf}
+  end: (\")
+  endCaptures:
+    '1': {name: string.quoted.double.abnf}
+  patterns:
+    - match: '(%x\h{2}(?:[-.]\h{2})?)'
+      name: constant.character.escape.abnf
+- comment: Terminal String
+  name: meta.string.abnf
+  contentName: string.quoted.single.abnf
+  begin: (\')
+  beginCaptures:
+    '1': {name: string.quoted.single.abnf}
+  end: (\')
+  endCaptures:
+    '1': {name: string.quoted.single.abnf}
+  patterns:
+    - match: '(%x\h{2}(?:[-.]\h{2})?)'
+      name: constant.character.escape.abnf
+
+- comment: Production Rule
+  name: meta.rule.abnf
+  match: ^\s*([a-zA-Z][-_\w]*)\s*((?:::)?=)
+  captures:
+    '1': {name: keyword.control.abnf}
+    '2': {name: keyword.operator.abnf}
+  end: '\n'
+- comment: Rule Identifier
+  match: \s*([\w][-\w]+)\s*
+  name: meta.rule.parameter.abnf
+  captures:
+    '1': {name: entity.name.tag.abnf}
+- comment: Escape
+  match: '(%x\h{2}(?:[-.]x?\h{2})?)'
+  name: constant.character.escape.abnf

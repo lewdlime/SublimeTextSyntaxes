@@ -1,0 +1,90 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: Extended BNF
+scopeName: source.ebnf
+fileTypes: ['ebnf']
+uuid: 48b3e845-a928-4197-b838-36e97105b79f
+repository:
+  operators:
+    name: keyword.operator.ebnf
+    match: "[-=\\.,;|*]"
+  optional:
+    name: meta.optional.ebnf
+    begin: (\[)
+    beginCaptures:
+      '1': {name: keyword.operator.ebnf}
+    end: (\])
+    endCaptures:
+      '1': {name: keyword.operator.ebnf}
+    patterns:
+      - include: $self
+  repetition:
+    name: meta.repetition.ebnf
+    begin: (\{)
+    beginCaptures:
+      '1': {name: keyword.operator.ebnf}
+    end: (\})
+    endCaptures:
+      '1': {name: keyword.operator.ebnf}
+    patterns:
+      - include: $self
+  grouping:
+    name: meta.grouping.ebnf
+    begin: (\()
+    beginCaptures:
+      '1': {name: keyword.operator.ebnf}
+    end: (\))
+    endCaptures:
+      '1': {name: keyword.operator.ebnf}
+    patterns:
+      - include: $self
+  terminal-single:
+    name: meta.string.ebnf
+    begin: (\".*)
+    beginCaptures:
+      '1': {name: string.quoted.double.ebnf}
+    end: (\")
+    endCaptures:
+      '1': {name: string.quoted.double.ebnf}
+  terminal-double:
+    name: meta.string.ebnf
+    begin: (\'.*)
+    beginCaptures:
+      '1': {name: string.quoted.single.ebnf}
+    end: (\')
+    endCaptures:
+      '1': {name: string.quoted.single.ebnf}
+  comment:
+    name: meta.comment.ebnf
+    begin: (\(\*.*)
+    beginCaptures:
+      '1': {name: comment.block.documentation.ebnf}
+    end: (\*\))
+    endCaptures:
+      '1': {name: comment.block.documentation.ebnf}
+  special:
+    name: meta.special.ebnf
+    begin: (\?.*)
+    beginCaptures:
+      '1': {name: comment.block.documentation.ebnf}
+    end: (\?)
+    endCaptures:
+      '1': {name: comment.block.documentation.ebnf}
+patterns:
+- comment: Production
+  name: meta.rule.ebnf
+  begin: ^([^=\n]+)(=)(.*)
+  beginCaptures:
+    '1': {name: keyword.control.ebnf}
+    '2': {name: keyword.operator.ebnf}
+    '3': {name: variable.parameter.ebnf}
+  end: \n
+  patterns:
+    - include: '#operators'
+    - include: '#optional'
+    - include: '#repetition'
+    - include: '#grouping'
+    - include: '#terminal-single'
+    - include: '#terminal-double'
+    - include: '#comment'
+    - include: '#special'

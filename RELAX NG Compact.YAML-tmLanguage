@@ -1,0 +1,97 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+# RelaxNG Compact: XML Schema definition Language
+name: RELAX NG Compact
+scopeName: source.rnc
+fileTypes: [rnc]
+uuid: 85F32571-780F-4AAC-BA70-C2229E0B1BDA
+patterns:
+- foldingStartMarker: \{\s*$
+- foldingStopMarker: ^\s*\}
+- comment: Operation characters
+  match: '[=,&|?*+\\]'
+  name: constant.character.rnc
+- comment: Comments
+  name: comment.line.number-sign.rnc
+  match: '#[^#].*$'
+- comment: Annotations
+  name: support.class.rnc
+  match: '##.*$'
+- comment: Top-level control
+  name: keyword.control.rnc
+  match: \bstart\b
+- comment: Reserved operators
+  name: keyword.operator.rnc
+  match: \b(parent|externalRef|grammar|div|include|namespace|default|datatypes)\b
+- comment: RELAX NG named datatypes
+  name: storage.type.rnc
+  match: \b(list|mixed|notAllowed|text|token|empty)\b
+- comment: XML Schema datatypes
+  name: storage.type.rnc
+  match: \b(xsd\:(string|boolean|float|double|decimal|date(Time)?|duration|hexBinary|base64Binary|anyURI|ID(REF(S)?)?|ENTIT(Y|IES)|NOTATION|normalizedString|token|language|IDREFS|NMTOKEN(S)?|(Q|NC)?Name|integer|nonNegativeInteger|positiveInteger|nonPositiveInteger|negativeInteger|byte|int|long|short|unsignedByte|unsignedInt|unsignedLong|unsignedShort|time|gYearMonth|gYear|gMonthDay|gDay|gMonth))\b
+- comment: Namespaces
+  name: variable.parameter.rnc
+  match: \b(xmlns:[a-zA-Z][a-zA-Z0-9_]*)\b
+- comment: Inline annotations and embedded elements
+  name: entity.other.inherited-class.rnc
+  match: \b([a-zA-Z][a-zA-Z0-9_]*:[a-zA-Z][a-zA-Z0-9_]*)\b
+- comment: Attribute rule
+  name: meta.declaration.attribute.rnc
+  match: \b(attribute)\b\s+\b(([a-zA-Z][a-zA-Z0-9_]*:)?[a-zA-Z][a-zA-Z_0-9]*)\b\s*\{
+  captures:
+    '1': {name: keyword.operator.rnc}
+    '2': {name: variable.parameter.rnc}
+    '3': {name: variable.parameter.rnc}
+- comment: Element rule
+  name: meta.declaration.element.rnc
+  match: \b(element)\b\s+\b(([a-zA-Z][a-zA-Z0-9_]*:)?[a-zA-Z][a-zA-Z_0-9]*)\b\s*\{
+  captures:
+    '1': {name: keyword.operator.rnc}
+    '2': {name: variable.parameter.rnc}
+    '3': {name: variable.parameter.rnc}
+- comment: Double-quoted string
+  name: string.quoted.double.rnc
+  begin: (")
+  end: (")
+  patterns:
+  - name: constant.character.escape.rnc
+    match: \\.
+- comment: Single-quoted string
+  name: string.quoted.single.rnc
+  begin: "(')"
+  end: "(')"
+  patterns:
+  - match: \\.
+    name: constant.character.escape.rnc
+- comment: Triple-double-quoted string
+  name: string.quoted.triple.rnc
+  begin: '(""")'
+  end: '(""")'
+  patterns:
+  - match: \\.
+    name: constant.character.escape.rnc
+- comment: Triple-single-quoted string
+  name: string.quoted.triple.rnc
+  begin: "(''')"
+  end: "(''')"
+  patterns:
+  - match: \\.
+    name: constant.character.escape.rnc
+- comment: Nesting embedded annotations and named elements
+  name: support.class.rnc
+  begin: '(\[)\s*'
+  beginCaptures:
+    '1': {name: support.class.annotation.rnc}
+  end: '\s*(\])'
+  patterns:
+  - include: $self
+  - match: \\.
+    name: constant.character.escape.rnc
+- comment: RELAX NG named rule
+  name: meta.grammar.production.rnc
+  match: \b([a-zA-Z][a-zA-Z_0-9\.]*)\s*=
+  captures:
+    '1': {name: variable.parameter.rnc}
+- comment: Unclosed grouping characters
+  name: invalid.illegal.rnc
+  match: '[\]})]'
