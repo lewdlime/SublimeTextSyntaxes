@@ -35,9 +35,7 @@ repository:
 
   continuations:
     - name: keyword.operator.abc punctuation.separator.continuation.abc
-      match: (\\)
-    - name: keyword.operator.abc punctuation.separator.continuation.abc
-      match: (^+:)
+      match: '\s*(\\(?=[ \t]*((?<!\\)%{1})([^%\n\r].*))?)'
 
   # Comments and Remark Fields
   comments:
@@ -86,6 +84,16 @@ repository:
       match: '^([A-HL-WZa-qs-z+]:)(.*)'
       captures:
         '1': {name: entity.name.function.abc}
+        '2': {name: variable.parameter.abc}
+      patterns:
+        - include: '#escapes'
+        - include: '#comments'
+        - include: '#directive'
+    # Field Continuation
+    - name: meta.field.line.continue.abc
+      match: (^+:)(.*)
+      captures:
+        '1': {name: entity.name.function.abc punctuation.separator.continuation.abc}
         '2': {name: variable.parameter.abc}
       patterns:
         - include: '#escapes'
