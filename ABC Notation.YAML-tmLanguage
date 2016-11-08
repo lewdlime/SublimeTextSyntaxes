@@ -9,42 +9,72 @@ patterns:
 - include: '#escapes'
 - include: '#comments'
 - include: '#fields'
-- include: '#directiveField'
+- include: '#directive-field'
 - include: '#directive'
-- include: '#abcTune'
+- include: '#abc-tune'
 
 repository:
-# Global Elements
-
-  # Literal Character Escapes, ABC Ligatures, ABC Accents, & HTML / XML Entities
-  escapes:
-    - name: constant.character.escape.abc
-      match: (\\%)
-    - name: constant.character.escape.abc
-      match: (\\\\)
-    - name: constant.character.escape.abc
-      match: (\\[[:punct:]\w]{2})
-    - name: constant.character.escape.abc
-      match: (\\u\h{4})
-    - name: constant.character.escape.abc
-      match: (&\w+;)
-    - name: constant.character.escape.abc
-      match: (&#\d+;)
-    - name: constant.character.escape.abc
-      match: (&#x\h+;)
-
-  continuations:
-    - name: keyword.operator.abc punctuation.separator.continuation.abc
-      match: '\s*(\\(?=\s*(%{1})([^%\n\r].*))?)'
-
+# 1. Global Matches
   # Comments and Remark Fields
-  comments:
+  abc-comment:
     - name: comment.line.percentage.abc
-      match: '[ \t]*((?<!\\)%{1})([^%\n\r].*)'
+      match: '\s*((?<!\\)%{1})([^%\n\r].*)'
       captures:
         '1': {name: comment.line.percentage.abc punctuation.definition.comment.abc}
-        '2': {name: comment.line.abc}
-    - name: comment.line.remark.abc
+        '2': {name: comment.line.percentage.abc}
+      patterns:
+        - include: '#escape'
+
+  # Pseudo-Comment Directives
+  directive:
+    name: meta.directive.abc
+    match: '((?<!\\)%{2}\s*\b\w+\b)\s+(.*)'  
+    captures:
+      '1': {name: keyword.control.directive.abc punctuation.definition.keyword}
+      '2': {name: variable.parameter.abc}
+    patterns:
+    - include: '#escape'
+    - include: '#string-param'
+    - include: '#boolean-param'
+    - include: '#unit-param'
+    - include: '#numeric-param'
+
+  # ABC Tune
+  abc-tune:
+    begin: ^(X:)\s*(?=\d+)
+    beginCaptures:
+      '1': {name: }
+      '2': {name: constant.numeric.integer.abc}
+    contentName: meta.tune.abc
+    end: \r?\n\s*\r?\n
+    patterns:
+    #- include: '#free-text'
+    - include: '#tune-header'
+    - include: '#tune-body'
+
+# 2. Content Matches
+  # Literal Character Escapes, ABC Ligatures, ABC Accents, & HTML / XML Entities
+  escape:
+  - name: constant.character.escape.abc
+    match: (\\%)
+  - name: constant.character.escape.abc
+    match: (\\\\)
+  - name: constant.character.escape.abc
+    match: (\\[[:punct:]\w]{2})
+  - name: constant.character.escape.abc
+    match: (\\u\h{4})
+  - name: constant.character.escape.abc
+    match: (&\w+;)
+  - name: constant.character.escape.abc
+    match: (&#\d+;)
+  - name: constant.character.escape.abc
+    match: (&#x\h+;)
+
+
+
+  # Information Fields
+  field:
+    - name: meta.line.remark.abc
       match: '(^r:)([^%\r\n]*)'
       captures:
         '1': {name: punctuation.definition.comment.abc}
@@ -65,21 +95,6 @@ repository:
       end: '((?<!\\)\])'
       endCaptures:
         '1': {name: punctuation.section.brackets.end.abc punctuation.definition.comment.abc}
-
-  # Pseudo-Comment Directives
-  directives:
-      match: '(?<!\\)(%{2}\b\w+\b)\s+(.*)'
-      name: meta.directive.abc
-      captures:
-        '1': {name: support.type.abc}
-        '2': {name: variable.parameter.abc}
-      patterns:
-        - include: '#escapes'
-        - include: '#comments'
-        - include: '#directives'
-
-  # Information Fields
-  fields:
     - name: meta.field.line.abc
       match: '^([A-HL-WZa-qs-z]:)(.*)'
       captures:
@@ -129,8 +144,12 @@ repository:
         - include: '#comments'
         - include: '#directive'
 
+  continuations:
+    - name: keyword.operator.abc punctuation.separator.continuation.abc
+      match: '\s*(\\(?=\s+))'
+
   # Tune Body Elements
-  inlineFields:
+  inline-fields:
     # Inline Fields
     - name: meta.field.inline.abc
       begin: '(\[[A-HL-WZa-qs-z]:)'
@@ -151,13 +170,13 @@ repository:
       patterns:
         - include: '#escapes'
 
-  barLines:
+  bar-lines:
     match: '((?:\.?\|\|?|:*\|\]|\[\|:*|::|:+\||\|:+|\.?\||\[\|\])[1-9]?|(?::*\|[1-9](?:[-,][1-9])*))'
     name: meta.code.barline.abc
     captures:
       '1': {name: keyword.operator.abc}
 
-  abcNotes:
+  abc-notes:
     match: ([_^]{1,2}(?:3\/2|\/)?|=)?([A-Ga-gz][,']*)((?:[1-9]\d*/*(?:[1-9]\d*)?)|(?:[1-9]\d*>*(?:[1-9]\d*)?)|(?:[1-9]\d*<*(?:[1-9]\d*)?))
     name: meta.code.note.abc
     captures:
@@ -165,14 +184,14 @@ repository:
       '2': {name: constant.character.abc}
       '3': {name: constant.numeric.abc}
 
-  abcRests:
+  abc-rests:
     match: '([xyz])((?:[1-9]\d*/*(?:[1-9]\d*)?)|(?:[1-9]\d*>*(?:[1-9]\d*)?)|(?:[1-9]\d*<*(?:[1-9]\d*)?))?|[XZ]([1-9][0-9]*)?|y(\d*(?:\.\d+)?)'
     name: meta.code.rest.abc
     captures:
       '1': {name: constant.character.abc}
       '2': {name: constant.numeric.abc}
 
-  noteLengths:
+  note-lengths:
     match: '((?:[1-9]\d*/*(?:[1-9]\d*)?)|(?:[1-9]\d*>*(?:[1-9]\d*)?)|(?:[1-9]\d*<*(?:[1-9]\d*)?))'
     name: meta.code.note.length.abc constant.numeric.abc
     captures:
@@ -195,7 +214,7 @@ repository:
     patterns:
       - include: '#escapes'
 
-  graceNotes:
+  grace-notes:
     begin: '((?<!\\){\/?).*'
     beginCaptures:
       '1': {name: keyword.operator.abc}
@@ -235,7 +254,7 @@ repository:
       - include: '#abcRests'
 
   # Sections
-  abcTunes:
+  abc-tunes:
     name: meta.struct.tune.abc
     begin: '^(X:)\s*(\d+|*)'
     beginCaptures:
@@ -255,7 +274,7 @@ repository:
       - include: '#fields'
       - include: '#directives'
 
-  abcFileHeader:
+  file-header:
     name: meta.struct.file.header.abc
     begin: (^%abc(?:-\d\.\d)?)
     beginCaptures:
