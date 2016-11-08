@@ -35,7 +35,7 @@ repository:
 
   continuations:
     - name: keyword.operator.abc punctuation.separator.continuation.abc
-      match: '\s*(\\(?=[ \t]*((?<!\\)%{1})([^%\n\r].*))?)'
+      match: '\s*(\\(?=\s*(%{1})([^%\n\r].*))?)'
 
   # Comments and Remark Fields
   comments:
