@@ -5,39 +5,55 @@ name: ABC Notation
 scopeName: source.abc
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 patterns:
-- include: '#freeText'
-- include: '#escapes'
-- include: '#comments'
-- include: '#fields'
+- include: '#free-text'
+- include: '#comment'
+- include: '#field'
 - include: '#directive-field'
 - include: '#directive'
 - include: '#abc-tune'
+
+# ensure comments and directives are top-level matches
+- include: '#comment'
+- include: '#directive'
 
 repository:
 # 1. Global Matches
   # Comments and Remark Fields
   abc-comment:
-    - name: comment.line.percentage.abc
+    - name: comment.line.abc
       match: '\s*((?<!\\)%{1})([^%\n\r].*)'
       captures:
         '1': {name: comment.line.percentage.abc punctuation.definition.comment.abc}
-        '2': {name: comment.line.percentage.abc}
+        '2': {name: comment.line.abc}
       patterns:
         - include: '#escape'
+
+  free-text:
+    - name: meta.free-text.abc
+      begin: ((?m:^%%\s*begintext))\s+(obeylines|fill|ragged|justify|align|skip)?
+      beginCaptures:
+        '1': {name: keyword.control.directive.abc punctuation.definition.keyword.abc}
+        '2': {name: variable.parameter.directive.abc}
+      contentName: string.unquoted.free-text.abc
+      end: (^%%\s*endtext)
+      patterns:
+      - include: '#comment'
+      - include: '#directive'
+      - include: '#escape'
 
   # Pseudo-Comment Directives
   directive:
     name: meta.directive.abc
     match: '((?<!\\)%{2}\s*\b\w+\b)\s+(.*)'  
     captures:
-      '1': {name: keyword.control.directive.abc punctuation.definition.keyword}
-      '2': {name: variable.parameter.abc}
+      '1': {name: keyword.control.directive.abc punctuation.definition.keyword.abc}
+      '2': {name: variable.parameter.directive.abc}
     patterns:
     - include: '#escape'
-    - include: '#string-param'
-    - include: '#boolean-param'
-    - include: '#unit-param'
-    - include: '#numeric-param'
+    #- include: '#string-param'
+    #- include: '#boolean-param'
+    #- include: '#unit-param'
+    #- include: '#numeric-param'
 
   # ABC Tune
   abc-tune:
