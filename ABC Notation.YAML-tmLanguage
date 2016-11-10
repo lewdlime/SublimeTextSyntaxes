@@ -5,20 +5,21 @@ name: ABC Notation
 scopeName: source.abc
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 patterns:
+# Include unparsed text as unquoted string content
+- include: '#unparsed-text'
+
+# Include free text and ABC tunes as the definitive blocks of ABC notation code
 - include: '#free-text'
-- include: '#comment'
-- include: '#field'
-- include: '#directive-field'
-- include: '#directive'
 - include: '#abc-tune'
 
-# ensure comments and directives are top-level matches
+# Ensure comments, fields, and directives are top-level matches
+- include: '#field'
 - include: '#comment'
 - include: '#directive'
 
 repository:
 # 1. Global Matches
-  # Comments and Remark Fields
+  # Comments
   abc-comment:
     - name: comment.line.abc
       match: '\s*((?<!\\)%{1})([^%\n\r].*)'
@@ -27,19 +28,6 @@ repository:
         '2': {name: comment.line.abc}
       patterns:
         - include: '#escape'
-
-  free-text:
-    - name: meta.free-text.abc
-      begin: ((?m:^%%\s*begintext))\s+(obeylines|fill|ragged|justify|align|skip)?
-      beginCaptures:
-        '1': {name: keyword.control.directive.abc punctuation.definition.keyword.abc}
-        '2': {name: variable.parameter.directive.abc}
-      contentName: string.unquoted.free-text.abc
-      end: (^%%\s*endtext)
-      patterns:
-      - include: '#comment'
-      - include: '#directive'
-      - include: '#escape'
 
   # Pseudo-Comment Directives
   directive:
@@ -55,6 +43,72 @@ repository:
     #- include: '#unit-param'
     #- include: '#numeric-param'
 
+# 2. Content Matches
+  # All unmatched text
+  # This can include escapes, comments, & directives in it's scope,
+  # despite being 'unparsed' text. Ends on the next immediate blank line.
+  unparsed-text:
+    - name: meta.unparsed-text.abc
+      begin: (?!(^\s*\r?\n).*)
+      contentName: string.unquoted.unparsed.abc
+      end: (\r?\n\s*\r?\n)
+      patterns:
+        - include: '#escape'
+        - include: '#comment'
+        - include: '#directive'
+
+  # Free Text
+  free-text:
+    - name: meta.free-text.abc
+      begin: (%%)\s*(begintext)\s+(obeylines|fill|ragged|justify|align|skip)?
+      beginCaptures:
+        '1': {name: keyword.control.directive.abc punctuation.definition.keyword.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+        '3': {name: variable.parameter.abc}
+      contentName: string.unquoted.free.abc
+      end: (%%)\s*(endtext)
+      endCaptures:
+        '1': {name: keyword.control.directive.abc punctuation.definition.keyword.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
+      patterns:
+      - include: '#comment'
+      - include: '#directive'
+      - include: '#escape'
+
+  embedded-svg:
+    - name: meta.block.svg.abc
+      begin: (%%)\s*(beginsvg)
+      beginCaptures:
+        '1': {name: keyword.operator.directive.abc punctuation.definition.keyword.abc punctuation.definition.sequence.begin.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      contentName: source.xml
+      end: (%%)\s*(endsvg)
+      endCaptures:
+        '1': {name: keyword.operator.directive.abc punctuation.definition.keyword.abc punctuation.definition.sequence.end.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
+      patterns:
+        - include: '#escape'
+        - include: '#comment'
+        - include: '#directive'
+    - name: meta.block.svg.abc
+      begin: (^I:)\s*(beginsvg)
+      beginCaptures:
+        '1': {name: keyword.control.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      contentName: source.xml
+      end: (^I:)(endsvg)
+      endCaptures:
+        '1': {name: keyword.control.abc }
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      patterns:
+        - include: '#escape'
+        - include: '#comment'
+        - include: '#directive'
+
+  embedded-html:
+    - name: meta.block.html.abc
+      begin: ()()
+
   # ABC Tune
   abc-tune:
     begin: ^(X:)\s*(?=\d+)
@@ -64,101 +118,89 @@ repository:
     contentName: meta.tune.abc
     end: \r?\n\s*\r?\n
     patterns:
-    #- include: '#free-text'
     - include: '#tune-header'
     - include: '#tune-body'
+    - include: '#free-text'
 
-# 2. Content Matches
+# 3. Child Content Matches
   # Literal Character Escapes, ABC Ligatures, ABC Accents, & HTML / XML Entities
   escape:
   - name: constant.character.escape.abc
-    match: (\\%)
+    match: (\\%|\\\\|\\u\h{4}|\\[[:punct:]\w]{2})
   - name: constant.character.escape.abc
-    match: (\\\\)
-  - name: constant.character.escape.abc
-    match: (\\[[:punct:]\w]{2})
-  - name: constant.character.escape.abc
-    match: (\\u\h{4})
-  - name: constant.character.escape.abc
-    match: (&\w+;)
-  - name: constant.character.escape.abc
-    match: (&#\d+;)
-  - name: constant.character.escape.abc
-    match: (&#x\h+;)
-
-
+    match: (&\w+;|&#\d+;|&#x\h+;)
 
   # Information Fields
   field:
-    - name: meta.line.remark.abc
-      match: '(^r:)([^%\r\n]*)'
-      captures:
-        '1': {name: punctuation.definition.comment.abc}
-        '2': {name: comment.line.abc}
-      patterns:
-        - include: '#escapes'
-        - name: comment.line.percentage.abc
-          match: '[ \t]*((?<!\\)%{1})([^%\n\r].*)'
-          captures:
-            '1': {name: comment.line.percentage.abc punctuation.definition.comment.abc}
-            '2': {name: comment.line.abc}
-        - include: '#directives'
-    - name: meta.brackets.remark.abc
-      begin: '(\[r:)'
-      beginCaptures:
-        '1': {name:  punctuation.section.brackets.begin.abc punctuation.definition.comment.abc}
-      contentName: comment.block.documentation.abc
-      end: '((?<!\\)\])'
-      endCaptures:
-        '1': {name: punctuation.section.brackets.end.abc punctuation.definition.comment.abc}
-    - name: meta.field.line.abc
-      match: '^([A-HL-WZa-qs-z]:)(.*)'
-      captures:
-        '1': {name: entity.name.function.abc punctuation.separator.continuation.abc}
-        '2': {name: variable.parameter.abc}
-      patterns:
-        - include: '#escapes'
-        - include: '#comments'
-        - include: '#directive'
-    # Field Continuation
-    - name: meta.field.line.continue.abc
-      match: (^+:)(.*)
-      captures:
-        '1': {name: entity.name.function.abc punctuation.separator.continuation.abc}
-        '2': {name: variable.parameter.abc}
-      patterns:
-        - include: '#escapes'
-        - include: '#comments'
-        - include: '#directive'
-    # Directive Fields
-    - name: meta.field.instruction.abc
-      match: '(^I:)\s*(\w+)\s+(.*)'
-      captures:
-        '1': {name: entity.name.function.abc punctuation.separator.continuation.abc}
-        '2': {name: support.type.instruction.abc}
-        '3': {name: variable.parameter.instruction.abc}
-      patterns:
-        - include: '#escapes'
-        - include: '#comments'
-        - include: '#directives'
-    # Key Fields
-    - name: meta.field.key.abc
-      match: '(^K:)\s*(.*)'
-      captures:
-        '1': {name: entity.name.function.abc punctuation.separator.continuation.abc}
-        '2': {name: support.constant.key.abc}
-      patterns:
-        - include: '#comments'
-        - include: '#directive'
-    # Tune Index Fields
-    - name: meta.field.index.abc
-      match: '(^X:)\s*(\d+)'
-      captures:
-        '1': {name: keyword.control.abc punctuation.definition.keyword.abc}
-        '2': {name: meta.toc-list.index.abc constant.numeric.integer.abc}
-      patterns:
-        - include: '#comments'
-        - include: '#directive'
+  - name: meta.field.remark.line.abc
+    match: '(^r:)([^%\r\n]*)'
+    captures:
+      '1': {name: punctuation.definition.comment.abc}
+      '2': {name: comment.line.abc}
+    patterns:
+      - include: '#escape'
+      - name: comment.line.percentage.abc
+        match: '[ \t]*((?<!\\)%{1})([^%\n\r].*)'
+        captures:
+          '1': {name: comment.line.percentage.abc punctuation.definition.comment.abc}
+          '2': {name: comment.line.abc}
+      - include: '#directive'
+  - name: meta.field.remark.inline.abc
+    begin: '(\[r:)'
+    beginCaptures:
+      '1': {name:  punctuation.section.brackets.begin.abc punctuation.definition.comment.abc}
+    contentName: comment.block.documentation.abc
+    end: '((?<!\\)\])'
+    endCaptures:
+      '1': {name: punctuation.section.brackets.end.abc punctuation.definition.comment.abc}
+  - name: meta.field.line.abc
+    match: '^([A-HL-WZa-qs-z]:)(.*)'
+    captures:
+      '1': {name: entity.name.function.abc punctuation.separator.continuation.abc}
+      '2': {name: variable.parameter.abc}
+    patterns:
+      - include: '#escapes'
+      - include: '#comments'
+      - include: '#directive'
+  # Field Continuation
+  - name: meta.field.line.continue.abc
+    match: (^+:)(.*)
+    captures:
+      '1': {name: entity.name.function.abc punctuation.separator.continuation.abc}
+      '2': {name: variable.parameter.abc}
+    patterns:
+      - include: '#escapes'
+      - include: '#comments'
+      - include: '#directive'
+  # Directive Fields
+  - name: meta.field.instruction.abc
+    match: '(^I:)\s*(\w+)\s+(.*)'
+    captures:
+      '1': {name: entity.name.function.abc punctuation.separator.continuation.abc}
+      '2': {name: support.type.instruction.abc}
+      '3': {name: variable.parameter.instruction.abc}
+    patterns:
+      - include: '#escapes'
+      - include: '#comments'
+      - include: '#directives'
+  # Key Fields
+  - name: meta.field.key.abc
+    match: '(^K:)\s*(.*)'
+    captures:
+      '1': {name: entity.name.function.abc punctuation.separator.continuation.abc}
+      '2': {name: support.constant.key.abc}
+    patterns:
+      - include: '#comments'
+      - include: '#directive'
+  # Tune Index Fields
+  - name: meta.field.index.abc
+    match: '(^X:)\s*(\d+)'
+    captures:
+      '1': {name: keyword.control.abc punctuation.definition.keyword.abc}
+      '2': {name: meta.toc-list.index.abc constant.numeric.integer.abc}
+    patterns:
+      - include: '#comments'
+      - include: '#directive'
 
   continuations:
     - name: keyword.operator.abc punctuation.separator.continuation.abc
