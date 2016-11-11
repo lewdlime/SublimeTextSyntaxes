@@ -1,4 +1,5 @@
 # SublimeTextSyntaxes
+
 Syntax definitions for various languages &amp; markups.
 
 Included syntax definitions:
@@ -7,6 +8,10 @@ Included syntax definitions:
 * **RELAX NG Compact**: Used for defining XML schema in a non-XML format.
 * **Augmented BNF**: Parser definition language. Used to describe the terminal rule syntax of standardized programming languages and markup languages. Features of this language differ from the original form of BNF. [See here for more info.](https://tools.ietf.org/rfc/rfc5234.txt)
 * **Extended BNF**: Parser definition language. Used to describe the terminal rule syntax of standardized programming languages and markup languages. Features of this language differ from the original form of BNF. [See here for more info.](http://www.cl.cam.ac.uk/~mgk25/iso-14977.pdf)
+
+## Notes About Syntaxes and Themes
+
+Editors that rely on tmTheme / tmLanguage configurations for syntax highlights &amp; color themes **do not** factor on how explicitly scoped a pattern is defined, _so long as there is a color that is bound to that scope's name._ As long as **most** `tmTheme` files can match, at the very least, [the minimal amount of scope coverage](http://www.sublimetext.com/docs/3/scope_naming.html#color_schemes), most text editor programs will do their best to apply the given colors to the given matching scopes.
 
 ## Notes About ABC Notation:
 

@@ -5,6 +5,8 @@ name: ABC Notation
 scopeName: source.abc
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 patterns:
+# Include file header, which occurs at the start of the file
+- include: '#file-header'
 # Include unparsed text as unquoted string content
 - include: '#unparsed-text'
 
@@ -44,12 +46,24 @@ repository:
     #- include: '#numeric-param'
 
 # 2. Content Matches
+  # File Header
+  file-header:
+    name: meta.file.header.abc
+    begin: \A(^%abc(?:-\d\.\d)?)(?m:.*)
+    beginCaptures:
+      '1': {name: storage.modifier.version.abc meta.namespace.file.abc meta.preprocessor.abc }
+    end: \r?\n\s*\r?\n
+    patterns:
+      - include: '#comment'
+      - include: '#directive'
+      - include: '#field-directive'
+
   # All unmatched text
   # This can include escapes, comments, & directives in it's scope,
   # despite being 'unparsed' text. Ends on the next immediate blank line.
   unparsed-text:
     - name: meta.unparsed-text.abc
-      begin: (?!(^\s*\r?\n).*)
+      begin: (?:^\s*\r?\n)\G((?m:.*))
       contentName: string.unquoted.unparsed.abc
       end: (\r?\n\s*\r?\n)
       patterns:
@@ -74,40 +88,6 @@ repository:
       - include: '#comment'
       - include: '#directive'
       - include: '#escape'
-
-  embedded-svg:
-    - name: meta.block.svg.abc
-      begin: (%%)\s*(beginsvg)
-      beginCaptures:
-        '1': {name: keyword.operator.directive.abc punctuation.definition.keyword.abc punctuation.definition.sequence.begin.abc}
-        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
-      contentName: source.xml
-      end: (%%)\s*(endsvg)
-      endCaptures:
-        '1': {name: keyword.operator.directive.abc punctuation.definition.keyword.abc punctuation.definition.sequence.end.abc}
-        '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
-      patterns:
-        - include: '#escape'
-        - include: '#comment'
-        - include: '#directive'
-    - name: meta.block.svg.abc
-      begin: (^I:)\s*(beginsvg)
-      beginCaptures:
-        '1': {name: keyword.control.abc}
-        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
-      contentName: source.xml
-      end: (^I:)(endsvg)
-      endCaptures:
-        '1': {name: keyword.control.abc }
-        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
-      patterns:
-        - include: '#escape'
-        - include: '#comment'
-        - include: '#directive'
-
-  embedded-html:
-    - name: meta.block.html.abc
-      begin: ()()
 
   # ABC Tune
   abc-tune:
@@ -206,9 +186,101 @@ repository:
     - name: keyword.operator.abc punctuation.separator.continuation.abc
       match: '\s*(\\(?=\s+))'
 
-  # Tune Body Elements
+# Tune Body Elements
+  note-length:
+    - name: constant.numeric.length.note.abc
+      match: |-
+        ((?:\d*/*(?:\d*)?)|
+         (?:\d*>*(?:\d*)?)|
+         (?:\d*<*(?:\d*)?))
+      captures:
+        '1': {name: entity.type.length.note.abc punctuation.definition.length.note.abc}
+    - name: constant.numeric.length.note.abc
+      match: (\d*/*(?!\.\d+)\d*)
+      captures:
+        '1': {name: entity.type.length.note.abc punctuation.definition.length.note.abc}
+
+  rest-length:
+    - name: constant.numeric.length.rest.abc
+      match: |-
+        ((?:\d*/*(?:\d*)?)|
+         (?:\d*>*(?:\d*)?)|
+         (?:\d*<*(?:\d*)?))
+      captures:
+        '1': {name: entity.type.length.rest.abc punctuation.definition.length.rest.abc}
+    - name: constant.numeric.length.rest.abc
+      # To avoid matching staccato decorations, do not match on floating-point decimals
+      match: (\d*[/<>]*(?!\.\d+))
+      captures:
+        '1': {name: entity.type.length.rest.abc punctuation.definition.length.rest.abc}
+
+  spacer-length:
+    name: constant.numeric.decimal.abc punctuation.separator.decimal.abc
+    match: (\d*(?=\.\d+))
+
+  note:
+    name: entity.name.type.note.abc punctuation.definition.entity.note.abc
+    match: "[A-Ga-g][,']*"
+
+  rest:
+    name: entity.name.type.rest.abc punctuation.definition.entity.rest.abc
+    match: "([xz])([[:^space:]]*)?"
+    patterns:
+      - include: '#note-length'
+
+  # ABC Rest
+  abc-rest:
+    - match: |-
+        ([xyz])((?:[1-9]\d*/*(?:[1-9]\d*)?)|
+                (?:[1-9]\d*>*(?:[1-9]\d*)?)|
+                (?:[1-9]\d*<*(?:[1-9]\d*)?))?|
+        [XZ]([1-9][0-9]*)?|y(\d*(?:\.\d+)?)
+      name: meta.code.rest.abc
+      captures:
+        '1': {name: entity.name.type.rest.abc}
+        '2': {name: constant.numeric.length.rest.abc}
+    - match: '([xz])([[:^space:]]*)?'
+      name: meta.code.rest.abc
+      captures:
+        '1': {name: entity.name.type.rest.abc}
+        '2': {name: constant.numeric.length.rest.abc}
+
+  abc-spacer:
+    - match: '(y)(\d+(?:\.\d*)?(?:pt|in|cm)?)?'
+      name: meta.code.spacer.abc
+      captures:
+        '1': {name: support.constant.spacer.abc}
+
+  # ABC Note 
+  abc-note:
+    name: meta.code.note.abc
+    match: '(?:[[:^space:]]*)?([A-Ga-g][,']*)(?:[[:^space:]]*)?'
+    captures:
+      '1': {name: entity.name.type.note.abc}
+    patterns:
+      - include: '#grace-note'
+      - include: '#abc-chord'
+      - include: '#annotation'
+      - include: '#decoration'
+      - include: '#accidental'
+      - include: '#note'
+      - include: '#note-length'
+
+  grace-note:
+    name: meta.braces.grace-note.abc
+    begin: (\{\/?)(?:[[:^space:]]*)
+    beginCaptures:
+      '1': {name:  punctuation.section.braces.begin.abc}
+    end: (\})
+    endCaptures:
+      '1': {name: entity.name.type.grace-note.abc punctuation.section.braces.end.abc}
+    patterns:
+      - include: '#note'
+      - include: '#rest'
+      - include: '#note-length'
+
+  # Inline Fields
   inline-fields:
-    # Inline Fields
     - name: meta.field.inline.abc
       begin: '(\[[A-HL-WZa-qs-z]:)'
       beginCaptures:
@@ -228,61 +300,34 @@ repository:
       patterns:
         - include: '#escapes'
 
-  bar-lines:
-    match: '((?:\.?\|\|?|:*\|\]|\[\|:*|::|:+\||\|:+|\.?\||\[\|\])[1-9]?|(?::*\|[1-9](?:[-,][1-9])*))'
+  barline:
     name: meta.code.barline.abc
+    match: '((?:\.?\|\|?|:*\|\]|\[\|:*|::|:+\||\|:+|\.?\||\[\|\])[1-9]?|(?::*\|[1-9](?:[-,][1-9])*))'
     captures:
       '1': {name: keyword.operator.abc}
 
-  abc-notes:
-    match: ([_^]{1,2}(?:3\/2|\/)?|=)?([A-Ga-gz][,']*)((?:[1-9]\d*/*(?:[1-9]\d*)?)|(?:[1-9]\d*>*(?:[1-9]\d*)?)|(?:[1-9]\d*<*(?:[1-9]\d*)?))
-    name: meta.code.note.abc
-    captures:
-      '1': {name: constant.language.abc}
-      '2': {name: constant.character.abc}
-      '3': {name: constant.numeric.abc}
-
-  abc-rests:
-    match: '([xyz])((?:[1-9]\d*/*(?:[1-9]\d*)?)|(?:[1-9]\d*>*(?:[1-9]\d*)?)|(?:[1-9]\d*<*(?:[1-9]\d*)?))?|[XZ]([1-9][0-9]*)?|y(\d*(?:\.\d+)?)'
-    name: meta.code.rest.abc
-    captures:
-      '1': {name: constant.character.abc}
-      '2': {name: constant.numeric.abc}
-
-  note-lengths:
+  note-length:
     match: '((?:[1-9]\d*/*(?:[1-9]\d*)?)|(?:[1-9]\d*>*(?:[1-9]\d*)?)|(?:[1-9]\d*<*(?:[1-9]\d*)?))'
-    name: meta.code.note.length.abc constant.numeric.abc
+    name: meta.code.note.length.abc
     captures:
-      '1': {name: constant.numeric.abc}
+      '1': {name: constant.numeric.note-length.abc}
 
-  decorations:
+  decoration:
     - match: '(?<!\\)![^!%\r\n]+!'
       name: markup.other.decoration.abc
     - match: '(?<!\\)[-.~uvTHLMPSO]'
       name: markup.other.decoration.abc
 
-  annotations:
-    begin: '((?<!\\)")'
+  string-annotation:
+    begin: '((?<!\\)"(?:[_^<>]|@))'
     beginCaptures:
-      '1': {name: keyword.operator.abc}
-    end: '((?<!\\)")'
+      '1': {name: string.quoted.double.annotation.abc punctuation.definition.string.begin.abc punctuation.keyword.  }
+    end: '(")'
     endCaptures:
       '1': {name: keyword.operator.abc}
     contentName: string.quoted.double.abc
     patterns:
       - include: '#escapes'
-
-  grace-notes:
-    begin: '((?<!\\){\/?).*'
-    beginCaptures:
-      '1': {name: keyword.operator.abc}
-    end: '((?<!\\)})'
-    endCaptures:
-      '1': {name: keyword.operator.abc}
-    contentName: meta.code.note.grace.abc
-    patterns:
-      - include: '#abcNote'
-      - include: '#abcRest'
 
   tuplets:
     match: '((?<!\\)\([1-9](?::\d+(:\d+)?)?)'
@@ -332,12 +377,92 @@ repository:
       - include: '#fields'
       - include: '#directives'
 
-  file-header:
-    name: meta.struct.file.header.abc
-    begin: (^%abc(?:-\d\.\d)?)
-    beginCaptures:
-      '1': {name: storage.modifier.version.abc meta.namespace.file.abc meta.preprocessor.abc }
-    end: \r?\n\s*\r?\n
-    patterns:
-      - include: '#comments'
-      - include: '#directives'
+  embedded-svg:
+    - name: meta.block.svg.abc
+      begin: (%%)\s*(beginsvg)
+      beginCaptures:
+        '1': {name: keyword.operator.directive.abc punctuation.definition.keyword.abc punctuation.definition.sequence.begin.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      contentName: source.xml
+      end: (%%)\s*(endsvg)
+      endCaptures:
+        '1': {name: keyword.operator.directive.abc punctuation.definition.keyword.abc punctuation.definition.sequence.end.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
+      patterns:
+        - include: '#escape'
+        - include: '#comment'
+        - include: '#directive'
+    - name: meta.block.svg.abc
+      begin: (^I:)\s*(beginsvg)
+      beginCaptures:
+        '1': {name: keyword.control.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      contentName: source.xml
+      end: (^I:)\s*(endsvg)
+      endCaptures:
+        '1': {name: keyword.control.abc }
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      patterns:
+        - include: '#escape'
+        - include: '#comment'
+        - include: '#directive'
+
+  embedded-html:
+    - name: meta.block.html.abc
+      begin: (%%)\s*(beginml)
+      beginCaptures:
+        '1': {name: keyword.operator.directive.abc punctuation.definition.keyword.abc punctuation.definition.sequence.begin.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      contentName: source.html
+      end: (%%)\s*(endml)
+      endCaptures:
+        '1': {name: keyword.operator.directive.abc punctuation.definition.keyword.abc punctuation.definition.sequence.end.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
+      patterns:
+        - include: '#escape'
+        - include: '#comment'
+        - include: '#directive'
+    - name: meta.block.html.abc
+      begin: (^I:)\s*(beginml)
+      beginCaptures:
+        '1': {name: keyword.control.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      contentName: source.html
+      end: (^I:)\s*(endml)
+      endCaptures:
+        '1': {name: keyword.control.abc }
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      patterns:
+        - include: '#escape'
+        - include: '#comment'
+        - include: '#directive'
+
+  embedded-postscript:
+    - name: meta.block.ps.abc
+      begin: (%%)\s*(beginps)
+      beginCaptures:
+        '1': {name: keyword.operator.directive.abc punctuation.definition.keyword.abc punctuation.definition.sequence.begin.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      contentName: source.ps
+      end: (%%)\s*(endps)
+      endCaptures:
+        '1': {name: keyword.operator.directive.abc punctuation.definition.keyword.abc punctuation.definition.sequence.end.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
+      patterns:
+        - include: '#escape'
+        - include: '#comment'
+        - include: '#directive'
+    - name: meta.block.ps.abc
+      begin: (^I:)\s*(beginps)
+      beginCaptures:
+        '1': {name: keyword.control.abc}
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      contentName: source.ps
+      end: (^I:)\s*(endps)
+      endCaptures:
+        '1': {name: keyword.control.abc }
+        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+      patterns:
+        - include: '#escape'
+        - include: '#comment'
+        - include: '#directive'
