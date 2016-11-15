@@ -4,16 +4,60 @@ name: Augmented BNF
 scopeName: source.abnf
 fileTypes: ['abnf']
 uuid: d167af74-1db4-48ea-ba12-2c31a07add3a
+repository:
+  optional:
+    name: meta.optional.abnf
+    begin: (\[)
+    beginCaptures:
+      '1': {name: keyword.operator.abnf}
+    end: (\])
+    endCaptures:
+      '1': {name: keyword.operator.abnf}
+    patterns:
+      - include: $self
+  repetition:
+    name: meta.repetition.abnf
+    begin: (\{)
+    beginCaptures:
+      '1': {name: keyword.operator.abnf}
+    end: (\})
+    endCaptures:
+      '1': {name: keyword.operator.abnf}
+    patterns:
+      - include: $self
+  grouping:
+    name: meta.grouping.abnf
+    begin: (\()
+    beginCaptures:
+      '1': {name: keyword.operator.abnf}
+    end: (\))
+    endCaptures:
+      '1': {name: keyword.operator.abnf}
+    patterns:
+      - include: $self
+  terminal-single:
+    name: meta.string.abnf
+    begin: (\".*)
+    beginCaptures:
+      '1': {name: string.quoted.double.abnf}
+    end: (\")
+    endCaptures:
+      '1': {name: string.quoted.double.abnf}
+  terminal-double:
+    name: meta.string.abnf
+    begin: (\'.*)
+    beginCaptures:
+      '1': {name: string.quoted.single.abnf}
+    end: (\')
+    endCaptures:
+      '1': {name: string.quoted.single.abnf}
 patterns:
 - comment: Operators
   name: keyword.operator.abnf
-  match: ([=\.,|*]|::=)
-- comment: Operators
-  match: '\s+-|-\s+'
-  name: keyword.operator.abnf
-- comment: Conditional Separator
-  match: /
-  name: keyword.control.abnf
+  match: '([-=\/\.,|*]|::=)'
+- comment: Escape
+  name: constant.character.escape.abnf
+  match: '(%x\h{2}(?:[-.]\h{2})*)'
 - comment: Comments
   name: comment.line.semicolon.abnf
   match: (;.*)
@@ -24,79 +68,17 @@ patterns:
   name: constant.numeric.abnf
   match: \d+(?:\h)*
 
-- comment: Optional
-  name: meta.optional.abnf
-  begin: (\[)
-  beginCaptures:
-    '1': {name: keyword.control.abnf}
-  end: (\])
-  endCaptures:
-    '1': {name: keyword.control.abnf}
-  patterns:
-    - include: $self
-    - match: '(%x\h{2}(?:[-.]\h{2})?)'
-      name: constant.character.escape.abnf
-- comment: Repetition
-  name: meta.repetition.abnf
-  begin: (\{)
-  beginCaptures:
-    '1': {name: keyword.operator.abnf}
-  end: (\})
-  endCaptures:
-    '1': {name: keyword.operator.abnf}
-  patterns:
-    - include: $self
-    - match: '(%x\h{2}(?:[-.]\h{2})?)'
-      name: constant.character.escape.abnf
-- comment: Grouping
-  name: meta.grouping.abnf
-  begin: (\()
-  beginCaptures:
-    '1': {name: keyword.control.abnf}
-  end: (\))
-  endCaptures:
-    '1': {name: keyword.control.abnf}
-  patterns:
-    - include: $self
-    - match: '(%x\h{2}(?:[-.]\h{2})?)'
-      name: constant.character.escape.abnf
-- comment: Terminal String
-  name: meta.string.abnf
-  contentName: string.quoted.double.abnf
-  begin: (\")
-  beginCaptures:
-    '1': {name: string.quoted.double.abnf}
-  end: (\")
-  endCaptures:
-    '1': {name: string.quoted.double.abnf}
-  patterns:
-    - match: '(%x\h{2}(?:[-.]\h{2})?)'
-      name: constant.character.escape.abnf
-- comment: Terminal String
-  name: meta.string.abnf
-  contentName: string.quoted.single.abnf
-  begin: (\')
-  beginCaptures:
-    '1': {name: string.quoted.single.abnf}
-  end: (\')
-  endCaptures:
-    '1': {name: string.quoted.single.abnf}
-  patterns:
-    - match: '(%x\h{2}(?:[-.]\h{2})?)'
-      name: constant.character.escape.abnf
-
-- comment: Production Rule
+- comment: Production
   name: meta.rule.abnf
-  match: ^\s*([a-zA-Z][-_\w]*)\s*((?:::)?=)
-  captures:
+  begin: "^\s*([a-zA-Z][-_\w]*)\s*((?::{2}?)=)(.*)"
+  beginCaptures:
     '1': {name: keyword.control.abnf}
     '2': {name: keyword.operator.abnf}
-  end: '\n'
-- comment: Rule Identifier
-  match: \s*([\w][-\w]+)\s*
-  name: meta.rule.parameter.abnf
-  captures:
-    '1': {name: entity.name.tag.abnf}
-- comment: Escape
-  match: '(%x\h{2}(?:[-.]x?\h{2})?)'
-  name: constant.character.escape.abnf
+    '3': {name: variable.parameter.abnf}
+  end: \n
+  patterns:
+    - include: '#optional'
+    - include: '#grouping'
+    - include: '#repetition'
+    - include: '#terminal-single'
+    - include: '#terminal-double'
