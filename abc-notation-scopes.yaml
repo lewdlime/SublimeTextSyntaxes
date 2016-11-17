@@ -4,183 +4,183 @@ foreground: "#F8F8F2"
 background: "#272822"
 
 - keywords:
-  - keyword.control:
-    - keyword.control.conditional: ""
-    - keyword.control.import: ""
-  - keyword.operator:
-    - keyword.operator.union: ['&', '&&']
-    - keyword.operator.staccato: "\\."
-    - keyword.operator.field: "(^[A-Za-z]:)"
-    - keyword.operator.directive: "((?<!%)%%\s*\b\w+\b)"
-    - keyword.operator.chord: ["\\[", "\\]"]
-    - keyword.operator.slur: ["\\(", "\\)"]
-    - keyword.operator.tuplet: "(\d*(?::\d*(?::\d*)?)?)"
-    - keyword.operator.grace-note: ["\\{\/", "\\}"]
-    - keyword.operator.bar-line: "((?:[|\[\]:]*)?\|(?:[|\[\]:]*))(\d(?:[-,]\d)*)?"
-    - keyword.operator.macro: "~[^n[[:blank:][:punct:]]]+"
-    - keyword.operator.decoration: "(?<!\\)![^!%[[:blank:]]]+!"
-    - keyword.operator.symbol: "(?<!\\)[-.~uvTHLMPSO]"
-  - keyword.operator.arithmetic: "((?:[1-9]\d*/*(?:[1-9]\d*)?)|(?:[1-9]\d*>*(?:[1-9]\d*)?)|(?:[1-9]\d*<*(?:[1-9]\d*)?))"
-  - keyword.operator.assignment:
-    - keyword.operator.assignment.macro: "~[^n[[:blank:]]]*"
-    - keyword.operator.assignment.symbol: "<user-defined symbol assignments>"
-  - keyword.operator.bitwise: "n/a"
-  - keyword.operator.logical: "\btrue\b|\bfalse\b|\byes\b|\bno\b|\bon\b|\boff\b|1|0"
-  - keyword.operator.word: "Directives, possibly"
-  - keyword.other: "n/a"
-  - punctuation.definition.keyword:
-    - punctuation.definition.slur.begin: ""
-    - punctuation.definition.slur.end: ""
-    - punctuation.definition.tuplet:
+  keyword.control:
+    keyword.control.conditional: ""
+    keyword.control.import: ""
+  keyword.operator:
+    keyword.operator.union: ['&', '&&']
+     keyword.operator.staccato: "\\."
+     keyword.operator.field: "(^[A-Za-z]:)"
+     keyword.operator.directive: "((?<!%)%%\s*\b\w+\b)"
+     keyword.operator.chord: ["\\[", "\\]"]
+     keyword.operator.slur: ["\\(", "\\)"]
+     keyword.operator.tuplet: "(\d*(?::\d*(?::\d*)?)?)"
+     keyword.operator.grace-note: ["\\{\/", "\\}"]
+     keyword.operator.bar-line: "((?:[|\[\]:]*)?\|(?:[|\[\]:]*))(\d(?:[-,]\d)*)?"
+     keyword.operator.macro: "~[^n[[:blank:][:punct:]]]+"
+     keyword.operator.decoration: "(?<!\\)![^!%[[:blank:]]]+!"
+     keyword.operator.symbol: "(?<!\\)[-.~uvTHLMPSO]"
+   keyword.operator.arithmetic: "((?:[1-9]\d*/*(?:[1-9]\d*)?)|(?:[1-9]\d*>*(?:[1-9]\d*)?)|(?:[1-9]\d*<*(?:[1-9]\d*)?))"
+   keyword.operator.assignment:
+     keyword.operator.assignment.macro: "~[^n[[:blank:]]]*"
+     keyword.operator.assignment.symbol: "<user-defined symbol assignments>"
+   keyword.operator.bitwise: "n/a"
+   keyword.operator.logical: "\btrue\b|\bfalse\b|\byes\b|\bno\b|\bon\b|\boff\b|1|0"
+   keyword.operator.word: "Directives, possibly"
+   keyword.other: "n/a"
+   punctuation.definition.keyword:
+     punctuation.definition.slur.begin: ""
+     punctuation.definition.slur.end: ""
+     punctuation.definition.tuplet:
 
 - entities:
-  - entity.name:
-    - entity.name.class: ""
-    - entity.name.class.forward-decl: ""
-    - entity.name.constant: ""
-    - entity.name.enum: ""
+   entity.name:
+     entity.name.class: ""
+     entity.name.class.forward-decl: ""
+     entity.name.constant: ""
+     entity.name.enum: ""
     # For decorations, use 'support.function'
-    - entity.name.function: "%%"
-    - entity.name.function.constructor: ""
-    - entity.name.function.destructor: ""
-    - entity.name.interface: ""
-    - entity.name.label: ["^T:(.*)", "\\[T:(.*)\\]"]
-    - entity.name.namespace: "^%abc(-\d\.\d)?"
-    - entity.name.section:
-      - entity.name.section.tuplet: ""
-    - entity.name.struct: ""
-    - entity.name.tag: "n/a"
-    - entity.name.trait: ""
-    - entity.name.type: "n/a"
-    - entity.name.union:
-      - entity.name.union.begin: ""
-      - entity.name.union.end: ""
-  - entity.other:
-    - entity.other.attribute-name: "n/a"
-    - entity.other.inherited-class: "n/a"
+     entity.name.function: "%%"
+     entity.name.function.constructor: ""
+     entity.name.function.destructor: ""
+     entity.name.interface: ""
+     entity.name.label: ["^T:(.*)", "\\[T:(.*)\\]"]
+     entity.name.namespace: "^%abc(-\d\.\d)?"
+     entity.name.section:
+       entity.name.section.tuplet: ""
+     entity.name.struct: ""
+     entity.name.tag: "n/a"
+     entity.name.trait: ""
+     entity.name.type: "n/a"
+     entity.name.union:
+       entity.name.union.begin: ""
+       entity.name.union.end: ""
+   entity.other:
+     entity.other.attribute-name: "n/a"
+     entity.other.inherited-class: "n/a"
 
 - metas:
-  - meta.toc-list: ["X:, P:, V: fields"]
-  - meta.block: ["Grace notes"]
-  - meta.braces: ["Grace notes"]
-  - meta.brackets: ["Inline fields, Chords, bracketed bar lines"]
-  - meta.class: "n/a"
-  - meta.enum: [""]
-  - meta.function: ["Directives (within pseudo-comments and both line I: fields & inline I: fields)"]
-  - meta.function-call: [""]
-  - meta.function.parameters: ["Directive parameters"]
-  - meta.function.return-type: "n/a"
-  - meta.generic: "n/a"
-  - meta.group: ["`(&` ... `&` ... `&)` voice union sections, Slurs, Decorations that end with `(`, Tuplets"]
-  - meta.interface: [""]
-  - meta.namespace: ["%abc(-\d\.\d) lines"]
-  - meta.paragraph: ["%%begintext ... %%endtext"]
-  - meta.parens: ["Directives that use parentheses"]
-  - meta.path: ["Directives that use paths"]
-  - meta.preprocessor: ["Directives, abcpp preprocessor statements"]
-  - meta.struct: ""
-  - meta.tag: "n/a"
-  - meta.trait: ""
-  - meta.type: "Font specifications, sizes in pt, cm, & in, true/false values, etc."
-  - meta.union: "`(&`, `&`, `&)`"
-  - punctuation.definition.generic.begin: [""]
-  - punctuation.definition.generic.end: ["`>`"]
-  - punctuation.section.block.begin: ["`{`"]
-  - punctuation.section.block.end: ["`}`"]
-  - punctuation.section.braces.begin: ["`{`"]
-  - punctuation.section.braces.end: ["`}`"]
-  - punctuation.section.brackets.begin: ["`[`"]
-  - punctuation.section.brackets.end: ["`]`"]
-  - punctuation.section.group.begin: ["`(`"]
-  - punctuation.section.group.end: ["`)`"]
-  - punctuation.section.parens.begin: ["`(`"]
-  - punctuation.section.parens.end: ["`)`"]
+   meta.toc-list: ["X:, P:, V: fields"]
+   meta.block: ["Grace notes"]
+   meta.braces: ["Grace notes"]
+   meta.brackets: ["Inline fields, Chords, bracketed bar lines"]
+   meta.class: "n/a"
+   meta.enum: [""]
+   meta.function: ["Directives (within pseudo-comments and both line I: fields & inline I: fields)"]
+   meta.function-call: [""]
+   meta.function.parameters: ["Directive parameters"]
+   meta.function.return-type: "n/a"
+   meta.generic: "n/a"
+   meta.group: ["`(&` ... `&` ... `&)` voice union sections, Slurs, Decorations that end with `(`, Tuplets"]
+   meta.interface: [""]
+   meta.namespace: ["%abc(-\d\.\d) lines"]
+   meta.paragraph: ["%%begintext ... %%endtext"]
+   meta.parens: ["Directives that use parentheses"]
+   meta.path: ["Directives that use paths"]
+   meta.preprocessor: ["Directives, abcpp preprocessor statements"]
+   meta.struct: ""
+   meta.tag: "n/a"
+   meta.trait: ""
+   meta.type: "Font specifications, sizes in pt, cm, & in, true/false values, etc."
+   meta.union: "`(&`, `&`, `&)`"
+   punctuation.definition.generic.begin: [""]
+   punctuation.definition.generic.end: ["`>`"]
+   punctuation.section.block.begin: ["`{`"]
+   punctuation.section.block.end: ["`}`"]
+   punctuation.section.braces.begin: ["`{`"]
+   punctuation.section.braces.end: ["`}`"]
+   punctuation.section.brackets.begin: ["`[`"]
+   punctuation.section.brackets.end: ["`]`"]
+   punctuation.section.group.begin: ["`(`"]
+   punctuation.section.group.end: ["`)`"]
+   punctuation.section.parens.begin: ["`(`"]
+   punctuation.section.parens.end: ["`)`"]
 
 - comments:
-  - comment.line:
-    - comment.line.percentage: "(%{1}(?<!%))(.*)"
-    - comment.line.remark: "(^r:)(.*)"
-  - comment.block:
-    - comment.block.inline-remark.abc: ["(\\[r:)(.*)", "\\]"]
-  - comment.block.documentation: "n/a"
-  - punctuation.definition.comment: "%|^r:|\\[r:"
+   comment.line:
+     comment.line.percentage: "(%{1}(?<!%))(.*)"
+     comment.line.remark: "(^r:)(.*)"
+   comment.block:
+     comment.block.inline-remark.abc: ["(\\[r:)(.*)", "\\]"]
+   comment.block.documentation: "n/a"
+   punctuation.definition.comment: "%|^r:|\\[r:"
 
 - constants:
-  - constant.character:
-    - constant.character.decoration:  "[.~HLMOPSTuv]"
-    - constant.character.escape: ["\\%", "\\\\", "\\u\h{4}", "\\[[:punct:]\w]{2}", "&\w+;", "&#\d+;", "&#x\h+;"]
-  - constant.language: "<TBD>"
-  - constant.numeric:
-    - constant.numeric.float: "\\d+\\.\\d+"
-    - constant.numeric.hex: "\\x\\h"
-    - constant.numeric.integer: "(\\d)\s+"
-    - constant.numeric.octal: "\\o\\d+"
+   constant.character:
+     constant.character.decoration:  "[.~HLMOPSTuv]"
+     constant.character.escape: ["\\%", "\\\\", "\\u\h{4}", "\\[[:punct:]\w]{2}", "&\w+;", "&#\d+;", "&#x\h+;"]
+   constant.language: "<TBD>"
+   constant.numeric:
+     constant.numeric.float: "\\d+\\.\\d+"
+     constant.numeric.hex: "\\x\\h"
+     constant.numeric.integer: "(\\d)\s+"
+     constant.numeric.octal: "\\o\\d+"
     # 'length.unit' refers to lengths that are expressed in 'cm', 'in', and 'pt'.
     # It is used by a vast number of directives, as well as by text annotations,
     # and spacers ('y3.4in'), among others.
-    - constand.numeric.length.unit: "(\\d+(?:\\.\\d*)?(?:cm|in|pt))"
-    - constant.numeric.length.rest: [""]
-    - constant.numeric.length.note: [""]
-  - constant.other:
-    - value: ""
-    - placeholder: ""
+     constand.numeric.length.unit: "(\\d+(?:\\.\\d*)?(?:cm|in|pt))"
+     constant.numeric.length.rest: [""]
+     constant.numeric.length.note: [""]
+   constant.other:
+     value: ""
+     placeholder: ""
 
 - variables:
-  - variable.function:
-    - field: ""
-    - directive: ""
-  - variable.language:
-    - field: ""
-    - directive: ""
-  - variable.other: [""]
-  - variable.other.constant: [""]
-  - variable.other.member: [""]
-  - variable.other.readwrite: [""]
-  - variable.parameter:
-    - field: ""
-    - directive: ""
+   variable.function:
+     field: ""
+     directive: ""
+   variable.language:
+     field: ""
+     directive: ""
+   variable.other: [""]
+   variable.other.constant: [""]
+   variable.other.member: [""]
+   variable.other.readwrite: [""]
+   variable.parameter:
+     field: ""
+     directive: ""
 
 - supports:
-  - support.class: [""]
-  - support.constant:
-    - macro: ""
-    - symbol: ""
-  - support.function:
-    - field: ""
-    - directive: ""
-    - decoration: ""
-  - support.module: [""]
-  - support.type:
-    - field: ""
-    - directive: ""
-  - support.variable:
-    - field: ""
-    - directive: ""
+   support.class: [""]
+   support.constant:
+     macro: ""
+     symbol: ""
+   support.function:
+     field: ""
+     directive: ""
+     decoration: ""
+   support.module: [""]
+   support.type:
+     field: ""
+     directive: ""
+   support.variable:
+     field: ""
+     directive: ""
 
 - punctuations:
-  - punctuation.accessor: [""]
-  - punctuation.separator: ["Bar lines, periods (`.`), ties (`-`), voice union (`&`), "]
-  - punctuation.separator.continuation: ["(\\(?= ))", "(^+:)"]
-  - punctuation.terminator: ["line ending characters `$`, `<EOL>`"]
+   punctuation.accessor: [""]
+   punctuation.separator: ["Bar lines, periods (`.`), ties (`-`), voice union (`&`), "]
+   punctuation.separator.continuation: ["(\\(?= ))", "(^+:)"]
+   punctuation.terminator: ["line ending characters `$`, `<EOL>`"]
 
 - storages:
-  - storage.modifier: ["`.`, `-`, `<`, `>`, `/`"]
-  - storage.type: ["Font specifications, sizes in pt, cm, & in, true/false values, etc."]
+   storage.modifier: ["`.`, `-`, `<`, `>`, `/`"]
+   storage.type: ["Font specifications, sizes in pt, cm, & in, true/false values, etc."]
 
 - strings:
-  - string.interpolated: ["<TBD>"]
-  - string.other: ["<TBD>"]
-  - string.quoted: [""]
-  - string.quoted.double: ["Specifically only for text annotations, but NOT for accompaniment chords"]
-  - string.quoted.other: ["<TBD>"]
-  - string.quoted.single: "n/a"
-  - string.quoted.triple: "n/a"
-  - string.regexp: "Regexps in %%select, %%score, %%staves, etc."
-  - string.unquoted: [".free", ".unparsed"]
+   string.interpolated: ["<TBD>"]
+   string.other: ["<TBD>"]
+   string.quoted: [""]
+   string.quoted.double: ["Specifically only for text annotations, but NOT for accompaniment chords"]
+   string.quoted.other: ["<TBD>"]
+   string.quoted.single: "n/a"
+   string.quoted.triple: "n/a"
+   string.regexp: "Regexps in %%select, %%score, %%staves, etc."
+   string.unquoted: [".free", ".unparsed"]
 
 - invalids:
-  - invalid.deprecated: "`!` as line breaks, `+symbol+` decorations,"
-  - invalid.illegal: ""
+   invalid.deprecated: "`!` as line breaks, `+symbol+` decorations,"
+   invalid.illegal: ""
 
 - markups: "n/a"
 
