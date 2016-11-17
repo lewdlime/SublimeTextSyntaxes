@@ -63,14 +63,14 @@ patterns:
   match: (;.*)
 - comment: Keywords
   name: support.constant.abnf
-  match: (WSP|LWSP|ALPHA|DIGIT|HEXDIG|DQUOTE|SP|HTAB|VCHAR|CHAR|OCTET|CTL|CR|LF|CRLF|BIT)
+  match: (?i:WSP|LWSP|ALPHA|DIGIT|HEXDIG|DQUOTE|SP|HTAB|VCHAR|CHAR|OCTET|CTL|CR|LF|CRLF|BIT)
 - comment: Number
   name: constant.numeric.abnf
   match: \d+(?:\h)*
 
 - comment: Production
   name: meta.rule.abnf
-  begin: "^\s*([a-zA-Z][-_\w]*)\s*((?::{2}?)=)(.*)"
+  begin: ^\s*([a-zA-Z][-_\w]*)\s*((?::{2}?)=)(.*)
   beginCaptures:
     '1': {name: keyword.control.abnf}
     '2': {name: keyword.operator.abnf}

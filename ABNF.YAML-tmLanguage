@@ -1,0 +1,92 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+name: Augmented BNF
+scopeName: source.abnf
+fileTypes: [abnf]
+uuid: d167af74-1db4-48ea-ba12-2c31a07add3a
+
+patterns:
+- name: keyword.operator.assignment.abnf
+  match: (=/|::=)
+
+- comment: Conditional Separator
+  name: keyword.other.separator.abnf
+  match: /
+
+- comment: Comments
+  name: comment.line.semicolon.abnf
+  match: (;.*)
+
+- name: support.function.built-in.abnf
+  match: (?i:WSP|LWSP|ALPHA|DIGIT|HEXDIG|DQUOTE|SP|HTAB|VCHAR|CHAR|OCTET|CTL|CR|LF|CRLF|BIT)
+
+- comment: Number
+  name: constant.character.escape.abnf
+  match: (%d[0-9]{1,2}(?:[-.]d?[0-9]{1,2})?)
+
+- name: constant.character.escape.abnf
+  match: (%x[0-9a-fA-F]{1,2}(?:[-.]x?[0-9a-fA-F]{1,2})?)
+
+- name: constant.character.escape.decimal.abnf
+  match: (%b[01]{1,2}(?:[-.]b?[01]{1,2})?)
+
+- comment: Optional
+  name: meta.optional.abnf
+  begin: (\[)
+  beginCaptures:
+    '1': {name: punctuation.definition.optional.abnf}
+  end: (\])
+  endCaptures:
+    '1': {name: punctuation.definition.optional.abnf}
+
+- comment: Grouping
+  name: meta.grouping.abnf
+  begin: (\()
+  beginCaptures:
+    '1': {name: punctuation.definition.group.abnf}
+  end: (\))
+  endCaptures:
+    '1': {name: punctuation.definition.group.abnf}
+
+- comment: Terminal String
+  name: meta.string.abnf
+  contentName: string.quoted.double.abnf
+  begin: (\")
+  beginCaptures:
+    '1': {name: string.quoted.double.abnf}
+  end: (\")
+  endCaptures:
+    '1': {name: string.quoted.double.abnf}
+
+- comment: Terminal String
+  name: meta.string.abnf
+  contentName: string.quoted.single.abnf
+  begin: (\')
+  beginCaptures:
+    '1': {name: string.quoted.single.abnf}
+  end: (\')
+  endCaptures:
+    '1': {name: string.quoted.single.abnf}
+
+- comment: Production Rule
+  name: meta.rule.abnf
+  contentName: variable.language.abnf
+  end: \n
+  match: ^\s*([[:alpha:]][-\w]*)\s*(:{,2}?=|=/?)
+  captures:
+    '1': {name: entity.name.class.abnf}
+    '2': {name: keyword.operator.abnf}
+
+- comment: Rule Identifier
+  name: meta.rule.parameter.abnf
+  match: \s*([[:alpha:]][-\w]*)\s*
+  captures:
+    '1': {name: variable.language.abnf}
+
+- name: constant.character.escape.abnf
+  match: (%d[0-9]{1,2}(?:[-.]d?[0-9]{1,2})?)
+
+- name: constant.character.escape.abnf
+  match: (%x[0-9a-fA-F]{1,2}(?:[-.]x?[0-9a-fA-F]{1,2})?)
+
+- name: constant.character.escape.abnf
+  match: (%b[01]{1,2}(?:[-.]b?[01]{1,2})?)
