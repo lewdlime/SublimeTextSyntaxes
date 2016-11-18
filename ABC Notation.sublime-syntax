@@ -1,0 +1,65 @@
+%YAML 1.2
+---
+name: ABC Notation
+first_line_match: (^%abc(-\d\.\d)?)
+file_extensions:
+  - abc
+  - abh
+  - abp
+scope: source.abc
+contexts:
+  main:
+    - include: free-text
+    - include: typeset-text
+    - match: '%.*'
+      name: comment.line.percentage.abc
+    - match: '(%%[[:alpha:]]\w*)\b\s+(.*)'
+      captures:
+        1: support.function.directive.abc
+        2: variable.parameter.directive.abc
+    - match: '^(%abc(-\d\.\d)?)'
+      name: entity.name.namespace.abc
+      push:
+        - meta_scope: meta.file-header.abc
+        - include: comments
+        - include: directive
+        - match: '^(I:)\s*([[:alpha:]]\w*)\b(.*)'
+          captures:
+            1: keyword.control.field.abc
+            2: support.function.directive.abc
+            3: variable.parameter.directive.abc
+        - match: ^\s*\n
+          pop: true
+    - include: abc-tune
+
+# Main Content
+  comments:
+    - match: '%.*'
+      name: comment.line.percentage.abc
+
+  directive:
+    - match: '(%%[[:alpha:]]\w*)\b\s+(.*)'
+      captures:
+        1: support.function.directive.abc
+        2: variable.parameter.directive.abc
+
+  abc-tune:
+    - match: ^(X:)\s*(\d+)
+      captures:
+        1: entity.name.tag.field.abc
+        2: constant.numeric.integer.abc
+      push:
+        - meta_scope: meta.tune.abc
+        - include: tune-header
+        - include: tune-body
+
+# Child Content
+
+  free-text:
+    # TODO
+
+  typeset-text:
+    # TODO
+
+
+...
