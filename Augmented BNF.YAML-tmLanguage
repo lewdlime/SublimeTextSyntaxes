@@ -52,24 +52,18 @@ repository:
     endCaptures:
       '1': {name: string.quoted.single.abnf}
 patterns:
-- comment: Operators
-  name: keyword.operator.abnf
+- name: keyword.operator.abnf
   match: '([-=\/\.,|*]|::=)'
-- comment: Escape
-  name: constant.character.escape.abnf
+- name: constant.character.escape.abnf
   match: '(%x\h{2}(?:[-.]\h{2})*)'
-- comment: Comments
-  name: comment.line.semicolon.abnf
+- name: comment.line.semicolon.abnf
   match: (;.*)
-- comment: Keywords
-  name: support.constant.abnf
+- name: support.constant.abnf
   match: (?i:WSP|LWSP|ALPHA|DIGIT|HEXDIG|DQUOTE|SP|HTAB|VCHAR|CHAR|OCTET|CTL|CR|LF|CRLF|BIT)
-- comment: Number
-  name: constant.numeric.abnf
+- name: constant.numeric.abnf
   match: \d+(?:\h)*
 
-- comment: Production
-  name: meta.rule.abnf
+- name: meta.rule.abnf
   begin: ^\s*([a-zA-Z][-_\w]*)\s*((?::{2}?)=)(.*)
   beginCaptures:
     '1': {name: keyword.control.abnf}
