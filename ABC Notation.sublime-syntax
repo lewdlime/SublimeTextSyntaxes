@@ -7,6 +7,11 @@ file_extensions:
   - abh
   - abp
 scope: source.abc
+variables:
+  # TODO
+  note: "[a-gA-G][,']"
+  rest: "[xz]"
+
 contexts:
   main:
     - include: free-text
@@ -44,7 +49,7 @@ contexts:
         2: variable.parameter.directive.abc
 
   abc-tune:
-    - match: ^(X:)\s*(\d+)
+    - match: ^\s*\n(X:)\s*(\d+)
       captures:
         1: entity.name.tag.field.abc
         2: constant.numeric.integer.abc
@@ -52,11 +57,11 @@ contexts:
         - meta_scope: meta.tune.abc
         - include: tune-header
         - include: tune-body
+        - match: ^\s*\n
+          pop: true
 
 # Child Content
-
-  free-text:
-    # TODO
+ 
 
   typeset-text:
     # TODO
