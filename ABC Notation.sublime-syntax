@@ -1,17 +1,107 @@
 %YAML 1.2
 ---
 name: ABC Notation
-first_line_match: (^%abc(-\d\.\d)?)
 file_extensions:
   - abc
   - abh
   - abp
+first_line_match: ^%abc(?:-\d\.\d)?
 scope: source.abc
 
 variables:
-  note: "[a-gA-G][,']"
-  rest: '[xz]'
+  _eol: '\r?\n'
 
+  _type_float: "(?x:(?:\d\d*)?\.\d*)"
+  _type_int: "(?x:(?:0|[1-9]\d*))"
+  _type_bool: "(?ix:y|yes|n|no|true|false|on|off|1|0)\b"
+  _type_unit: "{{_type_float}}(?:cm|in|pt)\b"
+
+  note: "[a-gA-G][,']*"
+  note_length: |-
+    (?x:
+      (?:\d*/*(?:\d*)?)
+      | (?:\d*>*(?:\d*)?)
+      | (?:\d*<*(?:\d*)?)
+    )
+  barline: |-
+    (?x:
+      \|
+      | :{2}
+      | (?:[|\[\]:]*)\|
+      | \|(?:[|\[\]:]*)
+      | ((?:[|\[\]:]*)\|(?:[|\[\]:]*))(\d(?:[-,]\d)*)
+    )
+  accidental: '((?:[_^]{1,2})|=|[_=^]{{note_length}})'
+  rest: |-
+    (?x:
+      [xz]{{note_length}}
+      | [XZ]\d+
+
+  chord_note: '[A-G]'
+  chord_accidental: '[b#♭♮♯]'
+  chord_type: '(m|min|maj|dim|aug|\+|sus|\d)\b'
+  chord_bass: '/{{chord_note}}{{chord_accidental}}?'
+  chord_alternate: '\({{chord_note}}{{chord_accidental}}?{{chord_type}}*{{chord_bass}}?\)'
+  chord_symbol: |-
+    (?x:
+      (?:{{chord_note}}{{chord_accidental}}?{{chord_type}}*{{chord_bass}}?){{chord_alternate}}*
+    )
+
+  annotation: |-
+    (?x:
+      (\"[_<>^])
+      | ("@{{_type_float}},{{_type_float}})
+    )
+
+  decoration: '(![^!\n]+!|[.~HLMOPSTuv])'
+
+  tuplet: '\(\d(?::\d(?::\d*)?)?'
+
+  abc_note: |-
+    (?x:
+      {{grace_note}}?
+      (?:{{annotation}}|<decoration>)*
+      {{accidental}}? {{note}} {{note_length}}?
+    )
+
+  abc_chord: |-
+    (?x:
+      {{grace_note}}?
+      (?:{{annotation}}|{{decoration}})*
+      \[{{accidental}}?{{note}}{{note_length}}?\]
+    )
+
+  ## Fields
+  field_id: '^[a-zA-Z]:'
+  continue_field: '^\+:'
+
+  file_field_id: '^[A-DF-IL-ORSUZmr]'
+  tuneheader_field_id: '^[A-DF-IK-XZmr]'
+  tunebody_field_id: '^[IK-NP-Rmr]'
+  inline_field_id: '\[[IK-NP-RUVmr]'
+  global_field_id: '[ILMNRUmr]'
+
+  ## Macros
+  static_macro_def: '(?x: ~[a-zA-Z&&[^nN]]{1,31} \s* = \s* {{abc_note}})'
+  static_macro: '~[a-zA-Z&&[^nN]]{1,31}'
+
+  transpose_note: |-
+    (?x:
+      {{grace_note}}?
+      (?:{{annotation}}|<decoration>)*
+      {{accidental}}? [h-z] {{note_length}}?
+    )
+  transpose_macro_def: '(?x: ~[a-zA-Z]{,29}n\d \s* = \s* {{transpose_note}})'
+  transpose_macro: '~[a-zA-Z]{,29}n\d'
+
+  music_code: # TODO
+
+  ## Namespaces
+  ent_namespace: '^%abc-\d\.\d'
+
+  ## Text Directives
+  b_text_directive: '^%%begin(text|svg|ml|md|js|ps)\b'
+  e_text_directive: '^%%end(\1)\b'
 
 contexts:
   main:
@@ -22,7 +112,7 @@ contexts:
       name: punctuation.definition.comment.abc
       push: line_comment
 
-    - match: '%%([[:alpha:]]\w*)\b'
+    - match: "%%([[:alpha:]]\w*)\b"
       captures:
         1: support.function.directive.abc
       push: directive
@@ -55,19 +145,18 @@ contexts:
         2: variable.parameter.directive.abc
 
   abc-tune:
-    - match: ^\s*\n(X:)\s*(\d+)
+    - meta_content_scope: meta.tune.body.abc
+    - match: '^\s*\n(X:)'
       captures:
         1: entity.name.tag.field.abc
         2: constant.numeric.integer.abc
       push:
-        - meta_scope: meta.tune.abc
         - include: tune-header
         - include: tune-body
-        - match: ^\s*\n
+        - match: $
           pop: true
 
 # Child Content
- 
 
   typeset-text:
     # TODO
