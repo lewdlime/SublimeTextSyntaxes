@@ -4,34 +4,31 @@ foreground: "#F8F8F2"
 background: "#272822"
 
 - keywords:
-  keyword.control:
-    keyword.control.conditional: ""
-    keyword.control.import: ""
-  keyword.operator:
-    keyword.operator.union: ['&', '&&']
-     keyword.operator.staccato: "\\."
-     keyword.operator.field: "(^[A-Za-z]:)"
-     keyword.operator.directive: "((?<!%)%%\s*\b\w+\b)"
-     keyword.operator.chord: ["\\[", "\\]"]
-     keyword.operator.slur: ["\\(", "\\)"]
-     keyword.operator.tuplet: "(\d*(?::\d*(?::\d*)?)?)"
-     keyword.operator.grace-note: ["\\{\/", "\\}"]
-     keyword.operator.bar-line: "((?:[|\[\]:]*)?\|(?:[|\[\]:]*))(\d(?:[-,]\d)*)?"
-     keyword.operator.macro: "~[^n[[:blank:][:punct:]]]+"
-     keyword.operator.decoration: "(?<!\\)![^!%[[:blank:]]]+!"
-     keyword.operator.symbol: "(?<!\\)[-.~uvTHLMPSO]"
-   keyword.operator.arithmetic: "((?:[1-9]\d*/*(?:[1-9]\d*)?)|(?:[1-9]\d*>*(?:[1-9]\d*)?)|(?:[1-9]\d*<*(?:[1-9]\d*)?))"
-   keyword.operator.assignment:
-     keyword.operator.assignment.macro: "~[^n[[:blank:]]]*"
-     keyword.operator.assignment.symbol: "<user-defined symbol assignments>"
-   keyword.operator.bitwise: "n/a"
-   keyword.operator.logical: "\btrue\b|\bfalse\b|\byes\b|\bno\b|\bon\b|\boff\b|1|0"
-   keyword.operator.word: "Directives, possibly"
-   keyword.other: "n/a"
-   punctuation.definition.keyword:
-     punctuation.definition.slur.begin: ""
-     punctuation.definition.slur.end: ""
-     punctuation.definition.tuplet:
+  keyword.control.conditional: ""
+  keyword.control.import: ""
+  keyword.operator.union: ['&', '&&']
+  keyword.operator.staccato: "\\."
+  keyword.operator.field: "(^[A-Za-z]:)"
+  keyword.operator.directive: "((?<!%)%%\s*\b\w+\b)"
+  keyword.operator.chord: ["\\[", "\\]"]
+  keyword.operator.slur: ["\\(", "\\)"]
+  keyword.operator.tuplet: "(\d*(?::\d*(?::\d*)?)?)"
+  keyword.operator.grace-note: ["\\{\/", "\\}"]
+  keyword.operator.bar-line: "((?:[|\[\]:]*)?\|(?:[|\[\]:]*))(\d(?:[-,]\d)*)?"
+  keyword.operator.macro: "~[^n[[:blank:][:punct:]]]+"
+  keyword.operator.decoration: "(?<!\\)![^!%[[:blank:]]]+!"
+  keyword.operator.symbol: "(?<!\\)[-.~uvTHLMPSO]"
+  keyword.operator.arithmetic: "((?:[1-9]\d*/*(?:[1-9]\d*)?)|(?:[1-9]\d*>*(?:[1-9]\d*)?)|(?:[1-9]\d*<*(?:[1-9]\d*)?))"
+  keyword.operator.assignment.macro: "~[^n[[:blank:]]]*"
+  keyword.operator.assignment.symbol: "<user-defined symbol assignments>"
+  keyword.operator.bitwise: "n/a"
+  keyword.operator.logical: "\btrue\b|\bfalse\b|\byes\b|\bno\b|\bon\b|\boff\b|1|0"
+  keyword.operator.word: "Directives, possibly"
+  keyword.other: "n/a"
+  punctuation.definition.keyword:
+  punctuation.definition.slur.begin: ""
+  punctuation.definition.slur.end: ""
+  punctuation.definition.tuplet:
 
 - entities:
    entity.name:
