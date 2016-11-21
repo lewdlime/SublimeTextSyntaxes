@@ -7,21 +7,26 @@ file_extensions:
   - abh
   - abp
 scope: source.abc
+
 variables:
-  # TODO
   note: "[a-gA-G][,']"
-  rest: "[xz]"
+  rest: '[xz]'
+
 
 contexts:
   main:
     - include: free-text
     - include: typeset-text
-    - match: '%.*'
-      name: comment.line.percentage.abc
-    - match: '(%%[[:alpha:]]\w*)\b\s+(.*)'
+
+    - match: '%'
+      name: punctuation.definition.comment.abc
+      push: line_comment
+
+    - match: '%%([[:alpha:]]\w*)\b'
       captures:
         1: support.function.directive.abc
-        2: variable.parameter.directive.abc
+      push: directive
+
     - match: '^(%abc(-\d\.\d)?)'
       name: entity.name.namespace.abc
       push:
@@ -35,6 +40,7 @@ contexts:
             3: variable.parameter.directive.abc
         - match: ^\s*\n
           pop: true
+
     - include: abc-tune
 
 # Main Content
