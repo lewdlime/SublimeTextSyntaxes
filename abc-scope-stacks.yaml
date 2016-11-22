@@ -1,7 +1,39 @@
 %YAML 1.2
 ---
-abc-book:
-  - ["(^%abc(?:-\d\.\d)?)", file-header]
-  - ["(^(?:))"]
+abc-file:
+  - global-header: "*"
+  - abc-tune: "+"
+  - embedded-content: "*"
+
+global-header:
+  - remark-fields
+  - comments
+  - fields
+  - instruction-fields
+  - pseudocomments
+  - embedded-content
+
+abc-tune:
+  - tune-header
+  - tune-body
+
+tune-header:
+  - _content_order: "index-field, (fields, instruction-fields)* key-field"
+  - comments
+  - pseudocomments
+  - embedded-content
+
+tune-body:
+  - _content_order: "key-field, code-line+, _blank-line_"
+  - comments
+  - pseudocomments
+  - embedded-content
+
+embedded-content:
+  - _content_order: "_begin-content_, _end-content_"
+  - remark-fields
+  - comments
+  - instruction-fields
+  - pseudocomments
 
 ...
