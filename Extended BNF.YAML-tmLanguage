@@ -2,79 +2,61 @@
 ---
 name: Extended BNF
 scopeName: source.ebnf
-fileTypes: ['ebnf']
+fileTypes: [ebnf]
 uuid: 48b3e845-a928-4197-b838-36e97105b79f
+patterns:
+  - name: meta.type.rule.ebnf
+    match: '^\s*([a-zA-Z][a-zA-Z ]+)\b\s*((?:::)?=)'
+    captures:
+      '1': {name: entity.name.class.abnf}
+      '2': {name: keyword.operator.assignment.ebnf} # punctuation.definition.sequence.begin.ebnf
+  - include: '#rule-items'
 repository:
-  continuation:
-    name: meta.continuation.ebnf
-    begin: \s*([^=;]*)
-    beginCaptures:
-      '1': {name: variable.parameter.rule.ebnf}
-    end: ((?!\");)
-    endCaptures:
-      '1': {name: punctuation.terminator.ebnf}
-    patterns:
-      - include: '#optional'
-      - include: '#repeat'
-      - include: '#group'
-      - include: '#terminal-single'
-      - include: '#terminal-double'
-      - include: '#operators'
-      - include: '#special'
-      - include: '#comments'
-  operators:
-    name: keyword.control.ebnf
-    match: ([-\\,;|*])
-  assignment:
-    name: keyword.control.assignment.ebnf
-    match: (:{,2}=)
-  optional:
+  separator:
+    name: punctuation.separator.abnf
+    match: (\||,|-)
+  terminator:
+    name: punctuation.terminator.ebnf
+    match: (;|\.)
+  option:
     name: meta.optional.ebnf
     begin: (\[)
     beginCaptures:
-      '1': {name: support.constant.optional.ebnf}
+      '1': {name: punctuation.section.brackets.begin.ebnf}
     end: (\])
     endCaptures:
-      '1': {name: support.constant.optional.ebnf}
+      '1': {name: punctuation.section.brackets.end.ebnf}
     patterns:
-      - include: '#optional'
-      - include: '#repeat'
-      - include: '#group'
-      - include: '#terminal-single'
-      - include: '#terminal-double'
-      - include: '#operators'
-  repeat:
-    name: meta.repeat.ebnf
+    - include: '#rule-items'
+  repeat-section:
+    name: meta.repetition.ebnf
     begin: (\{)
     beginCaptures:
-      '1': {name: support.constant.repeat.ebnf}
+      '1': {name: punctuation.section.braces.begin.ebnf}
     end: (\})
     endCaptures:
-      '1': {name: support.constant.repeat.ebnf}
+      '1': {name: punctuation.section.braces.end.ebnf}
     patterns:
-      - include: '#optional'
-      - include: '#repeat'
-      - include: '#group'
-      - include: '#terminal-single'
-      - include: '#terminal-double'
-      - include: '#operators'
+    - include: '#rule-items'
+  repeat-symbol:
+    name: constant.numeric.repeat.ebnf
+    match: '\*'
+  repeats:
+    patterns:
+    - include: '#repeat-section'
+    - include: '#repeat-symbol'
   group:
-    name: meta.group.ebnf
+    name: meta.grouping.ebnf
     begin: (\()
     beginCaptures:
-      '1': {name: support.constant.group.ebnf}
+      '1': {name: punctuation.section.group.begin.ebnf}
     end: (\))
     endCaptures:
-      '1': {name: support.constant.group.ebnf}
+      '1': {name: punctuation.section.group.end.ebnf}
     patterns:
-      - include: '#optional'
-      - include: '#repeat'
-      - include: '#group'
-      - include: '#terminal-single'
-      - include: '#terminal-double'
-      - include: '#operators'
+    - include: '#rule-items'
   terminal-single:
-    name: meta.string.ebnf
+    name: meta.string.single.ebnf
     contentName: string.quoted.double.ebnf
     begin: (\")
     beginCaptures:
@@ -83,7 +65,7 @@ repository:
     endCaptures:
       '1': {name: punctuation.definition.string.end.ebnf}
   terminal-double:
-    name: meta.string.ebnf
+    name: meta.string.double.ebnf
     contentName: string.quoted.single.ebnf
     begin: (\')
     beginCaptures:
@@ -91,83 +73,39 @@ repository:
     end: (\')
     endCaptures:
       '1': {name: punctuation.definition.string.end.ebnf}
-  comments:
-    name: meta.comment.ebnf
-    contentName: comment.block.documentation.ebnf
-    begin: (\(\*)
-    beginCaptures:
-      '1': {name: punctuation.definition.comment.ebnf}
-    end: (\*\))
-    endCaptures:
-      '1': {name: punctuation.definition.comment.ebnf}
-  special:
-    name: meta.special.ebnf
-    contentName: comment.block.documentation.ebnf
-    begin: (\?)
-    beginCaptures:
-      '1': {name: punctuation.definition.comment.ebnf}
-    end: (\?)
-    endCaptures:
-      '1': {name: punctuation.definition.comment.ebnf}
-patterns:
-- comment: Production
-  name: meta.rule.ebnf
-  contentName: variable.parameter.rule.ebnf
-  begin: (^[^=]+)\s*(=)
-  beginCaptures:
-    '1': {name: keyword.control.rule.ebnf}
-    '2': {name: keyword.operator.assignment.ebnf}
-  end: \n
-  endCaptures:
-    '1': {name: punctuation.terminator.ebnf}
-    '2': {name: comment.block.documentation.ebnf}
-  patterns:
-    - include: '#assignment'
-    - include: '#operators'
-    - include: '#optional'
-    - include: '#repeat'
-    - include: '#group'
+  terminal-string:
+    patterns:
     - include: '#terminal-single'
     - include: '#terminal-double'
+  special:
+    name: meta.special.ebnf
+    contentName: constant.character.escape.ebnf
+    begin: (\?)
+    beginCaptures:
+      '1': {name: comment.block.documentation.ebnf}
+    end: (\?)
+    endCaptures:
+      '1': {name: comment.block.documentation.ebnf}
+  comment:
+    name: meta.comment.ebnf
+    contentName: comment.block.documentation.ebnf
+    begin: '(\(\*)'
+    beginCaptures:
+      '1': {name: punctuation.definition.comment.ebnf}
+    end: '(\*\))'
+    endCaptures:
+      '1': {name: punctuation.definition.comment.ebnf}
+  rule-ids:
+    name: entity.name.type.rule.ebnf
+    match: ((?:[a-zA-Z][a-zA-Z ]+)\b(?!\s*:{,2}=))
+  rule-items:
+    patterns:
+    - include: '#separator'
+    - include: '#terminator'
+    - include: '#option'
+    - include: '#repeats'
+    - include: '#group'
+    - include: '#terminal-string'
     - include: '#special'
-    - include: '#comments'
-    - include: '#continuation'
-- comment: Comments
-  name: meta.comment.ebnf
-  contentName: comment.block.documentation.ebnf
-  begin: (\(\*)
-  beginCaptures:
-    '1': {name: punctuation.definition.comment.ebnf}
-  end: (\*\))
-  endCaptures:
-    '1': {name: punctuation.definition.comment.ebnf}
-- comment: Specials
-  name: meta.special.ebnf
-  contentName: comment.block.documentation.ebnf
-  begin: (\?)
-  beginCaptures:
-    '1': {name: punctuation.definition.comment.ebnf}
-  end: (\?)
-  endCaptures:
-    '1': {name: punctuation.definition.comment.ebnf}
-- comment: Terminal
-  name: meta.string.ebnf
-  contentName: string.quoted.double.ebnf
-  begin: (\")
-  beginCaptures:
-    '1': {name: punctuation.definition.string.begin.ebnf}
-  end: (\")
-  endCaptures:
-    '1': {name: punctuation.definition.string.end.ebnf}
-- comment: Terminal
-  name: meta.string.ebnf
-  contentName: string.quoted.single.ebnf
-  begin: (\')
-  beginCaptures:
-    '1': {name: punctuation.definition.string.begin.ebnf}
-  end: (\')
-  endCaptures:
-    '1': {name: punctuation.definition.string.end.ebnf}
-- comment: Operators
-  name: keyword.control.ebnf
-  match: ([-\\,;|*])
+    - include: '#rule-ids'
+    - include: '#comment'
