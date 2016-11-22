@@ -105,19 +105,20 @@ variables:
 
 contexts:
   main:
-    - include: free-text
+    #- include: free-text
     - include: typeset-text
 
     - match: '%'
       name: punctuation.definition.comment.abc
       push: line_comment
 
-    - match: "%%([[:alpha:]]\w*)\b"
+    - match: "(%%)([[:alpha:]]\w*)\b"
       captures:
-        1: support.function.directive.abc
+        1: punctuation.definition.directive.abc
+        2: support.function.directive.abc
       push: directive
 
-    - match: '^(%abc(-\d\.\d)?)'
+    - match: '^(%)(abc(?:-\d\.\d)?)'
       name: entity.name.namespace.abc
       push:
         - meta_scope: meta.file-header.abc

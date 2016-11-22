@@ -1,78 +1,101 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
----
 name: Augmented BNF
 scopeName: source.abnf
-fileTypes: ['abnf']
+fileTypes: [abnf]
 uuid: d167af74-1db4-48ea-ba12-2c31a07add3a
+
+patterns:
+- name: meta.type.rule.abnf
+  match: |-
+    (?x:
+      ^((?:^\s*[a-zA-Z][-a-zA-Z]*)\b | (?:^\s*<[a-zA-Z][-a-zA-Z]*)\b>)
+    )\s*(=\/?|::=)
+  captures:
+    '1': {name: entity.name.class.abnf}
+    '2': {name: keyword.operator.assignment.abnf}
+- include: '#rule-items'
+- name: meta.comment.line.abnf
+  begin: '(;)(.*)'
+  beginCaptures:
+    '1': {name: punctuation.definition.comment.abnf}
+    '2': {name: comment.line.semicolon.abnf}
+  end: $
+
 repository:
-  optional:
+  escapes:
+    name: constant.character.escape.abnf
+    match: |-
+      (?x:
+        (?:%\h{1,2}(?:[-.]\h{1,2})?)
+        | (?:%x\h{1,2}(?:[-.]x?\h{1,2})?)
+        | (?:%d[0-9]{1,2}(?:[-.]d?[0-9]{1,2})?)
+        | (?:%b[01]{1,2}(?:[-.]b?[01]{1,2})?)
+      )
+  core:
+    name: support.function.built-in.abnf
+    match: (?i:WSP|LWSP|ALPHA|DIGIT|HEXDIG|DQUOTE|SP|HTAB|VCHAR|CHAR|OCTET|CTL|CR|LF|CRLF|BIT)\b
+  rule-id:
+    name: variable.parameter.abnf
+    match: |-
+      (?x:
+        ((?:[a-zA-Z][-a-zA-Z]*)(?!\s*=\/?|::=))\b
+        | <((?:[a-zA-Z][-a-zA-Z ]*)(?!\s*=\/?|::=))\b>
+      )
+  terminal-single:
+    name: meta.string.single.abnf
+    contentName: string.quoted.single.abnf
+    begin: (\')
+    beginCaptures:
+      '1': {name: punctuation.definition.string.begin.abnf}
+    end: (\')
+    endCaptures:
+      '1': {name: punctuation.definition.string.end.abnf}
+  terminal-double:
+    name: meta.string.double.abnf
+    contentName: string.quoted.double.abnf
+    begin: (\")
+    beginCaptures:
+      '1': {name: punctuation.definition.string.begin.abnf}
+    end: (\")
+    endCaptures:
+      '1': {name: punctuation.definition.string.end.abnf}
+  terminal-string:
+    patterns:
+    - include: '#terminal-single'
+    - include: '#terminal-double'
+  alternate:
+    name: punctuation.separator.abnf
+    match: ((?<!=)\/)
+  option:
     name: meta.optional.abnf
     begin: (\[)
     beginCaptures:
-      '1': {name: keyword.operator.abnf}
+      '1': {name: punctuation.definition.optional.abnf}
     end: (\])
     endCaptures:
-      '1': {name: keyword.operator.abnf}
+      '1': {name: punctuation.definition.optional.abnf}
     patterns:
-      - include: $self
-  repetition:
-    name: meta.repetition.abnf
-    begin: (\{)
-    beginCaptures:
-      '1': {name: keyword.operator.abnf}
-    end: (\})
-    endCaptures:
-      '1': {name: keyword.operator.abnf}
-    patterns:
-      - include: $self
-  grouping:
+    - include: '#rule-items'
+  group:
     name: meta.grouping.abnf
     begin: (\()
     beginCaptures:
-      '1': {name: keyword.operator.abnf}
+      '1': {name: punctuation.definition.group.abnf}
     end: (\))
     endCaptures:
-      '1': {name: keyword.operator.abnf}
+      '1': {name: punctuation.definition.group.abnf}
     patterns:
-      - include: $self
-  terminal-single:
-    name: meta.string.abnf
-    begin: (\".*)
-    beginCaptures:
-      '1': {name: string.quoted.double.abnf}
-    end: (\")
-    endCaptures:
-      '1': {name: string.quoted.double.abnf}
-  terminal-double:
-    name: meta.string.abnf
-    begin: (\'.*)
-    beginCaptures:
-      '1': {name: string.quoted.single.abnf}
-    end: (\')
-    endCaptures:
-      '1': {name: string.quoted.single.abnf}
-patterns:
-- name: keyword.operator.abnf
-  match: '([-=\/\.,|*]|::=)'
-- name: constant.character.escape.abnf
-  match: '(%x\h{2}(?:[-.]\h{2})*)'
-- name: comment.line.semicolon.abnf
-  match: (;.*)
-- name: support.constant.abnf
-  match: (?i:WSP|LWSP|ALPHA|DIGIT|HEXDIG|DQUOTE|SP|HTAB|VCHAR|CHAR|OCTET|CTL|CR|LF|CRLF|BIT)
-- name: constant.numeric.abnf
-  match: \d+(?:\h)*
-
-- name: meta.rule.abnf
-  begin: ^\s*([a-zA-Z][-_\w]*)\s*((?::{2}?)=)(.*)
-  beginCaptures:
-    '1': {name: keyword.control.abnf}
-    '2': {name: keyword.operator.abnf}
-    '3': {name: variable.parameter.abnf}
-  end: \n
-  patterns:
-    - include: '#optional'
-    - include: '#grouping'
-    - include: '#repetition'
-    - include: '#terminal-single'
-    - include: '#terminal-double'
+    - include: '#rule-items'
+  repeat:
+    name: constant.numeric.abnf
+    match: '(?x:\d+(?:\*\d*)? | \*)'
+  rule-items:
+    patterns:
+    - include: '#alternate'
+    - include: '#core'
+    - include: '#repeat'
+    - include: '#rule-id'
+    - include: '#group'
+    - include: '#option'
+    - include: '#escapes'
+    - include: '#terminal-string'
