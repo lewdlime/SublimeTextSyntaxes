@@ -9,12 +9,35 @@ first_line_match: ^%abc(?:-\d\.\d)?
 scope: source.abc
 
 variables:
-  _eol: '\r?\n'
+  _eol: \r?\n
+  _type_float: (?x:(?:\d\d*)?\.\d*)
+  _type_int: (?x:(?:0|[1-9]\d*))
+  _type_bool: (?ix:y|yes|n|no|true|false|on|off|1|0)\b
+  _type_unit: '{{_type_float}}(?:cm|in|pt)\b'
 
-  _type_float: "(?x:(?:\d\d*)?\.\d*)"
-  _type_int: "(?x:(?:0|[1-9]\d*))"
-  _type_bool: "(?ix:y|yes|n|no|true|false|on|off|1|0)\b"
-  _type_unit: "{{_type_float}}(?:cm|in|pt)\b"
+  _escape: |-
+      (?x:
+        (?:\\%)
+        | (?:\\\\)
+        | (?:\\u\h{4})
+        | (?:\\[[:punct:]\w]{2})
+        | (?:&\w+;)
+        | (?:&#\d+;)
+        | (?:&#x\h+;)
+      )
+  _field: '^[a-zA-Z&&[^IKTXr]]:'
+  _field_continue: '^\+:'
+  _remark: '^r:'
+  _instruction: '^I:\s*\w+\b'
+  _namespace: '^%abc(?:-\d\.\d)?'
+  _pseudocomment: '(?<!\\)%%\s*\w+\b'
+
+  _line_break: (?:\$(?=\s+))
+  _line_continue: (\\(?= ))
+
+  abc-directive:
+    - include: '#_instruction'
+    - include: '#_pseudocomment'
 
   note: "[a-gA-G][,']*"
   note_length: |-
