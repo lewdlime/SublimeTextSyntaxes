@@ -5,24 +5,8 @@ fileTypes: [abc]
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 
 patterns:
-- comment: Namespace
-  name: meta.namespace.abc
-  match: '(%)(abc(?:-\d\.\d)?)'
-  captures:
-    '1': {name: comment.line.percentage.abc}
-    '2': {name: entity.name.namespace.abc}
-
-- comment: Directives
-  name: meta.directive.abc
-  match: '(%%)\s*(\w*)\b([^%\n\r]*)'
-  captures:
-    '1': {name: comment.line.percentage.abc}
-    '2': {name: support.function.directive.abc}
-    '3': {name: variable.parameter.directive.abc}
-
-- comment: Comments
-  name: comment.line.percentage.abc
-  match: '%{1}(?!%|abc).*'
+- include: '#unparsed'
+- include: '#escape'
 
 - comment: Bar lines
   name: keyword.operator.barline.abc
@@ -91,6 +75,13 @@ patterns:
   name: support.constant.line-continue.abc
   match: (\/(?= ) +)
 
+- include: '#namespace'
+
+- include: '#directive'
+
+- include: '#comments'
+
+
 # TODO:
 # corrections to inline fields
 # note lengths
@@ -102,6 +93,32 @@ patterns:
 # corrections to string annotations/chord symbols
 
 repository:
+  # Unparsed text matches for all text outside of an ABC tune or multi-line
+  # block of embedded markup or code content.
+  unparsed:
+    name: meta.free-text.abc
+    begin: '^([^\s].*)'
+    beginCaptures:
+      '1': {name: comment.block.free-text.abc}
+    end: ^\s*$
+  escape:
+    name: constant.character.escape.abc
+    match: (?:\\%)|(?:\\\\)|(?:\\u\h{4})|(?:\\[[:punct:]&&[\w]&&[^\s]]{2})|(?:&\w+;)|(?:&#\d+;)|(?:&#x\h+;)
+  namespace:
+    comment: Namespace
+    name: meta.namespace.abc
+    match: '(%)(abc(?:-\d\.\d)?)'
+    captures:
+      '1': {name: comment.line.percentage.abc}
+      '2': {name: entity.name.namespace.abc}
+  directive:
+    comment: Directives
+    name: meta.directive.abc
+    match: '(%%)\s*(\w*)\b([^%\n\r]*)'
+    captures:
+      '1': {name: comment.line.percentage.abc}
+      '2': {name: support.function.directive.abc}
+      '3': {name: variable.parameter.directive.abc}
   comments:
     comment: Comments
     name: comment.line.percentage.abc
@@ -110,3 +127,69 @@ repository:
     comment: Note lengths
     name: constant.numeric.note-length.abc
     match: ((?:\d*/*(?:\d*)?)|(?:\d*>*(?:\d*)?)|(?:\d*<*(?:\d*)?)|(?:\d(?!\.))+)
+  spacing-length:
+    name: constant.numeric.float.spacing-length.abc
+    match: (\d*(?:\.\d*)?(?:pt|in|cm)?\b)
+
+  svg-directive:
+    name: meta.svg.directive.abc
+    contentName: source.xml
+    begin: (%%)\s*(beginsvg)
+    beginCaptures:
+      '1': {name: punctuation.definition.comment.pseudo.abc}
+      '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+    end: (%%)\s*(endsvg)
+    endCaptures:
+      '1': {name: punctuation.definition.comment.pseudo.abc}
+      '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
+    patterns:
+    - include: '#_escape'
+    - include: '#abc-comment'
+    - include: '#_directive'
+
+  svg-instruction:
+    name: meta.svg.instruction.abc
+    contentName: source.xml
+    begin: (^I:)\s*(beginsvg)
+    beginCaptures:
+      '1': {name: support.constant.instruction.abc}
+      '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+    end: (^I:)\s*(endsvg)
+    endCaptures:
+      '1': {name: support.constant.instruction.abc}
+      '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
+    patterns:
+    - include: '#comment'
+    - include: '#directive'
+
+  text-directive:
+    name: meta.text.directive.abc
+    contentName: string.unquoted.free.abc
+    begin: ^(%%)\s*(begintext)\b\s+((?:obeylines|fill|ragged|justify|align|skip)\b)?
+    beginCaptures:
+      '1': {name: comment.line.percentage.abc}
+      '2': {name: support.function.directive.abc}
+      '3': {name: support.type.directive.abc}
+    end: ^(%%)\s*(endtext)\s*\n
+    endCaptures:
+      '1': {name: comment.line.percentage.abc}
+      '2': {name: support.function.directive.abc}
+    patterns:
+    - include: '#comment'
+    - include: '#directive'
+
+  text-instruction:
+    name: meta.text.instruction.abc
+    contentName: string.unquoted.free.abc
+    begin: ^(I:)\s*(begintext)\b\s+((?:obeylines|fill|ragged|justify|align|skip)\b)?
+    beginCaptures:
+      '1': {name: support.constant.instruction.abc}
+      '2': {name: support.function.directive.abc}
+      '3': {name: support.type.directive.abc}
+    end: ^(I:)\s*(endtext)\s*\n
+    endCaptures:
+      '1': {name: support.constant.instruction.abc}
+      '2': {name: support.function.directive.abc}
+    patterns:
+    - include: '#comment'
+    - include: '#directive'
