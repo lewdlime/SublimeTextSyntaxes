@@ -1,13 +1,28 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
 name: ABC Notation
-scopeName: text.abcnotation
+scopeName: source.abc
 fileTypes: [abc]
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 
 patterns:
+- comment: Namespace
+  name: meta.namespace.abc
+  match: '(%)(abc(?:-\d\.\d)?)'
+  captures:
+    '1': {name: comment.line.percentage.abc}
+    '2': {name: entity.name.namespace.abc}
+
+- comment: Directives
+  name: meta.directive.abc
+  match: '(%%)\s*(\w*)\b([^%\n\r]*)'
+  captures:
+    '1': {name: comment.line.percentage.abc}
+    '2': {name: support.function.directive.abc}
+    '3': {name: variable.parameter.directive.abc}
+
 - comment: Comments
   name: comment.line.percentage.abc
-  match: '%.*'
+  match: '%{1}(?!%|abc).*'
 
 - comment: Bar lines
   name: keyword.operator.abc
@@ -26,7 +41,7 @@ patterns:
     '2': {name: string.unquoted.abc}
 
 - comment: Notes
-  match: ([\^=_]*)([A-Ga-gz][,']*)([0-9]*/*[><0-9]*)
+  match: ([_\^]{2}|=|[_=\^](?:\d*/*(?:\d*)?)|(?:\d(?!\.))+)?([A-Ga-g][,']*)((?:\d*/*(?:\d*)?)|(?:\d*>*(?:\d*)?)|(?:\d*<*(?:\d*)?)|(?:\d(?!\.))+)
   captures:
     '1': {name: constant.language.abc}
     '2': {name: constant.character.abc}
@@ -35,3 +50,20 @@ patterns:
 - comment: Chord names + other annotations
   name: string.quoted.abc
   match: '[\"!].*?[\"!]'
+
+# TODO:
+# decorations
+# inline fields
+# note lengths
+# corrections to barlines
+# rests
+# tuplets
+# slurs
+# chords
+# 
+
+repository:
+  comments:
+    comment: Comments
+    name: comment.line.percentage.abc
+    match: '%(?!%|abc).*'
