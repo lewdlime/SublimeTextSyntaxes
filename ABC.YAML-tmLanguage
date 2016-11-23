@@ -25,8 +25,8 @@ patterns:
   match: '%{1}(?!%|abc).*'
 
 - comment: Bar lines
-  name: keyword.operator.abc
-  match: '[\[:]*[|:][|\]:]*(\[?[0-9]+)?|(\[[0-9]+)'
+  name: keyword.operator.barline.abc
+  match: '((?:\.?\|\|?|:*\|\]|\[\|:*|::|:+\||\|:+|\.?\||\[\|\])[1-9]?|(?::*\|[1-9](?:[-,][1-9])*))'
 
 - comment: Header lines
   name: entity.name.function.abc
@@ -34,36 +34,79 @@ patterns:
   captures:
     '1': {name: string.unquoted.abc}
 
-- comment: Inline fields
-  match: \[([A-Z]:)(.*?)\]
+- comment: Inline Fields
+  match: (\[[a-zA-Z&&[^IKXr]]:)(.*?)(\])
   captures:
-    '1': {name: entity.name.function.abc}
-    '2': {name: string.unquoted.abc}
+    '1': {name: entity.name.function.inline-field.abc}
+    '2': {name: string.unquoted.inline-field.abc}
+    '3': {name: entity.name.function.inline-field.abc}
 
 - comment: Notes
   match: ([_\^]{2}|=|[_=\^](?:\d*/*(?:\d*)?)|(?:\d(?!\.))+)?([A-Ga-g][,']*)((?:\d*/*(?:\d*)?)|(?:\d*>*(?:\d*)?)|(?:\d*<*(?:\d*)?)|(?:\d(?!\.))+)
   captures:
-    '1': {name: constant.language.abc}
-    '2': {name: constant.character.abc}
-    '3': {name: constant.numeric.abc}
+    '1': {name: constant.language.accidental.abc}
+    '2': {name: constant.character.note.abc}
+    '3': {name: constant.numeric.note-length.abc}
 
-- comment: Chord names + other annotations
-  name: string.quoted.abc
-  match: '[\"!].*?[\"!]'
+- comment: Chord symbols and string annotations
+  name: meta.code.string.chord.abc
+  match: '(\")(.*)(\")'
+  captures:
+    '1': {name: punctuation.definition.string.begin.abc}
+    '2': {name: string.quoted.double.chord.abc}
+    '3': {name: punctuation.definition.string.end.abc}
+
+- comment: Slurs
+  name: meta.code.slur.abc
+  begin: (\((?![\d!:]))
+  beginCaptures:
+    '1': {name: support.type.slur.abc}
+  end: (\)(?!!))
+  endCaptures:
+    '1': {name: support.type.slur.abc}
+  patterns:
+  - include: $self
+  - include: '#abc-code'
+
+- comment: Chords
+  name: meta.code.chord.abc
+  begin: (\[(?!(?:[|:\d])|(?:[A-Za-z]:)))
+  beginCaptures:
+    '1': {name: support.type.chord.abc}
+  end: (\](?![|:\d]))
+
+- comment: Decorations
+  name: meta.code.decoration.abc
+  match: '(!)([[:alpha:]&&[^\s!]]*)(!)'
+  captures:
+    '1': {name: keyword.operator.decoration.abc}
+    '2': {name: entity.name.trait.decoration.abc}
+    '3': {name: keyword.operator.decoration.abc}
+
+- comment: Line Break
+  name: support.constant.line-break.abc
+  match: (\$(?= ) +)
+
+- comment: Line Continue
+  name: support.constant.line-continue.abc
+  match: (\/(?= ) +)
 
 # TODO:
-# decorations
-# inline fields
+# corrections to inline fields
 # note lengths
 # corrections to barlines
 # rests
 # tuplets
 # slurs
 # chords
-# 
+# corrections to string annotations/chord symbols
 
 repository:
   comments:
     comment: Comments
     name: comment.line.percentage.abc
     match: '%(?!%|abc).*'
+  note-length:
+    comment: Note lengths
+    name: constant.numeric.note-length.abc
+    match: ((?:\d*/*(?:\d*)?)|(?:\d*>*(?:\d*)?)|(?:\d*<*(?:\d*)?)|(?:\d(?!\.))+)
