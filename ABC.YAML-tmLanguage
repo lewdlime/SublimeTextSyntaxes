@@ -5,7 +5,9 @@ fileTypes: [abc]
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 
 patterns:
-- include: '#unparsed'
+# FIXME: 'unparsed' needs to match up to a blank line, not individual lines.
+#- include: '#unparsed'
+
 - include: '#escape'
 
 - comment: Bar lines
