@@ -1,5 +1,4 @@
 # .gitignore
-!*.JSON-tmLanguage
 !*.YAML-tmLanguage
 !/.mvn/wrapper/maven-wrapper.jar
 !Build/
@@ -9,6 +8,7 @@
 !default.perspectivev3
 !TAGS/
 !tags/
+#!*.JSON-tmLanguage
 #(r)(e)ledmac/(r)(e)ledpar
 #*.css
 #*.eps
@@ -48,6 +48,13 @@
 #modules.xml
 #Pods/
 #vendor/Pods/
+*.tm*
+*.tmLanguage
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.tmproj
+*.tmproject
+*.JSON-tmLanguage
 $RECYCLE.BIN/
 *$py.class
 **.orig
@@ -285,13 +292,7 @@ $RECYCLE.BIN/
 *.tgz
 *.thm
 *.tikz
-*.tm*
-*.tmLanguage
-*.tmlanguage.cache
 *.tmp
-*.tmPreferences.cache
-*.tmproj
-*.tmproject
 *.toc
 *.ttc
 *.ttf
