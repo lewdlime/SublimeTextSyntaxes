@@ -426,7 +426,7 @@ repository:
     captures:
       '1': {name: constant.numeric.length.note.abc}
 
-  _pitch:
+  _note:
     name: entity.name.type.note.abc
     match: ([A-Ga-g][,']*)
 
@@ -462,8 +462,6 @@ repository:
     patterns:
     - include: '#_postscript_instruction'
     - include: '#_postscript_directive'
-
-
 
   _remark:
     name: meta.field.remark.abc
