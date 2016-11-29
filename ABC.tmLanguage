@@ -136,6 +136,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#field-index</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#escape</string>
 				</dict>
 				<dict>

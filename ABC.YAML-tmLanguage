@@ -38,6 +38,7 @@ patterns:
   - include: '#field-remark'
   - include: '#field-instruction'
   - include: '#field-key'
+  - include: '#field-index'
   - include: '#escape'
   - include: '#comments'
   - include: '#directive'
