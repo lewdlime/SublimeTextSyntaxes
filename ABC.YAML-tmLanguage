@@ -5,9 +5,16 @@ fileTypes: [abc]
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 
 patterns:
+## Global Elements
 #- include: '#unparsed'
 
 - include: '#escape'
+
+# TODO: Define a meta section to
+# constrain elements to ABC tunes,
+# excluding global matches
+# (fields, comments, directives,
+# embedded content, & namespace comments)
 
 - comment: Bar lines
   name: meta.code.barline.abc
@@ -16,9 +23,9 @@ patterns:
     '1': {name: keyword.operator.barline.abc}
     '2': {name: support.type.numeric.barline.abc}
 
-- comment: More Bar Lines
+- comment: Repeat Section Bar Lines
   name: meta.code.barline.abc
-  match: ([\[\]])([1-9](?:[-,][1-9])*)
+  match: ([:|\[\]]*[|\[\]])([1-9](?:[-,][1-9])*)
   captures:
     '1': {name: keyword.operator.barline.abc}
     '2': {name: support.type.numeric.barline.abc}  
@@ -30,8 +37,8 @@ patterns:
     '1': {name: keyword.control.index.abc}
     '2': {name: constant.numeric.index.abc}
 
-- comment: Index Field
-  name: meta.field.index.abc
+- comment: Key Field
+  name: meta.field.key.abc
   match: ^(K:)\s*([^%\\]+)
   captures:
     '1': {name: keyword.control.key.abc}
@@ -59,7 +66,7 @@ patterns:
     '2': {name: keyword.operator.word.instruction.abc}
     '3': {name: variable.parameter.instruction.abc}
 
-
+## ABC Code Elements
 
 - comment: Decoration Symbols
   name: meta.code.decoration.symbol.abc
@@ -75,22 +82,34 @@ patterns:
     '2': {name: entity.name.trait.decoration.abc}
     '3': {name: keyword.operator.decoration.abc}
 
-- comment: Notes
+- comment: Note Values (Accidentals, Pitch, Note Length)
   match: ([_\^]{2}|=|[_=\^](?:\d*/*(?:\d*)?)|(?:\d(?!\.))+)?([A-Ga-g][,']*)((?:\d*/*(?:\d*)?)|(?:\d*>*(?:\d*)?)|(?:\d*<*(?:\d*)?)|(?:[<\/>]+)|(?:\d(?!\.))+)
   captures:
     '1': {name: constant.language.accidental.abc}
     '2': {name: constant.character.note.abc}
     '3': {name: constant.numeric.note-length.abc}
 
-- comment: Chord symbols and string annotations
+- comment: Chord symbols
   name: meta.code.string.chord.abc
-  begin: (\")
+  begin: (\"(?![_<>^@]))
   beginCaptures:
     '1': {name: punctuation.definition.string.chord.begin.abc}
   contentName: string.quoted.double.chord.abc
   end: (\")
   endCaptures:
     '1': {name: punctuation.definition.string.chord.end.abc}
+
+- comment: String annotations
+  name: meta.code.string.annotation.abc
+  begin: (\"[_<>^@])
+  beginCaptures:
+    '1': {name: punctuation.definition.string.annotation.begin.abc}
+  contentName: string.quoted.double.annotation.abc
+  end: (\")
+  endCaptures:
+    '1': {name: punctuation.definition.string.annotation.end.abc}
+
+## Advanced Syntax Elements
 
 - comment: Slurs
   name: meta.code.slur.abc
