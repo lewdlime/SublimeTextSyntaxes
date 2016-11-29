@@ -12,31 +12,6 @@
 	<array>
 		<dict>
 			<key>begin</key>
-			<string>^[ \t\v\f]*$</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>comment.block.free-text.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Unparsed Content</string>
-			<key>end</key>
-			<string>^[ \t\v\f]*$</string>
-			<key>name</key>
-			<string>meta.free-text.abc</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#escape</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
 			<string>^(X:)[ \t\v\f]*(\d+)</string>
 			<key>beginCaptures</key>
 			<dict>
@@ -54,7 +29,7 @@
 			<key>comment</key>
 			<string>ABC Tune</string>
 			<key>end</key>
-			<string>^ *$</string>
+			<string>\nK:</string>
 			<key>name</key>
 			<string>meta.tune.abc</string>
 			<key>patterns</key>

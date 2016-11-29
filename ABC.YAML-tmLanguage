@@ -5,22 +5,13 @@ fileTypes: [abc]
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 
 patterns:
-- comment: Unparsed Content
-  name: meta.free-text.abc
-  begin: '^[ \t\v\f]*$'
-  beginCaptures:
-    '1': {name: comment.block.free-text.abc}
-  end: '^[ \t\v\f]*$'
-  patterns:
-  - include: '#escape'
-
 - comment: ABC Tune
   name: meta.tune.abc
   begin: '^(X:)[ \t\v\f]*(\d+)'
   beginCaptures:
     '1': {name: keyword.control.index.abc}
     '2': {name: constant.numeric.index.abc}
-  end: '^ *$'
+  end: '\nK:' # End just before the first 'K:' field
   patterns:
   - include: '#tune-body'
   - include: '#field'
