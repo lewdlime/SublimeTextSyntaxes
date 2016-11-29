@@ -29,14 +29,90 @@
 			<key>comment</key>
 			<string>ABC Tune</string>
 			<key>end</key>
-			<string>\nK:</string>
+			<string>[ \t\v\f]</string>
 			<key>name</key>
 			<string>meta.tune.abc</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#tune-body</string>
+					<string>#inline-field</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#inline-remark</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#inline-instruction</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#grace</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#decoration</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#decoration-symbol</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-chord</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-annotation</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#abc-note</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#abc-rest</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#barline</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#barline-repeat</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#slur</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#chord</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#tuplet</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#union</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#macro</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#backquote</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#line-break</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#line-continue</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1421,7 +1497,7 @@
 			<key>comment</key>
 			<string>Tune Body</string>
 			<key>end</key>
-			<string>^ *$</string>
+			<string>^[ \t\v\f]*$</string>
 			<key>name</key>
 			<string>meta.tune.body.abc</string>
 			<key>patterns</key>
