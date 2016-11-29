@@ -29,114 +29,14 @@
 			<key>comment</key>
 			<string>ABC Tune</string>
 			<key>end</key>
-			<string>[ \t\v\f]</string>
+			<string>^[ \t\v\f]*$</string>
 			<key>name</key>
 			<string>meta.tune.abc</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#inline-field</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#inline-remark</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#inline-instruction</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#grace</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#decoration</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#decoration-symbol</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-chord</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#string-annotation</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#abc-note</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#abc-rest</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#barline</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#barline-repeat</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#slur</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#chord</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#tuplet</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#union</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#macro</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#backquote</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#line-break</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#line-continue</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#field</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#field-title</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#field-remark</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#field-instruction</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#field-key</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#field-index</string>
+					<string>#tune-body</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -149,6 +49,10 @@
 				<dict>
 					<key>include</key>
 					<string>#directive</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#namespace</string>
 				</dict>
 			</array>
 		</dict>
@@ -167,6 +71,38 @@
 		<dict>
 			<key>include</key>
 			<string>#namespace</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#text-directive</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#text-instruction</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#svg-directive</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#svg-instruction</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#postscript-directive</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#postscript-instruction</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#js-directive</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#js-instruction</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -228,6 +164,28 @@
 			<key>name</key>
 			<string>meta.code.abc-rest.abc</string>
 		</dict>
+		<key>abc-space</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.spacer.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.space-length.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Spacer</string>
+			<key>match</key>
+			<string>([yY])(?x:\d+(?:(?:\d*(?:\.\d*)?(?:pt|in|cm)?))?)?</string>
+			<key>name</key>
+			<string>meta.code.abc-space.abc</string>
+		</dict>
 		<key>accidental</key>
 		<dict>
 			<key>captures</key>
@@ -258,7 +216,7 @@
 			<key>comment</key>
 			<string>Backquote (used for spacing between note sequences)</string>
 			<key>match</key>
-			<string>(`)</string>
+			<string>(\`)</string>
 			<key>name</key>
 			<string>meta.code.backquote.abc</string>
 		</dict>
@@ -417,7 +375,7 @@
 			<key>comment</key>
 			<string>Decoration Symbols</string>
 			<key>match</key>
-			<string>([-.~HLMOPSTuv])</string>
+			<string>([-\.~HLMOPSTuv])</string>
 			<key>name</key>
 			<string>meta.code.decoration.symbol.abc</string>
 		</dict>
@@ -447,25 +405,6 @@
 			<string>(%%)[ \t\v\f]*(\w*)([^%\n\r]*)</string>
 			<key>name</key>
 			<string>meta.directive.abc</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#text-directive</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#svg-directive</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#postscript-directive</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#js-directive</string>
-				</dict>
-			</array>
 		</dict>
 		<key>escape</key>
 		<dict>
@@ -492,7 +431,7 @@
 			<key>comment</key>
 			<string>Fields</string>
 			<key>match</key>
-			<string>^([[:alpha:]&amp;&amp;[^IKTXr]]:)([^%\\]*)</string>
+			<string>^([[:alpha:]&amp;&amp;[^IKXr]]:)([^%\\]*)</string>
 			<key>name</key>
 			<string>meta.code.field.abc</string>
 		</dict>
@@ -549,22 +488,6 @@
 					<key>include</key>
 					<string>#spacing-length</string>
 				</dict>
-				<dict>
-					<key>include</key>
-					<string>#text-instruction</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#svg-instruction</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#postscript-instruction</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#js-instruction</string>
-				</dict>
 			</array>
 		</dict>
 		<key>field-key</key>
@@ -610,28 +533,6 @@
 			<string>^(r:)([^%\\]*)</string>
 			<key>name</key>
 			<string>meta.code.field.remark.abc</string>
-		</dict>
-		<key>field-title</key>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.field.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>markup.heading.title.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Title Field</string>
-			<key>match</key>
-			<string>^(T:)([^%\\]*)</string>
-			<key>name</key>
-			<string>meta.code.field.title.abc</string>
 		</dict>
 		<key>grace</key>
 		<dict>
@@ -822,6 +723,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escape</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#comments</string>
 				</dict>
 				<dict>
@@ -870,6 +775,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escape</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#comments</string>
 				</dict>
 				<dict>
@@ -891,7 +800,7 @@
 			<key>comment</key>
 			<string>Line Break</string>
 			<key>match</key>
-			<string>(\$(?= ) +)</string>
+			<string>(\$(?= ) )</string>
 			<key>name</key>
 			<string>meta.code.line-break.abc</string>
 		</dict>
@@ -925,7 +834,7 @@
 			<key>comment</key>
 			<string>User-defined Macro</string>
 			<key>match</key>
-			<string>(~[a-zA-Z][a-zA-Z0-9]{1,31})</string>
+			<string>(\~[a-zA-Z][a-zA-Z0-9]{0,30})</string>
 			<key>name</key>
 			<string>meta.code.macro.abc</string>
 		</dict>
@@ -1048,6 +957,21 @@
 			</dict>
 			<key>name</key>
 			<string>meta.ps.directive.abc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escape</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#directive</string>
+				</dict>
+			</array>
 		</dict>
 		<key>postscript-instruction</key>
 		<dict>
@@ -1092,6 +1016,10 @@
 			<string>meta.ps.instruction.abc</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#escape</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#comments</string>
@@ -1212,10 +1140,18 @@
 		</dict>
 		<key>spacing-length</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.float.space-length.abc</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(\d*(?:\.\d*)?(?:pt|in|cm)?\b)</string>
+			<string>(\d*(?:\.\d*)?(?:pt|in|cm)?)</string>
 			<key>name</key>
-			<string>constant.numeric.float.spacing-length.abc</string>
+			<string>meta.code.space-length.abc</string>
 		</dict>
 		<key>string-annotation</key>
 		<dict>
@@ -1315,15 +1251,15 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#_escape</string>
+					<string>#escape</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#abc-comment</string>
+					<string>#comments</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#_directive</string>
+					<string>#directive</string>
 				</dict>
 			</array>
 		</dict>
@@ -1367,7 +1303,11 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#comment</string>
+					<string>#escape</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1418,6 +1358,10 @@
 			<string>meta.text.directive.abc</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#escape</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#comments</string>
@@ -1473,6 +1417,10 @@
 			<array>
 				<dict>
 					<key>include</key>
+					<string>#escape</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#comments</string>
 				</dict>
 				<dict>
@@ -1506,6 +1454,22 @@
 			<string>meta.tune.body.abc</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#field</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#field-title</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#field-remark</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#field-instruction</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#inline-field</string>

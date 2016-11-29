@@ -5,55 +5,35 @@ fileTypes: [abc]
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 
 patterns:
-- comment: ABC Tune
-  name: meta.tune.abc
-  begin: '^(X:)[ \t\v\f]*(\d+)'
-  beginCaptures:
-    '1': {name: keyword.control.index.abc}
-    '2': {name: constant.numeric.index.abc}
-  end: '[ \t\v\f]' # End just before the first 'K:' field
-  patterns:
-  - include: '#inline-field'
-  - include: '#inline-remark'
-  - include: '#inline-instruction'
-  - include: '#grace'
-  - include: '#decoration'
-  - include: '#decoration-symbol'
-  - include: '#string-chord'
-  - include: '#string-annotation'
-  - include: '#abc-note'
-  - include: '#abc-rest'
-  - include: '#barline'
-  - include: '#barline-repeat'
-  - include: '#slur'
-  - include: '#chord'
-  - include: '#tuplet'
-  - include: '#union'
-  - include: '#macro'
-  - include: '#backquote'
-  - include: '#line-break'
-  - include: '#line-continue'
+  #- include: '#unparsed'
+  # Tune Body ends just before the first 'K:' field
+  - comment: ABC Tune
+    name: meta.tune.abc
+    begin: '^(X:)[ \t\v\f]*(\d+)'
+    beginCaptures:
+      '1': {name: keyword.control.index.abc}
+      '2': {name: constant.numeric.index.abc}
+    end: '^[ \t\v\f]*$'
+    patterns:
+      - include: '#tune-body'
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+      - include: '#namespace'
   - include: '#field'
-  - include: '#field-title'
   - include: '#field-remark'
   - include: '#field-instruction'
-  - include: '#field-key'
-  - include: '#field-index'
-  - include: '#escape'
-  - include: '#comments'
+  - include: '#namespace'
+  - include: '#text-directive'
+  - include: '#text-instruction'
+  - include: '#svg-directive'
+  - include: '#svg-instruction'
+  - include: '#postscript-directive'
+  - include: '#postscript-instruction'
+  - include: '#js-directive'
+  - include: '#js-instruction'
   - include: '#directive'
-
-- include: '#field'
-
-- include: '#field-remark'
-
-- include: '#field-instruction'
-
-- include: '#namespace'
-
-- include: '#directive'
-
-- include: '#comments'
+  - include: '#comments'
 
 repository:
   # Unparsed text matches for all text outside of an ABC tune or multi-line
@@ -84,11 +64,6 @@ repository:
       '1': {name: comment.line.percentage.abc}
       '2': {name: support.function.directive.abc}
       '3': {name: variable.parameter.directive.abc}
-    patterns:
-    - include: '#text-directive'
-    - include: '#svg-directive'
-    - include: '#postscript-directive'
-    - include: '#js-directive'
   comments:
     comment: Comments
     name: comment.line.percentage.abc
@@ -97,7 +72,7 @@ repository:
   field:
     comment: Fields
     name: meta.code.field.abc
-    match: ^([[:alpha:]&&[^IKTXr]]:)([^%\\]*)
+    match: ^([[:alpha:]&&[^IKXr]]:)([^%\\]*)
     captures:
       '1': {name: entity.name.function.field.abc}
       '2': {name: string.unquoted.field.abc}
@@ -117,26 +92,15 @@ repository:
       '2': {name: keyword.operator.word.instruction.abc}
       '3': {name: variable.parameter.instruction.abc}
     patterns:
-    - include: '#spacing-length'
-    - include: '#text-instruction'
-    - include: '#svg-instruction'
-    - include: '#postscript-instruction'
-    - include: '#js-instruction'
+      - include: '#spacing-length'
 
   field-index:
     comment: Index Field
     name: meta.code.field.index.abc
-    match: '^(X:)[ \t\v\f]*(\d+)'
+    match: ^(X:)[ \t\v\f]*(\d+)
     captures:
     '1': {name: keyword.control.index.abc}
     '2': {name: constant.numeric.index.abc}
-  field-title:
-    comment: Title Field
-    name: meta.code.field.title.abc
-    match: ^(T:)([^%\\]*)
-    captures:
-      '1': {name: entity.name.function.field.abc}
-      '2': {name: markup.heading.title.abc}
   field-key:
     comment: Key Field
     name: meta.code.field.key.abc
@@ -144,10 +108,6 @@ repository:
     captures:
       '1': {name: keyword.control.key.abc}
       '2': {name: string.unquoted.key.abc}
-
-  spacing-length:
-    name: constant.numeric.float.spacing-length.abc
-    match: (\d*(?:\.\d*)?(?:pt|in|cm)?\b)
 
 ## ABC Tune Body
   # This pattern is not used, but is available to
@@ -159,28 +119,32 @@ repository:
     beginCaptures:
       '1': {name: keyword.control.key.abc}
       '2': {name: string.unquoted.key.abc}
-    end: '^[ \t\v\f]*$'
+    end: ^[ \t\v\f]*$
     patterns:
-    - include: '#inline-field'
-    - include: '#inline-remark'
-    - include: '#inline-instruction'
-    - include: '#grace'
-    - include: '#decoration'
-    - include: '#decoration-symbol'
-    - include: '#string-chord'
-    - include: '#string-annotation'
-    - include: '#abc-note'
-    - include: '#abc-rest'
-    - include: '#barline'
-    - include: '#barline-repeat'
-    - include: '#slur'
-    - include: '#chord'
-    - include: '#tuplet'
-    - include: '#union'
-    - include: '#macro'
-    - include: '#backquote'
-    - include: '#line-break'
-    - include: '#line-continue'
+      - include: '#field'
+      - include: '#field-title'
+      - include: '#field-remark'
+      - include: '#field-instruction'
+      - include: '#inline-field'
+      - include: '#inline-remark'
+      - include: '#inline-instruction'
+      - include: '#grace'
+      - include: '#decoration'
+      - include: '#decoration-symbol'
+      - include: '#string-chord'
+      - include: '#string-annotation'
+      - include: '#abc-note'
+      - include: '#abc-rest'
+      - include: '#barline'
+      - include: '#barline-repeat'
+      - include: '#slur'
+      - include: '#chord'
+      - include: '#tuplet'
+      - include: '#union'
+      - include: '#macro'
+      - include: '#backquote'
+      - include: '#line-break'
+      - include: '#line-continue'
 
 ## ABC Code Elements
   # Inline Fields
@@ -216,7 +180,7 @@ repository:
     endCaptures:
       '1': {name: entity.name.function.inline-field.abc}
     patterns:
-    - include: '#spacing-length'
+      - include: '#spacing-length'
 
   # ABC Note Constructs
   grace:
@@ -229,15 +193,15 @@ repository:
     endCaptures:
       '1': {name: support.type.grace.abc}
     patterns:
-    - include: '#note'
-    - include: '#note-length'
-    - include: '#rest'
-    - include: '#decoration'
-    - include: '#decoration-symbol'
+      - include: '#note'
+      - include: '#note-length'
+      - include: '#rest'
+      - include: '#decoration'
+      - include: '#decoration-symbol'
   decoration:
     comment: Decorations
     name: meta.code.decoration.abc
-    match: '(!)([[:alpha:]&&[^ \t\v\f!]]*)(!)'
+    match: (!)([[:alpha:]&&[^ \t\v\f!]]*)(!)
     captures:
       '1': {name: keyword.operator.decoration.abc}
       '2': {name: entity.name.trait.decoration.abc}
@@ -245,7 +209,7 @@ repository:
   decoration-symbol:
     comment: Decoration Symbols
     name: meta.code.decoration.symbol.abc
-    match: ([-.~HLMOPSTuv])
+    match: ([-\.~HLMOPSTuv])
     captures:
       '1': {name: entity.name.trait.decoration.symbol.abc}
   abc-note:
@@ -318,6 +282,20 @@ repository:
       '1': {name: storage.type.rest.multi.abc} # constant.character.rest.abc
       '2': {name: constant.numeric.rest-length.abc}
 
+  # Spacing Elements
+  abc-space:
+    comment: Spacer
+    name: meta.code.abc-space.abc
+    match: ([yY])(?x:\d+(?:(?:\d*(?:\.\d*)?(?:pt|in|cm)?))?)?
+    captures:
+      '1': {name: storage.type.spacer.abc}
+      '2': {name: constant.numeric.space-length.abc}
+  spacing-length:
+    name: meta.code.space-length.abc
+    match: (\d*(?:\.\d*)?(?:pt|in|cm)?)
+    captures:
+      '1': {name: constant.numeric.float.space-length.abc}
+
   # Barlines
   ## NOTE: Repeat section barlines act as a catch-all for any stray `]`,
   ## to prevent being matched as the end of a chord.
@@ -347,20 +325,20 @@ repository:
     endCaptures:
       '1': {name: support.type.slur.abc}
     patterns:
-    - include: '#grace'
-    - include: '#abc-note'
-    - include: '#abc-rest'
-    - include: '#decoration'
-    - include: '#string-chord'
-    - include: '#string-annotation'
-    - include: '#barline'
-    - include: '#barline-repeat'
-    - include: '#macro'
-    - include: '#tuplet'
-    - include: '#union'
-    - include: '#backquote'
-    - include: '#chord'
-    - include: '#slur'
+      - include: '#grace'
+      - include: '#abc-note'
+      - include: '#abc-rest'
+      - include: '#decoration'
+      - include: '#string-chord'
+      - include: '#string-annotation'
+      - include: '#barline'
+      - include: '#barline-repeat'
+      - include: '#macro'
+      - include: '#tuplet'
+      - include: '#union'
+      - include: '#backquote'
+      - include: '#chord'
+      - include: '#slur'
   chord:
     comment: Chords
     name: meta.code.chord.abc
@@ -371,14 +349,14 @@ repository:
     endCaptures:
       '2': {name: support.type.chord.abc}
     patterns:
-    - include: '#abc-note'
-    - include: '#abc-rest'
-    - include: '#decoration'
-    - include: '#decoration-symbol'
-    - include: '#macro'
-    - include: '#union'
-    - include: '#backquote'
-    - include: '#slur'
+      - include: '#abc-note'
+      - include: '#abc-rest'
+      - include: '#decoration'
+      - include: '#decoration-symbol'
+      - include: '#macro'
+      - include: '#union'
+      - include: '#backquote'
+      - include: '#slur'
 
   # Operators
   tuplet:
@@ -396,20 +374,19 @@ repository:
   macro:
     comment: User-defined Macro
     name: meta.code.macro.abc
-    match: (~[a-zA-Z][a-zA-Z0-9]{1,31})
+    match: (\~[a-zA-Z][a-zA-Z0-9]{0,30})
     captures:
       '1': {name: support.function.macro.abc}
   backquote:
     comment: Backquote (used for spacing between note sequences)
     name: meta.code.backquote.abc
-    match: (`)
+    match: (\`)
     captures:
       '1': {name: support.constant.backquote.abc}
-
   line-break:
     comment: Line Break
     name: meta.code.line-break.abc
-    match: (\$(?= ) +)
+    match: (\$(?= ) )
     captures:
       '1': {name: support.constant.line-break.abc}
   line-continue:
@@ -433,8 +410,9 @@ repository:
       '1': {name: comment.line.percentage.abc}
       '2': {name: support.function.directive.abc}
     patterns:
-    - include: '#comments'
-    - include: '#directive'
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
   text-instruction:
     name: meta.text.instruction.abc
     contentName: string.unquoted.free.abc
@@ -448,8 +426,9 @@ repository:
       '1': {name: support.constant.instruction.abc}
       '2': {name: support.function.directive.abc}
     patterns:
-    - include: '#comments'
-    - include: '#directive'
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
   svg-directive:
     name: meta.svg.directive.abc
     contentName: source.xml
@@ -462,9 +441,9 @@ repository:
       '1': {name: punctuation.definition.comment.pseudo.abc}
       '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
     patterns:
-    - include: '#_escape'
-    - include: '#abc-comment'
-    - include: '#_directive'
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
   svg-instruction:
     name: meta.svg.instruction.abc
     contentName: source.xml
@@ -477,8 +456,9 @@ repository:
       '1': {name: support.constant.instruction.abc}
       '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
     patterns:
-    - include: '#comment'
-    - include: '#directive'
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
   postscript-directive:
     name: meta.ps.directive.abc
     contentName: source.ps
@@ -491,6 +471,10 @@ repository:
     endCaptures:
       '1': {name: punctuation.definition.comment.pseudo.abc}
       '2': {name: support.function.directive.abc}
+    patterns:
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
   postscript-instruction:
     name: meta.ps.instruction.abc
     contentName: source.ps
@@ -504,8 +488,9 @@ repository:
       '1': {name: support.constant.instruction.abc}
       '2': {name: support.function.directive.abc}
     patterns:
-    - include: '#comments'
-    - include: '#directive'
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
   js-directive:
     name: meta.js.directive.abc
     contentName: source.javascript
@@ -518,8 +503,9 @@ repository:
       '1': {name: comment.line.percentage.abc}
       '2': {name: support.function.directive.abc}
     patterns:
-    - include: '#comments'
-    - include: '#directive'
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
   js-instruction:
     name: meta.js.instruction.abc
     contentName: source.javascript
@@ -532,5 +518,7 @@ repository:
       '1': {name: support.constant.instruction.abc}
       '2': {name: support.function.directive.abc}
     patterns:
-    - include: '#comments'
-    - include: '#directive'
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+...
