@@ -1,5 +1,16 @@
 %YAML 1.2
 ---
+
+comment: "#75715E comment.line.percentage"
+field-id: "#66D9EF variable.function.field"
+field-value: "#E6DB74 string.unquoted"
+  - numerics: "#AE81FF constant.numeric constant.numeric.float constant.numeric.hex constant.numeric.integer constant.numeric.octal"
+  - escapes: "#AE81FF constant.character.escape"
+barlines: "#AE81FF constant.character"
+code: "#F92672 storage.modifier | entity.name.tag"
+chord-symbols: "#FF85FF string.interpolated.chord"
+annotations: "#FF85FF string.interpolated.annotation"
+
 abc-file:
   - global-header: "*"
   - abc-tune: "+"

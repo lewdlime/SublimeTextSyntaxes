@@ -11,9 +11,203 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>include</key>
-			<string>#escape</string>
+			<key>begin</key>
+			<string>^[ \t\v\f]*$</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>comment.block.free-text.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Unparsed Content</string>
+			<key>end</key>
+			<string>^[ \t\v\f]*$</string>
+			<key>name</key>
+			<string>meta.free-text.abc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#escape</string>
+				</dict>
+			</array>
 		</dict>
+		<dict>
+			<key>begin</key>
+			<string>^(X:)[ \t\v\f]*(\d+)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.index.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.index.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>ABC Tune</string>
+			<key>end</key>
+			<string>^ *$</string>
+			<key>name</key>
+			<string>meta.tune.abc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tune-body</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#field</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#field-title</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#field-remark</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#field-instruction</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#field-key</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#escape</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#comments</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#directive</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#field</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#field-remark</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#field-instruction</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#namespace</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#directive</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#comments</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>abc-note</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.accidental.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.character.note.abc</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.note-length.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Note Values (Accidentals, Pitch, Note Length)</string>
+			<key>match</key>
+			<string>([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?([A-Ga-g][,']*)((?:\d*/*(?:\d*)?)|(?:\d*&gt;*(?:\d*)?)|(?:\d*&lt;*(?:\d*)?)|(?:[&lt;\/&gt;]+)|(?:\d(?!\.))+)</string>
+			<key>name</key>
+			<string>meta.code.note.abc</string>
+		</dict>
+		<key>abc-rest</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.abc-rest.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.rest-length.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Rests</string>
+			<key>match</key>
+			<string>([xz])((?:\d*\/*(?:\d*)?)|(?:\d*&gt;*(?:\d*)?)|(?:\d*&lt;*(?:\d*)?))?|([XZ])(\d*)?</string>
+			<key>name</key>
+			<string>meta.code.abc-rest.abc</string>
+		</dict>
+		<key>accidental</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.accidental.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Accidentals</string>
+			<key>match</key>
+			<string>([_\^]{2}|=|[_=\^](?:\d*/*(?:\d*)?)|(?:\d(?!\.))+)</string>
+			<key>name</key>
+			<string>meta.code.accidental.abc</string>
+		</dict>
+		<key>backquote</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.constant.backquote.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Backquote (used for spacing between note sequences)</string>
+			<key>match</key>
+			<string>(`)</string>
+			<key>name</key>
+			<string>meta.code.backquote.abc</string>
+		</dict>
+		<key>barline</key>
 		<dict>
 			<key>captures</key>
 			<dict>
@@ -35,6 +229,7 @@
 			<key>name</key>
 			<string>meta.code.barline.abc</string>
 		</dict>
+		<key>barline-repeat</key>
 		<dict>
 			<key>captures</key>
 			<dict>
@@ -50,261 +245,13 @@
 				</dict>
 			</dict>
 			<key>comment</key>
-			<string>More Bar Lines</string>
+			<string>Repeat Section Bar Lines</string>
 			<key>match</key>
-			<string>([\[\]])([1-9](?:[-,][1-9])*)</string>
+			<string>([:|\[\]]*[|\[\]][\[\]]?)([1-9](?:[-,][1-9])*)</string>
 			<key>name</key>
 			<string>meta.code.barline.abc</string>
 		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.control.index.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>constant.numeric.index.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Index Field</string>
-			<key>match</key>
-			<string>^(X:)\s*(\d+)</string>
-			<key>name</key>
-			<string>meta.field.index.abc</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.control.key.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>string.unquoted.key.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Index Field</string>
-			<key>match</key>
-			<string>^(K:)\s*([^%\\]+)</string>
-			<key>name</key>
-			<string>meta.field.index.abc</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.field.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>string.unquoted.field.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Fields</string>
-			<key>match</key>
-			<string>^([[:alpha:]&amp;&amp;[^IKXr]]:)([^%\\]*)</string>
-			<key>name</key>
-			<string>entity.name.function.abc</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.field.remark.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>comment.block.remark.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Remark Field</string>
-			<key>match</key>
-			<string>^(r:)([^%\\]*)</string>
-			<key>name</key>
-			<string>meta.code.field.remark.abc</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>support.constant.instruction.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.word.instruction.abc</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>variable.parameter.instruction.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Instruction Field</string>
-			<key>match</key>
-			<string>^(I:)\s*(\w+)\s+([^%\n\r]*)</string>
-			<key>name</key>
-			<string>meta.field.instruction.abc</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.trait.decoration.symbol.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Decoration Symbols</string>
-			<key>match</key>
-			<string>([.~HLMOPSTuv])</string>
-			<key>name</key>
-			<string>meta.code.decoration.symbol.abc</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.decoration.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.trait.decoration.abc</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.decoration.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Decorations</string>
-			<key>match</key>
-			<string>(!)([[:alpha:]&amp;&amp;[^\s!]]*)(!)</string>
-			<key>name</key>
-			<string>meta.code.decoration.abc</string>
-		</dict>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>constant.language.accidental.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>constant.character.note.abc</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>constant.numeric.note-length.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Notes</string>
-			<key>match</key>
-			<string>([_\^]{2}|=|[_=\^](?:\d*/*(?:\d*)?)|(?:\d(?!\.))+)?([A-Ga-g][,']*)((?:\d*/*(?:\d*)?)|(?:\d*&gt;*(?:\d*)?)|(?:\d*&lt;*(?:\d*)?)|(?:[&lt;\/&gt;]+)|(?:\d(?!\.))+)</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(\")</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.chord.begin.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Chord symbols and string annotations</string>
-			<key>contentName</key>
-			<string>string.quoted.double.chord.abc</string>
-			<key>end</key>
-			<string>(\")</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.string.chord.end.abc</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.code.string.chord.abc</string>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(\((?![\d!:]))</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.slur.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Slurs</string>
-			<key>end</key>
-			<string>(\)(?!\!))</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.slur.abc</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.code.slur.abc</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#note</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#rest</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#decoration</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#slur</string>
-				</dict>
-			</array>
-		</dict>
+		<key>chord</key>
 		<dict>
 			<key>begin</key>
 			<string>(\[)(?![|:\d])</string>
@@ -334,7 +281,31 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#note</string>
+					<string>#abc-note</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#abc-rest</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#decoration</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#decoration-symbol</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#macro</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#union</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#backquote</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -342,22 +313,322 @@
 				</dict>
 			</array>
 		</dict>
+		<key>comments</key>
 		<dict>
 			<key>comment</key>
-			<string>Line Break</string>
+			<string>Comments</string>
 			<key>match</key>
-			<string>(\$(?= ) +)</string>
+			<string>%(?!%|abc).*</string>
 			<key>name</key>
-			<string>support.constant.line-break.abc</string>
+			<string>comment.line.percentage.abc</string>
 		</dict>
+		<key>decoration</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.decoration.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.trait.decoration.abc</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.decoration.abc</string>
+				</dict>
+			</dict>
 			<key>comment</key>
-			<string>Line Continue</string>
+			<string>Decorations</string>
 			<key>match</key>
-			<string>(\\(?= ) +)</string>
+			<string>(!)([[:alpha:]&amp;&amp;[^ \t\v\f!]]*)(!)</string>
 			<key>name</key>
-			<string>support.constant.line-continue.abc</string>
+			<string>meta.code.decoration.abc</string>
 		</dict>
+		<key>decoration-symbol</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.trait.decoration.symbol.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Decoration Symbols</string>
+			<key>match</key>
+			<string>([-.~HLMOPSTuv])</string>
+			<key>name</key>
+			<string>meta.code.decoration.symbol.abc</string>
+		</dict>
+		<key>directive</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>comment.line.percentage.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.directive.abc</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.directive.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Directives</string>
+			<key>match</key>
+			<string>(%%)[ \t\v\f]*(\w*)([^%\n\r]*)</string>
+			<key>name</key>
+			<string>meta.directive.abc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#text-directive</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#svg-directive</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#postscript-directive</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#js-directive</string>
+				</dict>
+			</array>
+		</dict>
+		<key>escape</key>
+		<dict>
+			<key>match</key>
+			<string>(?:\\%)|(?:\\\\)|(?:\\u\h{4})|(?:\\[[:punct:]&amp;&amp;[\w]&amp;&amp;[^[ \t\v\f]]]{2})|(?:&amp;\w+;)|(?:&amp;#\d+;)|(?:&amp;#x\h+;)</string>
+			<key>name</key>
+			<string>constant.character.escape.abc</string>
+		</dict>
+		<key>field</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.field.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.field.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Fields</string>
+			<key>match</key>
+			<string>^([[:alpha:]&amp;&amp;[^IKTXr]]:)([^%\\]*)</string>
+			<key>name</key>
+			<string>meta.code.field.abc</string>
+		</dict>
+		<key>field-index</key>
+		<dict>
+			<key>1</key>
+			<dict>
+				<key>name</key>
+				<string>keyword.control.index.abc</string>
+			</dict>
+			<key>2</key>
+			<dict>
+				<key>name</key>
+				<string>constant.numeric.index.abc</string>
+			</dict>
+			<key>captures</key>
+			<false/>
+			<key>comment</key>
+			<string>Index Field</string>
+			<key>match</key>
+			<string>^(X:)[ \t\v\f]*(\d+)</string>
+			<key>name</key>
+			<string>meta.code.field.index.abc</string>
+		</dict>
+		<key>field-instruction</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.constant.instruction.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.word.instruction.abc</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.instruction.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Instruction Field</string>
+			<key>match</key>
+			<string>^(I:)[ \t\v\f]*(\w+)[ \t\v\f]+([^%\n\r]*)</string>
+			<key>name</key>
+			<string>meta.code.field.instruction.abc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#spacing-length</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#text-instruction</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#svg-instruction</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#postscript-instruction</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#js-instruction</string>
+				</dict>
+			</array>
+		</dict>
+		<key>field-key</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.key.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.key.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Key Field</string>
+			<key>match</key>
+			<string>^(K:)[ \t\v\f]*([^%\\]+)</string>
+			<key>name</key>
+			<string>meta.code.field.key.abc</string>
+		</dict>
+		<key>field-remark</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.field.remark.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>comment.block.remark.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Remark Field</string>
+			<key>match</key>
+			<string>^(r:)([^%\\]*)</string>
+			<key>name</key>
+			<string>meta.code.field.remark.abc</string>
+		</dict>
+		<key>field-title</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.field.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>markup.heading.title.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Title Field</string>
+			<key>match</key>
+			<string>^(T:)([^%\\]*)</string>
+			<key>name</key>
+			<string>meta.code.field.title.abc</string>
+		</dict>
+		<key>grace</key>
+		<dict>
+			<key>begin</key>
+			<string>(\{\/?)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.type.grace.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Grace Notes</string>
+			<key>end</key>
+			<string>(\})</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.type.grace.abc</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.code.grace.abc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#note</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#note-length</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#rest</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#decoration</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#decoration-symbol</string>
+				</dict>
+			</array>
+		</dict>
+		<key>inline-field</key>
 		<dict>
 			<key>begin</key>
 			<string>(\[[[:alpha:]&amp;&amp;[^IKXr]]:)</string>
@@ -386,6 +657,48 @@
 			<key>name</key>
 			<string>meta.code.inline-field.abc</string>
 		</dict>
+		<key>inline-instruction</key>
+		<dict>
+			<key>begin</key>
+			<string>(\[I:)[ \t\v\f]*(\w+)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.inline-field.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.operator.word.instruction.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Inline Instruction Field</string>
+			<key>contentName</key>
+			<string>variable.parameter.instruction.abc</string>
+			<key>end</key>
+			<string>(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>entity.name.function.inline-field.abc</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.field.instruction.abc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#spacing-length</string>
+				</dict>
+			</array>
+		</dict>
+		<key>inline-remark</key>
 		<dict>
 			<key>begin</key>
 			<string>(\[r:)</string>
@@ -414,123 +727,10 @@
 			<key>name</key>
 			<string>meta.code.inline-field.remark.abc</string>
 		</dict>
-		<dict>
-			<key>begin</key>
-			<string>(\[)(I:)\s*(\w+)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.inline-field.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>support.constant.instruction.abc</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.operator.word.instruction.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Inline Instruction Field</string>
-			<key>contentName</key>
-			<string>variable.parameter.instruction.abc</string>
-			<key>end</key>
-			<string>(\])</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.inline-field.abc</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.field.instruction.abc</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#namespace</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#directive</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#comments</string>
-		</dict>
-	</array>
-	<key>repository</key>
-	<dict>
-		<key>accidental</key>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>constant.language.accidental.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Accidentals</string>
-			<key>match</key>
-			<string>([_\^]{2}|=|[_=\^](?:\d*/*(?:\d*)?)|(?:\d(?!\.))+)</string>
-			<key>name</key>
-			<string>meta.code.accidental.abc</string>
-		</dict>
-		<key>comments</key>
-		<dict>
-			<key>comment</key>
-			<string>Comments</string>
-			<key>match</key>
-			<string>%(?!%|abc).*</string>
-			<key>name</key>
-			<string>comment.line.percentage.abc</string>
-		</dict>
-		<key>directive</key>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>comment.line.percentage.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>support.function.directive.abc</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>variable.parameter.directive.abc</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>Directives</string>
-			<key>match</key>
-			<string>(%%)\s*(\w*)\b([^%\n\r]*)</string>
-			<key>name</key>
-			<string>meta.directive.abc</string>
-		</dict>
-		<key>escape</key>
-		<dict>
-			<key>match</key>
-			<string>(?:\\%)|(?:\\\\)|(?:\\u\h{4})|(?:\\[[:punct:]&amp;&amp;[\w]&amp;&amp;[^\s]]{2})|(?:&amp;\w+;)|(?:&amp;#\d+;)|(?:&amp;#x\h+;)</string>
-			<key>name</key>
-			<string>constant.character.escape.abc</string>
-		</dict>
 		<key>js-directive</key>
 		<dict>
 			<key>begin</key>
-			<string>(%%)\s*(beginjs)</string>
+			<string>(%%)[ \t\v\f]*(beginjs)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -547,7 +747,7 @@
 			<key>contentName</key>
 			<string>source.javascript</string>
 			<key>end</key>
-			<string>(%%)\s*(endjs)</string>
+			<string>(%%)[ \t\v\f]*(endjs)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -578,7 +778,7 @@
 		<key>js-instruction</key>
 		<dict>
 			<key>begin</key>
-			<string>(^I:)\s*(beginjs)</string>
+			<string>(^I:)[ \t\v\f]*(beginjs)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -595,7 +795,7 @@
 			<key>contentName</key>
 			<string>source.javascript</string>
 			<key>end</key>
-			<string>^(I:)\s*(endjs)</string>
+			<string>^(I:)[ \t\v\f]*(endjs)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -622,6 +822,79 @@
 					<string>#directive</string>
 				</dict>
 			</array>
+		</dict>
+		<key>line-break</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.constant.line-break.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Line Break</string>
+			<key>match</key>
+			<string>(\$(?= ) +)</string>
+			<key>name</key>
+			<string>meta.code.line-break.abc</string>
+		</dict>
+		<key>line-continue</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.constant.line-continue.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Line Continue</string>
+			<key>match</key>
+			<string>(\\(?= ) )</string>
+			<key>name</key>
+			<string>meta.code.line-continue.abc</string>
+		</dict>
+		<key>macro</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.macro.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>User-defined Macro</string>
+			<key>match</key>
+			<string>(~[a-zA-Z][a-zA-Z0-9]{1,31})</string>
+			<key>name</key>
+			<string>meta.code.macro.abc</string>
+		</dict>
+		<key>multi-rest</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.rest.multi.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.rest-length.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Multi-measure Rest</string>
+			<key>match</key>
+			<string>([XZ])(\d*)?</string>
+			<key>name</key>
+			<string>meta.code.rest.multi.abc</string>
 		</dict>
 		<key>namespace</key>
 		<dict>
@@ -656,7 +929,7 @@
 				</dict>
 			</dict>
 			<key>comment</key>
-			<string>Notes</string>
+			<string>Pitch Value</string>
 			<key>match</key>
 			<string>([A-Ga-g][,']*)</string>
 			<key>name</key>
@@ -682,7 +955,7 @@
 		<key>postscript-directive</key>
 		<dict>
 			<key>begin</key>
-			<string>(%%)\s*(beginps)</string>
+			<string>(%%)[ \t\v\f]*(beginps)[ \t\v\f]+(nosvg)?</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -695,11 +968,16 @@
 					<key>name</key>
 					<string>support.function.directive.abc</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.directive.abc</string>
+				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>source.ps</string>
 			<key>end</key>
-			<string>(%%)\s*(endps)</string>
+			<string>(%%)[ \t\v\f]*(endps)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -719,7 +997,7 @@
 		<key>postscript-instruction</key>
 		<dict>
 			<key>begin</key>
-			<string>(^I:)\s*(beginps)</string>
+			<string>(^I:)[ \t\v\f]*(beginps)[ \t\v\f]+(nosvg)?</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -732,11 +1010,16 @@
 					<key>name</key>
 					<string>support.function.directive.abc</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.directive.abc</string>
+				</dict>
 			</dict>
 			<key>contentName</key>
 			<string>source.ps</string>
 			<key>end</key>
-			<string>^(I:)\s*(endps)</string>
+			<string>^(I:)[ \t\v\f]*(endps)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -764,6 +1047,114 @@
 				</dict>
 			</array>
 		</dict>
+		<key>rest</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.rest.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>constant.numeric.rest-length.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Simple Rest</string>
+			<key>match</key>
+			<string>([xz])((?:\d*\/*(?:\d*)?)|(?:\d*&gt;*(?:\d*)?)|(?:\d*&lt;*(?:\d*)?))?</string>
+			<key>name</key>
+			<string>meta.code.rest.abc</string>
+		</dict>
+		<key>slur</key>
+		<dict>
+			<key>begin</key>
+			<string>(\((?![\d!:]))</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.type.slur.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Slurs</string>
+			<key>end</key>
+			<string>(\)(?!\!))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.type.slur.abc</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.code.slur.abc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#grace</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#abc-note</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#abc-rest</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#decoration</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-chord</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-annotation</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#barline</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#barline-repeat</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#macro</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#tuplet</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#union</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#backquote</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#chord</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#slur</string>
+				</dict>
+			</array>
+		</dict>
 		<key>spacing-length</key>
 		<dict>
 			<key>match</key>
@@ -771,10 +1162,68 @@
 			<key>name</key>
 			<string>constant.numeric.float.spacing-length.abc</string>
 		</dict>
+		<key>string-annotation</key>
+		<dict>
+			<key>begin</key>
+			<string>(\"[_&lt;&gt;^@])</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.annotation.begin.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>String annotations</string>
+			<key>contentName</key>
+			<string>string.quoted.double.annotation.abc</string>
+			<key>end</key>
+			<string>(\")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.annotation.end.abc</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.code.string.annotation.abc</string>
+		</dict>
+		<key>string-chord</key>
+		<dict>
+			<key>begin</key>
+			<string>(\"(?![_&lt;&gt;^@]))</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.chord.begin.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Chord symbols</string>
+			<key>contentName</key>
+			<string>string.quoted.double.chord.abc</string>
+			<key>end</key>
+			<string>(\")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.chord.end.abc</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.code.string.chord.abc</string>
+		</dict>
 		<key>svg-directive</key>
 		<dict>
 			<key>begin</key>
-			<string>(%%)\s*(beginsvg)</string>
+			<string>(%%)[ \t\v\f]*(beginsvg)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -791,7 +1240,7 @@
 			<key>contentName</key>
 			<string>source.xml</string>
 			<key>end</key>
-			<string>(%%)\s*(endsvg)</string>
+			<string>(%%)[ \t\v\f]*(endsvg)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -826,7 +1275,7 @@
 		<key>svg-instruction</key>
 		<dict>
 			<key>begin</key>
-			<string>(^I:)\s*(beginsvg)</string>
+			<string>(^I:)[ \t\v\f]*(beginsvg)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -843,7 +1292,7 @@
 			<key>contentName</key>
 			<string>source.xml</string>
 			<key>end</key>
-			<string>(^I:)\s*(endsvg)</string>
+			<string>(^I:)[ \t\v\f]*(endsvg)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -874,7 +1323,7 @@
 		<key>text-directive</key>
 		<dict>
 			<key>begin</key>
-			<string>^(%%)\s*(begintext)\b\s+((?:obeylines|fill|ragged|justify|align|skip)\b)?</string>
+			<string>^(%%)[ \t\v\f]*(begintext)[ \t\v\f]+(obeylines|fill|ragged|justify|align|skip)?</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -896,7 +1345,7 @@
 			<key>contentName</key>
 			<string>string.unquoted.free.abc</string>
 			<key>end</key>
-			<string>^(%%)\s*(endtext)\s*\n</string>
+			<string>^(%%)[ \t\v\f]*(endtext)[ \t\v\f]*</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -927,7 +1376,7 @@
 		<key>text-instruction</key>
 		<dict>
 			<key>begin</key>
-			<string>^(I:)\s*(begintext)\b\s+((?:obeylines|fill|ragged|justify|align|skip)\b)?</string>
+			<string>^(I:)[ \t\v\f]*(begintext)[ \t\v\f]+(obeylines|fill|ragged|justify|align|skip)?</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -949,7 +1398,7 @@
 			<key>contentName</key>
 			<string>string.unquoted.free.abc</string>
 			<key>end</key>
-			<string>^(I:)\s*(endtext)\s*\n</string>
+			<string>^(I:)[ \t\v\f]*(endtext)[ \t\v\f]*\n</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -977,10 +1426,151 @@
 				</dict>
 			</array>
 		</dict>
+		<key>tune-body</key>
+		<dict>
+			<key>begin</key>
+			<string>^(K:)[ \t\v\f]*([^%\\]+)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.key.abc</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>string.unquoted.key.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Tune Body</string>
+			<key>end</key>
+			<string>^ *$</string>
+			<key>name</key>
+			<string>meta.tune.body.abc</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#inline-field</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#inline-remark</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#inline-instruction</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#grace</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#decoration</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#decoration-symbol</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-chord</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string-annotation</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#abc-note</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#abc-rest</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#barline</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#barline-repeat</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#slur</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#chord</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#tuplet</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#union</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#macro</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#backquote</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#line-break</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#line-continue</string>
+				</dict>
+			</array>
+		</dict>
+		<key>tuplet</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.type.tuplet.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Tuplets</string>
+			<key>match</key>
+			<string>(\(\d+(?::\d*(?::\d*)?)?)</string>
+			<key>name</key>
+			<string>meta.code.tuplet.abc</string>
+		</dict>
+		<key>union</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.union.abc</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Union Operators</string>
+			<key>match</key>
+			<string>(\(\&amp;|\&amp;\&amp;?|\&amp;\))</string>
+			<key>name</key>
+			<string>meta.code.union.abc</string>
+		</dict>
 		<key>unparsed</key>
 		<dict>
 			<key>begin</key>
-			<string>^([^\s].*)</string>
+			<string>^[ \t\v\f]*$</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -990,9 +1580,9 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>^(\s*\n){2}</string>
+			<string>^[ \t\v\f]*$</string>
 			<key>name</key>
-			<string>meta.free-text.abc</string>
+			<string>meta.unparsed.abc</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>
