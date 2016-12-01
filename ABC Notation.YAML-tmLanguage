@@ -13,7 +13,7 @@ patterns:
     name: meta.tune.abc
     begin: '^(X:)[ \t\v\f]*(\d+)'
     beginCaptures:
-      '1': {name: keyword.control.index.abc}
+      '1': {name: keyword.control.index.abc meta.toc-list.index.abc}
       '2': {name: constant.numeric.index.abc}
     end: '^\s*$'
     patterns:
