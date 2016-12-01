@@ -125,9 +125,14 @@ repository:
       - include: '#directive'
 
 ## ABC Code Elements
-  # Note Sequences
   abc-note-sequence:
+    comment: |-
+      Note Sequences
+      IMPORTANT: This ordering is crucial: Chord symbols must come first,
+      so that when matching for barlines, chord starts and ends aren't
+      mismatched with repeat section barlines.
     patterns:
+    - include: '#chord'
     - include: '#grace'
     - include: '#decoration'
     - include: '#strings'
@@ -138,7 +143,6 @@ repository:
     - include: '#operators'
     - include: '#barline'
     - include: '#slur'
-    - include: '#chord'
 
   # Inline Fields
   inline-field:
@@ -196,17 +200,21 @@ repository:
       name: meta.code.decoration.symbol.abc
       match: ([-\.~HLMOPSTuv](?!:))
       captures:
-        '1': {name: entity.name.trait.decoration.symbol.abc}
+        '1': {name: entity.name.function.decoration.abc} # entity.name.trait.decoration.symbol.abc
     - comment: Decoration Symbols, at start of line
       name: meta.code.decoration.symbol.abc
       match: ^([-\.~HLMOPSTuv](?!:))
+      captures:
+        '1': {name: entity.name.function.decoration.abc} # entity.name.trait.decoration.symbol.abc
     - comment: Decorations
       name: meta.code.decoration.abc
-      match: (!)([[:alpha:]&&[^ \t\v\f!]]*)(!)
-      captures:
-        '1': {name: keyword.operator.decoration.abc}
-        '2': {name: entity.name.trait.decoration.abc}
-        '3': {name: keyword.operator.decoration.abc}
+      begin: (!)([[:alpha:]<>^&&[^ \t\v\f!]]*)
+      beginCaptures:
+        '1': {name: entity.name.function.decoration.abc}
+        '2': {name: entity.name.function.decoration.abc} # entity.name.trait.decoration.abc
+      end: ([()]?!)
+      endCaptures:
+        '1': {name: entity.name.function.decoration.abc}
 
   strings:
     patterns:
@@ -224,7 +232,7 @@ repository:
         - include: '#escape'
     - comment: String Annotations
       name: meta.code.string.annotation.abc
-      begin: (\"[_<>^@])
+      begin: (\"[_<>^@](?!!))
       beginCaptures:
         '1': {name: punctuation.definition.string.annotation.begin.abc}
       contentName: string.quoted.double.annotation.abc
@@ -252,7 +260,7 @@ repository:
         (?x)
           ([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?
           ([A-Ga-g][,']*)
-          (\d*(?!\.)>*(?:\d*)?)?
+          (\d*(?![.!])>*(?!!)(?:\d*)?)?
       captures:
         '1': {name: constant.language.accidental.abc}
         '2': {name: constant.character.note.abc}
@@ -262,7 +270,7 @@ repository:
         (?x)
           ([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?
           ([A-Ga-g][,']*)
-          (\d*(?!\.)<*(?:\d*)?)?
+          (\d*(?![.!])<*(?!!)(?:\d*)?)?
       captures:
         '1': {name: constant.language.accidental.abc}
         '2': {name: constant.character.note.abc}
@@ -303,8 +311,8 @@ repository:
     name: meta.code.note-length.abc
     match: |-
       ((?:\d*/*(?:\d*)?)|
-       (?:\d*>*(?:\d*)?)|
-       (?:\d*<*(?:\d*)?)|
+       (?:\d*(?![.!])>*(?!!)(?:\d*)?)|
+       (?:\d*(?![.!])<*(?!!)(?:\d*)?)|
        (?:\d+(?!\.))
       )
     captures:
@@ -321,7 +329,7 @@ repository:
         '1': {name: storage.type.abc-rest.abc}
         '2': {name: constant.numeric.rest-length.abc}
     - name: meta.code.abc-rest.abc
-      match: ([xz])((?:\d*\/*(?:\d*)?)|(?:\d*>*(?:\d*)?)|(?:\d*<*(?:\d*)?))?
+      match: ([xz])((?:\d*\/*(?:\d*)?)|(?:\d*(?![.!])>*(?!!)(?:\d*)?)|(?:\d*(?![.!])<*(?!!)(?:\d*)?))?
       captures:
         '1': {name: storage.type.abc-rest.abc} # constant.character.rest.abc
         '2': {name: constant.numeric.rest-length.abc}
@@ -348,28 +356,33 @@ repository:
     comment: Bar lines, Repeat Section Bar Lines, 
     patterns:
     - name: meta.code.barline.abc
-      match: ((?:[:|\[\]]*\|[:|\[\]]*)(?![A-Z]:))([1-9](?:[-,][1-9])*)?
+      match: (\||\|\]|\|\||\[\||\[\|\])(\d(?:[-,]\d)*)?
+      captures:
+        '1': {name: keyword.operator.barline.abc}
+    - name: meta.code.barline.abc
+      match: (:*[|\[\]](?![A-Za-z]:))(\d+(?:[-,]\d)*)?
       captures:
         '1': {name: keyword.operator.barline.abc}
         '2': {name: support.type.numeric.barline.abc}
     - name: meta.code.barline.abc
-      match: ([:|\[\]]*[|\[\]][\[\]]?(?![A-Z]:))([1-9](?:[-,][1-9])*)
+      match: (\|)(\d(?:[-,]\d)*)?
       captures:
         '1': {name: keyword.operator.barline.abc}
         '2': {name: support.type.numeric.barline.abc}
     - name: meta.code.barline.abc
-      match: (\:\:*)
+      match: (\|:+|:+\||::+|:+\|:+)
       captures:
         '1': {name: keyword.operator.barline.abc}
+
 
   # Slurs and Chords
   slur:
     comment: Slurs
     name: meta.code.slur.abc
-    begin: (\((?![\d!:]))
+    begin: (\((?![\d!&:]))
     beginCaptures:
       '1': {name: support.type.slur.abc}
-    end: (\)(?!\!))
+    end: (\)(?!!))
     endCaptures:
       '1': {name: support.type.slur.abc}
     patterns:
@@ -378,12 +391,12 @@ repository:
   chord:
     comment: Chords
     name: meta.code.chord.abc
-    begin: (\[)(?!(?:[A-Za-z][:])|(?:[|:]*))
+    begin: (\[(?![|:\d]|(?:[A-Za-z]:)|(?:\||\|\]|\|\||\[\||\[\|\])))
     beginCaptures:
       '1': {name: support.type.chord.abc}
-    end: (\])
+    end: ((?<!\|)\](?!\d))
     endCaptures:
-      '2': {name: support.type.chord.abc}
+      '1': {name: support.type.chord.abc}
     patterns:
       - include: '#abc-note'
       - include: '#abc-rest'
