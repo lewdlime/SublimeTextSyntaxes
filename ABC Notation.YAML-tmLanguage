@@ -14,7 +14,7 @@ patterns:
     begin: '^(X:)\s*(\d+)'
     beginCaptures:
       '1': {name: keyword.control.index.abc}
-      '2': {name: constant.numeric.index.abc}
+      '2': {name: constant.numeric.index.abc meta.toc-list.index.abc}
     end: '^\s*$'
     patterns:
       - include: '#tune-body'
