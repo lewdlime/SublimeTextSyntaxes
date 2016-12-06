@@ -107,13 +107,13 @@ repository:
     comment: Directives and Namespaces
     patterns:
       - name: meta.directive.abc
-        match: '(%%)\s*(\w*)\b([^%\n\r]*)'
+        match: '((?:^\s*)?%%)\s*(\w*)\b([^%\n\r]*)'
         captures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: support.function.directive.abc}
           '3': {name: variable.parameter.directive.abc}
       - name: meta.namespace.abc
-        match: '(%)(abc(?:-\d\.\d)?)'
+        match: '((?:^\s*)?%)(abc(?:-\d\.\d)?)'
         captures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: entity.name.namespace.abc}
@@ -124,7 +124,7 @@ repository:
   comments:
     comment: ABC Line Comments
     name: comment.line.percentage.abc
-    match: '%(?!%|abc).*'
+    match: '(?:^\s*)?%(?!%|abc).*'
 
   field:
     comment: Fields, Remark Fields, Instruction Fields, & Key Fields
@@ -568,12 +568,12 @@ repository:
     patterns:
     - name: meta.text.directive.abc
       contentName: string.unquoted.typeset.abc
-      begin: ^(%%)\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?
+      begin: ((?:^\s*)?%%)\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?
       beginCaptures:
         '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
         '3': {name: variable.parameter.directive.abc}
-      end: ^(%%)\s*(endtext)\b
+      end: ((?:^\s*)?%%)\s*(endtext)\b
       endCaptures:
         '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
@@ -582,28 +582,28 @@ repository:
       - include: '#comments'
       - include: '#directive'
     - name: meta.svg.directive.abc
-      begin: (%%)\s*(beginsvg)\b
+      begin: ((?:^\s*)?%%)\s*(beginsvg)\b
       beginCaptures:
-        '1': {name: punctuation.definition.comment.pseudo.abc}
-        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
-      end: (%%)\s*(endsvg)\b
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+      end: ((?:^\s*)?%%)\s*(endsvg)\b
       endCaptures:
-        '1': {name: punctuation.definition.comment.pseudo.abc}
-        '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
       patterns:
       #- include: source.xml
       - include: '#escape'
       - include: '#comments'
       - include: '#directive'
     - name: meta.ps.directive.abc
-      begin: (%%)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?
+      begin: ((?:^\s*)?%%)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?
       beginCaptures:
         '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
         '3': {name: variable.parameter.directive.abc}
-      end: (%%)\s*(endps)\b
+      end: ((?:^\s*)?%%)\s*(endps)\b
       endCaptures:
-        '1': {name: punctuation.definition.comment.pseudo.abc}
+        '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
       patterns:
       #- include: source.ps
@@ -611,11 +611,11 @@ repository:
       - include: '#comments'
       - include: '#directive'
     - name: meta.js.directive.abc
-      begin: (%%)\s*(beginjs)\b
+      begin: ((?:^\s*)?%%)\s*(beginjs)\b
       beginCaptures:
         '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
-      end: (%%)\s*(endjs)\b
+      end: ((?:^\s*)?%%)\s*(endjs)\b
       endCaptures:
         '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
@@ -625,14 +625,14 @@ repository:
       - include: '#comments'
       - include: '#directive'
     - name: meta.html.directive.abc
-      begin: (%%)\s*(beginml)\b
+      begin: ((?:^\s*)?%%)\s*(beginml)\b
       beginCaptures:
-        '1': {name: punctuation.definition.comment.pseudo.abc}
-        '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
-      end: (%%)\s*(endml)\b
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+      end: ((?:^\s*)?%%)\s*(endml)\b
       endCaptures:
-        '1': {name: punctuation.definition.comment.pseudo.abc}
-        '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
       patterns:
       #- include: source.html
       - include: '#escape'

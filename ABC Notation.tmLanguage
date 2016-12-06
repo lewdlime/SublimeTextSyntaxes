@@ -514,7 +514,7 @@ brackets separately from the notes.</string>
 			<key>comment</key>
 			<string>ABC Line Comments</string>
 			<key>match</key>
-			<string>%(?!%|abc).*</string>
+			<string>(?:^\s*)?%(?!%|abc).*</string>
 			<key>name</key>
 			<string>comment.line.percentage.abc</string>
 		</dict>
@@ -619,7 +619,7 @@ brackets separately from the notes.</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(%%)\s*(\w*)\b([^%\n\r]*)</string>
+					<string>((?:^\s*)?%%)\s*(\w*)\b([^%\n\r]*)</string>
 					<key>name</key>
 					<string>meta.directive.abc</string>
 				</dict>
@@ -638,7 +638,7 @@ brackets separately from the notes.</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(%)(abc(?:-\d\.\d)?)</string>
+					<string>((?:^\s*)?%)(abc(?:-\d\.\d)?)</string>
 					<key>name</key>
 					<string>meta.namespace.abc</string>
 					<key>patterns</key>
@@ -663,7 +663,7 @@ brackets separately from the notes.</string>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>^(%%)\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?</string>
+					<string>((?:^\s*)?%%)\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -685,7 +685,7 @@ brackets separately from the notes.</string>
 					<key>contentName</key>
 					<string>string.unquoted.typeset.abc</string>
 					<key>end</key>
-					<string>^(%%)\s*(endtext)\b</string>
+					<string>((?:^\s*)?%%)\s*(endtext)\b</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -719,33 +719,33 @@ brackets separately from the notes.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(%%)\s*(beginsvg)\b</string>
+					<string>((?:^\s*)?%%)\s*(beginsvg)\b</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.comment.pseudo.abc</string>
+							<string>comment.line.percentage.abc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>variable.function.abc punctuation.definition.sequence.begin.abc</string>
+							<string>support.function.directive.abc</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(%%)\s*(endsvg)\b</string>
+					<string>((?:^\s*)?%%)\s*(endsvg)\b</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.comment.pseudo.abc</string>
+							<string>comment.line.percentage.abc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>variable.function.abc punctuation.definition.sequence.end.abc</string>
+							<string>support.function.directive.abc</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -768,7 +768,7 @@ brackets separately from the notes.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(%%)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?</string>
+					<string>((?:^\s*)?%%)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -788,13 +788,13 @@ brackets separately from the notes.</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(%%)\s*(endps)\b</string>
+					<string>((?:^\s*)?%%)\s*(endps)\b</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.comment.pseudo.abc</string>
+							<string>comment.line.percentage.abc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -822,7 +822,7 @@ brackets separately from the notes.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(%%)\s*(beginjs)\b</string>
+					<string>((?:^\s*)?%%)\s*(beginjs)\b</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -837,7 +837,7 @@ brackets separately from the notes.</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(%%)\s*(endjs)\b</string>
+					<string>((?:^\s*)?%%)\s*(endjs)\b</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -871,33 +871,33 @@ brackets separately from the notes.</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(%%)\s*(beginml)\b</string>
+					<string>((?:^\s*)?%%)\s*(beginml)\b</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.comment.pseudo.abc</string>
+							<string>comment.line.percentage.abc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>variable.function.abc punctuation.definition.sequence.begin.abc</string>
+							<string>support.function.directive.abc</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>(%%)\s*(endml)\b</string>
+					<string>((?:^\s*)?%%)\s*(endml)\b</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.comment.pseudo.abc</string>
+							<string>comment.line.percentage.abc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>variable.function.abc punctuation.definition.sequence.end.abc</string>
+							<string>support.function.directive.abc</string>
 						</dict>
 					</dict>
 					<key>name</key>

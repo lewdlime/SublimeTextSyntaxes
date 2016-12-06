@@ -2,8 +2,8 @@
 name: ABC Notation
 scopeName: source.abc
 fileTypes: [abc]
-foldingStartMarker: '^X:\d+'
-foldingStopMarker: '^[ \t\v\f]*$'
+foldingStartMarker: '^X:\s*\d+'
+foldingStopMarker: '^\s*$'
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 
 patterns:
@@ -11,10 +11,10 @@ patterns:
   # Tune Body ends just before the first 'K:' field
   - comment: ABC Tune
     name: meta.tune.abc
-    begin: '^(X:)[ \t\v\f]*(\d+)'
+    begin: '^(X:)\s*(\d+)'
     beginCaptures:
       '1': {name: keyword.control.index.abc}
-      '2': {name: constant.numeric.index.abc}
+      '2': {name: constant.numeric.index.abc meta.toc-list.index.abc}
     end: '^\s*$'
     patterns:
       - include: '#tune-body'
@@ -32,20 +32,20 @@ repository:
   # the scope stack, this repository item goes unused.
   # unparsed:
   #   name: meta.unparsed.abc
-  #   begin: '^[ \t\v\f]*(?!\nX:)'
+  #   begin: '^\s*(?!\nX:)'
   #   beginCaptures:
   #     '1': {name: comment.block.free-text.abc}
-  #   end: '^[ \t\v\f]*$'
+  #   end: '^\s*$'
 
 ## Global Elements
   tune-body:
     comment: ABC Tune Body
     name: meta.tune.body.abc
-    begin: ^(K:)[ \t\v\f]*([^%\\]+)?
+    begin: ^(K:)\s*([^%\\]+)?
     beginCaptures:
       '1': {name: keyword.control.key.abc}
       '2': {name: string.unquoted.key.abc}
-    end: ^[ \t\v\f]*$
+    end: (?:^\s*)?$
     patterns:
       - include: '#slur'
       - include: '#abc-chord'
@@ -93,7 +93,7 @@ repository:
       - name: constant.character.escape.abc
         match: (\\u\h{4})
       - name: constant.character.escape.abc
-        match: (?:\\[[:punct:]&&[\w]&&[^[ \t\v\f]]]{2})
+        match: (?:\\[[:punct:]\w\S]{2})
       - name: constant.character.escape.abc
         match: (?:&\w+;)
       - name: constant.character.escape.abc
@@ -107,13 +107,13 @@ repository:
     comment: Directives and Namespaces
     patterns:
       - name: meta.directive.abc
-        match: '(%%)([ \t\v\f]*\w*(?!begin\w*|end\w*)\b)([^%\n\r]*)'
+        match: '(%%)\s*(\w*)\b([^%\n\r]*)'
         captures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: support.function.directive.abc}
           '3': {name: variable.parameter.directive.abc}
       - name: meta.namespace.abc
-        match: '(%)(abc(?:-\d\.\d)?)'
+        match: '(?:^\s+)?(%)(abc(?:-\d\.\d)?)'
         captures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: entity.name.namespace.abc}
@@ -124,39 +124,55 @@ repository:
   comments:
     comment: ABC Line Comments
     name: comment.line.percentage.abc
-    match: '%(?!%|abc).*'
+    match: '(?:^\s+)?%(?!%|abc).*'
 
   field:
     comment: Fields, Remark Fields, Instruction Fields, & Key Fields
     patterns:
       - name: meta.code.field.abc
-        match: ^([[:alpha:]&&[^IKXr]]:)([^%\\]*)
+        match: ^([[:alpha:]&&[^IKPVTXr]]:)([^%\n\r]*)
         captures:
-          '1': {name: entity.name.function.field.abc}
+          '1': {name: entity.other.attribute-name.field.abc}
           '2': {name: string.unquoted.field.abc}
       - comment: Remark Field
         name: meta.code.field.remark.abc
-        match: ^(r:)([^%\\]*)
+        match: ^(r:)([^%\n\r]*)
         captures:
-          '1': {name: entity.name.function.field.remark.abc}
+          '1': {name: entity.other.attribute-name.field.remark.abc}
           '2': {name: comment.block.remark.abc}
       - comment: Instruction Field
         name: meta.code.field.instruction.abc
-        match: ^(I:)[ \t\v\f]*(\w+(?!begin.*|end.*))[ \t\v\f]+([^%\n\r]*)
+        match: ^(I:)\s*(\w+)[ \t\v\f]+([^%\n\r]*)
         captures:
           '1': {name: support.constant.instruction.abc}
           '2': {name: keyword.operator.word.instruction.abc}
           '3': {name: variable.parameter.instruction.abc}
         patterns:
-        - include: '#spacing-length'
+          - include: '#spacing-length'
       - comment: Key Field
         name: meta.code.field.key.abc
-        match: ^(K:)[ \t\v\f]*([^%\\]+)
+        match: ^(K:)\s*([^%\n\r]+)
         captures:
           '1': {name: keyword.control.key.abc}
-          '2': {name: string.unquoted.key.abc}
-    # TODO: Voice & Part Fields, using symbol scopes for indexing as
-    # jumplist symbols
+          '2': {name: string.unquoted.key.abc entity.name.function.key.abc}
+      - comment: Title Field
+        name: meta.code.field.title.abc
+        match: ^(T:)\s*([^%\n\r]+)
+        captures:
+          '1': {name: entity.other.attribute-name.title.abc}
+          '2': {name: string.unquoted.title.abc meta.toc-list.title.abc}
+      - comment: Voice Field
+        name: meta.code.field.voice.abc
+        match: ^(V:)\s*([^%\r\n]+)
+        captures:
+          '1': {name: entity.other.attribute-name.field.voice.abc}
+          '2': {name: variable.parameter.voice.abc meta.toc-list.voice.abc}
+      - comment: Part Field
+        name: meta.code.field.part.abc
+        match: ^(P:)\s*([^%\r\n]+)
+        captures:
+          '1': {name: entity.other.attribute-name.field.part.abc}
+          '2': {name: variable.parameter.part.abc meta.toc-list.part.abc}
 
 ## ABC Code Elements
   # Operators
@@ -228,33 +244,62 @@ repository:
       - comment: Inline Fields
         name: meta.code.inline-field.abc
         contentName: string.unquoted.inline-field.abc
-        begin: (\[[[:alpha:]&&[^IKXr]]:)
+        begin: (\[)\s*([[:alpha:]&&[^IKPVXr]]:)
         beginCaptures:
-          '1': {name: entity.name.function.inline-field.abc}
+          '1': {name: entity.other.attribute-name.inline-field.abc}
         end: (\])
         endCaptures:
-          '1': {name: entity.name.function.inline-field.abc}
+          '1': {name: entity.other.attribute-name.inline-field.abc}
       - comment: Inline Remark Field
         name: meta.code.inline-field.remark.abc
         contentName: comment.block.remark.abc
         begin: (\[r:)
         beginCaptures:
-          '1': {name: entity.name.function.inline-field.remark.abc}
+          '1': {name: entity.other.attribute-name.inline-field.remark.abc}
         end: (\])
         endCaptures:
-          '1': {name: entity.name.function.inline-field.remark.abc}
+          '1': {name: entity.other.attribute-name.inline-field.remark.abc}
       - comment: Inline Instruction Field
-        name: meta.field.instruction.abc
+        name: meta.code.inline-field.instruction.abc
         contentName: variable.parameter.instruction.abc
-        begin: (\[I:)[ \t\v\f]*(\w+)
+        begin: (\[I:)\s*(\w+)
         beginCaptures:
-          '1': {name: entity.name.function.inline-field.abc}
+          '1': {name: entity.other.attribute-name.inline-field.instruction.abc}
           '2': {name: keyword.operator.word.instruction.abc}
         end: (\])
         endCaptures:
-          '1': {name: entity.name.function.inline-field.abc}
+          '1': {name: entity.other.attribute-name.inline-field.instruction.abc}
         patterns:
         - include: '#spacing-length'
+      - comment: Inline Title Field
+        name: meta.code.inline-field.title.abc
+        begin: (\[T:)\s*([^%\n\r\]]+)
+        beginCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.title.abc}
+          '2': {name: string.unquoted.title.abc meta.toc-list.title.abc}
+        end: (\])
+        endCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.title.abc}
+        patterns:
+          - include: '#escape'
+      - comment: Inline Voice Field
+        name: meta.code.inline-field.voice.abc
+        begin: (\[V:)\s*([^%\r\n\]]+)
+        beginCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.voice.abc}
+          '2': {name: variable.parameter.voice.abc meta.toc-list.voice.abc}
+        end: (\])
+        endCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.voice.abc}
+      - comment: Inline Part Field
+        name: meta.code.inline-field.part.abc
+        begin: (\[P:)\s*([^%\r\n\]]+)
+        beginCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.part.abc}
+          '2': {name: variable.parameter.part.abc meta.toc-list.part.abc}
+        end: (\])
+        endCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.part.abc}
     # TODO: Voice & Part Fields, using symbol scopes for indexing as
     # jumplist symbols
 
@@ -278,13 +323,13 @@ repository:
     comment: Decoration Symbols
     patterns:
       - name: meta.code.decoration.symbol.abc
-        match: ([-\.~HLMOPSTuv](?!:))
+        match: (?:^\s+)?([-\.~HLMOPSTuv](?!:))
         captures:
           '1': {name: variable.parameter.decoration.symbol.abc}
-      - name: meta.code.decoration.symbol.abc
-        match: ^([-\.~HLMOPSTuv](?!:))
+      - name: meta.code.decoration.abc
+        match: (!\w+!)
         captures:
-          '1': {name: variable.parameter.decoration.symbol.abc}
+          '1': {name: variable.parameter.decoration.abc}
       - name: meta.code.decoration.abc
         match: |-
           (?x)
@@ -519,12 +564,12 @@ repository:
     patterns:
     - name: meta.text.directive.abc
       contentName: string.unquoted.typeset.abc
-      begin: ^(%%)[ \t\v\f]*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?
+      begin: (?:^\s+)?(%%)\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?
       beginCaptures:
         '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
         '3': {name: variable.parameter.directive.abc}
-      end: ^(%%)[ \t\v\f]*(endtext)\b
+      end: (?:^\s+)?(%%)\s*(endtext)\b
       endCaptures:
         '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
@@ -533,11 +578,11 @@ repository:
       - include: '#comments'
       - include: '#directive'
     - name: meta.svg.directive.abc
-      begin: (%%)[ \t\v\f]*(beginsvg)\b
+      begin: (?:^\s+)?(%%)\s*(beginsvg)\b
       beginCaptures:
         '1': {name: punctuation.definition.comment.pseudo.abc}
         '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
-      end: (%%)[ \t\v\f]*(endsvg)\b
+      end: (?:^\s+)?(%%)\s*(endsvg)\b
       endCaptures:
         '1': {name: punctuation.definition.comment.pseudo.abc}
         '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
@@ -547,12 +592,12 @@ repository:
       - include: '#comments'
       - include: '#directive'
     - name: meta.ps.directive.abc
-      begin: (%%)[ \t\v\f]*(beginps)\b([ \t\v\f]+(?:nosvg))?
+      begin: (?:^\s+)?(%%)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?
       beginCaptures:
         '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
         '3': {name: variable.parameter.directive.abc}
-      end: (%%)[ \t\v\f]*(endps)\b
+      end: (?:^\s+)?(%%)\s*(endps)\b
       endCaptures:
         '1': {name: punctuation.definition.comment.pseudo.abc}
         '2': {name: support.function.directive.abc}
@@ -562,11 +607,11 @@ repository:
       - include: '#comments'
       - include: '#directive'
     - name: meta.js.directive.abc
-      begin: (%%)[ \t\v\f]*(beginjs)\b
+      begin: (?:^\s+)?(%%)\s*(beginjs)\b
       beginCaptures:
         '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
-      end: (%%)[ \t\v\f]*(endjs)\b
+      end: (?:^\s+)?(%%)\s*(endjs)\b
       endCaptures:
         '1': {name: comment.line.percentage.abc}
         '2': {name: support.function.directive.abc}
@@ -576,11 +621,11 @@ repository:
       - include: '#comments'
       - include: '#directive'
     - name: meta.html.directive.abc
-      begin: (%%)[ \t\v\f]*(beginml)\b
+      begin: (?:^\s+)?(%%)\s*(beginml)\b
       beginCaptures:
         '1': {name: punctuation.definition.comment.pseudo.abc}
         '2': {name: variable.function.abc punctuation.definition.sequence.begin.abc}
-      end: (%%)[ \t\v\f]*(endml)\b
+      end: (?:^\s+)?(%%)\s*(endml)\b
       endCaptures:
         '1': {name: punctuation.definition.comment.pseudo.abc}
         '2': {name: variable.function.abc punctuation.definition.sequence.end.abc}
@@ -591,12 +636,12 @@ repository:
       - include: '#directive'
     - name: meta.text.instruction.abc
       contentName: string.unquoted.free.abc
-      begin: ^(I:)[ \t\v\f]*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?
+      begin: ^(I:)\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?
       beginCaptures:
         '1': {name: support.constant.instruction.abc}
         '2': {name: support.function.directive.abc}
         '3': {name: variable.parameter.directive.abc}
-      end: ^(I:)[ \t\v\f]*(endtext)\b
+      end: ^(I:)\s*(endtext)\b
       endCaptures:
         '1': {name: support.constant.instruction.abc}
         '2': {name: support.function.directive.abc}
@@ -605,11 +650,11 @@ repository:
       - include: '#comments'
       - include: '#directive'
     - name: meta.svg.instruction.abc
-      begin: (^I:)[ \t\v\f]*(beginsvg)\b
+      begin: (^I:)\s*(beginsvg)\b
       beginCaptures:
         '1': {name: support.constant.instruction.abc}
         '2': {name: support.function.directive.abc}
-      end: (^I:)[ \t\v\f]*(endsvg)\b
+      end: (^I:)\s*(endsvg)\b
       endCaptures:
         '1': {name: support.constant.instruction.abc}
         '2': {name: support.function.directive.abc}
@@ -619,12 +664,12 @@ repository:
       - include: '#comments'
       - include: '#directive'
     - name: meta.ps.instruction.abc
-      begin: (^I:)[ \t\v\f]*(beginps)\b([ \t\v\f]+(?:nosvg))?
+      begin: (^I:)\s*(beginps)\b\s+(nosvg)?
       beginCaptures:
         '1': {name: support.constant.instruction.abc}
         '2': {name: support.function.directive.abc}
         '3': {name: variable.parameter.directive.abc}
-      end: ^(I:)[ \t\v\f]*(endps)\b
+      end: ^(I:)\s*(endps)\b
       endCaptures:
         '1': {name: support.constant.instruction.abc}
         '2': {name: support.function.directive.abc}
@@ -635,11 +680,11 @@ repository:
       - include: '#directive'
     - name: meta.js.instruction.abc
       contentName: source.javascript
-      begin: (^I:)[ \t\v\f]*(beginjs)\b
+      begin: (^I:)\s*(beginjs)\b
       beginCaptures:
         '1': {name: support.constant.instruction.abc}
         '2': {name: support.function.directive.abc}
-      end: ^(I:)[ \t\v\f]*(endjs)\b
+      end: ^(I:)\s*(endjs)\b
       endCaptures:
         '1': {name: support.constant.instruction.abc}
         '2': {name: support.function.directive.abc}
@@ -650,11 +695,11 @@ repository:
       - include: '#directive'
     - name: meta.svg.instruction.abc
       contentName: source.html
-      begin: (^I:)[ \t\v\f]*(beginml)\b
+      begin: (^I:)\s*(beginml)\b
       beginCaptures:
         '1': {name: support.constant.instruction.abc}
         '2': {name: support.function.directive.abc}
-      end: (^I:)[ \t\v\f]*(endml)\b
+      end: (^I:)\s*(endml)\b
       endCaptures:
         '1': {name: support.constant.instruction.abc}
         '2': {name: support.function.directive.abc}
