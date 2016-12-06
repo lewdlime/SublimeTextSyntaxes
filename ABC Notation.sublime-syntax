@@ -661,5 +661,117 @@ contexts:
       - include: '#comments'
       - include: '#directive'
 
+  embedded-text:
+    - clear_scopes: true
+    - meta_scope: meta.embedded.text.abc
+    - match: (?:^\s+)?(%%)\s*(begintext)\b(\s+(?:obeylines|fill|ragged|justify|align|skip))?
+      captures:
+        1: comment.line.percentage.abc
+        2: support.function.directive.abc
+        3: variable.parameter.directive.abc
+      push:
+        - match: (?:^\s+)?(%%)\s*(endtext)
+          captures:
+            1: comment.line.percentage.abc
+            2: support.function.directive.abc
+          pop: true
+        - match: 'begintext'
+          scope: support.function.directive.abc
+          push:
+            - meta_content_scope: string.unquoted.typeset.abc
+          with_prototype:
+            - match: (?=%%\s*endtext)
+              pop: true
 
+  embedded-svg:
+    - clear_scopes: true
+    - meta_scope: meta.embedded.svg.abc
+    - match: (?:^\s+)?(%%)\s*(beginsvg)\b
+      captures:
+        1: comment.line.percentage.abc
+        2: support.function.directive.abc
+      push:
+        - match: (?:^\s+)?(%%)\s*(endsvg)\b
+          captures:
+            1: comment.line.percentage.abc
+            2: support.function.directive.abc
+          pop: true
+        - match: 'beginsvg'
+          scope: support.function.directive.abc
+          push:
+            - meta_content_scope: meta.embedded.svg.abc
+            - include: 'scope:source.xml'
+          with_prototype:
+            - include: comments
+            - include: directive
+            - match: (?=%%\s*endsvg)
+              pop: true
+
+  embedded-html:
+    - clear_scopes: true
+    - meta_scope: meta.embedded.html.abc
+    - match: (?:^\s+)?(%%)\s*(beginml)\b
+      captures:
+        1: comment.line.percentage.abc
+        2: support.function.directive.abc
+      push:
+        - match: (?:^\s+)?(%%)\s*(endml)\b
+          captures:
+            1: comment.line.percentage.abc
+            2: support.function.directive.abc
+          pop: true
+        - match: 'beginml'
+          scope: support.function.directive.abc
+          push:
+            - meta_content_scope: meta.embedded.html.abc
+            - include: 'scope:source.html'
+          with_prototype:
+            - include: comments
+            - include: directive
+            - match: (?=%%\s*endml)
+              pop: true
+
+  embedded-ps:
+    - clear_scopes: true
+    - meta_scope: meta.embedded.ps.abc
+    - match: (?:^\s+)?(%%)\s*(beginps)\b
+      captures:
+        1: comment.line.percentage.abc
+        2: support.function.directive.abc
+      push:
+        - match: (?:^\s+)?(%%)\s*(endps)\b
+          captures:
+            1: comment.line.percentage.abc
+            2: support.function.directive.abc
+          pop: true
+        - match: 'beginml'
+          scope: support.function.directive.abc
+          push:
+            - meta_content_scope: meta.embedded.ps.abc
+            - include: 'scope:source.ps'
+          with_prototype:
+            - match: (?=%%\s*endps)
+              pop: true
+
+  embedded-js:
+    - clear_scopes: true
+    - meta_scope: meta.embedded.js.abc
+    - match: (?:^\s+)?(%%)\s*(beginjs)\b
+      captures:
+        1: comment.line.percentage.abc
+        2: support.function.directive.abc
+      push:
+        - match: (?:^\s+)?(%%)\s*(endjs)\b
+          captures:
+            1: comment.line.percentage.abc
+            2: support.function.directive.abc
+          pop: true
+        - match: 'beginml'
+          scope: support.function.directive.abc
+          push:
+            - meta_content_scope: meta.embedded.js.abc
+            - include: 'scope:source.js'
+          with_prototype:
+            - match: (?=%%\s*endjs)
+              pop: true
 ...
