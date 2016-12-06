@@ -216,6 +216,7 @@ repository:
       - include: '#abc-rest'
       - include: '#abc-space'
       - include: '#overlay'
+      - include: '#slur'
 
   slur:
     comment: Slurs

@@ -142,6 +142,10 @@ brackets separately from the notes.</string>
 					<key>include</key>
 					<string>#overlay</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#slur</string>
+				</dict>
 			</array>
 		</dict>
 		<key>abc-note</key>
