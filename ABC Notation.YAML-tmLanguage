@@ -46,7 +46,6 @@ repository:
       '2': {name: string.unquoted.key.abc}
     end: ^\s*$
     patterns:
-      - include: '#slur'
       - include: '#abc-chord'
       - include: '#abc-note-sequence'
       - include: '#abc-rest-sequence'
@@ -217,15 +216,6 @@ repository:
       - include: '#abc-space'
       - include: '#decoration'
       - include: '#overlay'
-      - include: '#slur'
-
-  slur:
-    comment: Slurs
-    patterns:
-    - name: support.type.slur.abc
-      match: (\((?![\d:])[',]?)
-    - match: (\))
-      name: support.type.slur.abc
 
   # Inline Fields
   inline-field:
@@ -311,6 +301,10 @@ repository:
   decoration:
     comment: Decoration Symbols
     patterns:
+      - name: meta.code.decoration.slur.abc
+        match: ((?:\((?![\d:])[',]?)|\)(?!!))
+        captures:
+          '1': {name: support.type.slur.abc}
       - name: meta.code.decoration.symbol.abc
         match: (?:^\s*)?([-\.~HLMOPSTuv](?!:))
         captures:
