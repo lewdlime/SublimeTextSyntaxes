@@ -7,7 +7,6 @@ foldingStopMarker: '^\s*$'
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
 
 patterns:
-  #- include: '#unparsed'
   # Tune Body ends just before the first 'K:' field
   - comment: ABC Tune
     name: meta.tune.abc
@@ -221,7 +220,7 @@ repository:
   slur:
     comment: Slurs
     name: meta.code.slur.abc
-    begin: (\((?![\d!:]))
+    begin: (\((?![\d:]))
     beginCaptures:
       '1': {name: support.type.slur.abc}
     end: (\)(?!\!))
