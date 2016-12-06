@@ -215,6 +215,7 @@ repository:
       - include: '#abc-note'
       - include: '#abc-rest'
       - include: '#abc-space'
+      - include: '#decoration'
       - include: '#overlay'
       - include: '#slur'
 

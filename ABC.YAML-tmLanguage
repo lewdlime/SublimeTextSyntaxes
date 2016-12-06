@@ -90,9 +90,9 @@ repository:
       - name: constant.character.escape.abc
         match: (\\\\)
       - name: constant.character.escape.abc
-        match: (\\u\h{4})
+        match: '(\\u\h{4})'
       - name: constant.character.escape.abc
-        match: (?:\\[[:punct:]\w\S]{2})
+        match: '(?:\\[[:punct:]\w\S]{2})'
       - name: constant.character.escape.abc
         match: (?:&\w+;)
       - name: constant.character.escape.abc
@@ -215,6 +215,7 @@ repository:
       - include: '#abc-note'
       - include: '#abc-rest'
       - include: '#abc-space'
+      - include: '#decoration'
       - include: '#overlay'
       - include: '#slur'
 
@@ -295,10 +296,10 @@ repository:
   grace:
     comment: Grace Notes
     name: meta.code.grace.abc
-    begin: (\{\/?)
+    begin: '(\{\/?)'
     beginCaptures:
       '1': {name: support.type.grace.abc}
-    end: (\})
+    end: '(\})'
     endCaptures:
       '1': {name: support.type.grace.abc}
     patterns:
@@ -542,7 +543,7 @@ repository:
   macro:
     comment: User-defined Macro
     name: meta.code.macro.abc
-    match: (\~[a-zA-Z][a-zA-Z0-9]{0,30})
+    match: '(\~[a-zA-Z][a-zA-Z0-9]{0,30})'
     captures:
       '1': {name: support.function.macro.abc}
 
@@ -701,7 +702,7 @@ repository:
     comment: Illegal Syntax
     patterns:
     - name: meta.code.illegal.abc
-      match: ([\[]{2,}(?<!\|)(?!:))
+      match: '([\[]{2,}(?<!\|)(?!:))'
       captures:
         '1': {name: invalid.illegal.barline.abc}
     - name: meta.code.illegal.abc
@@ -709,7 +710,7 @@ repository:
       captures:
         '1': {name: invalid.illegal.barline.abc}
     - name: meta.code.illegal.abc
-      match: ([\[]{2,}(?!:))
+      match: '([\[]{2,}(?!:))'
       captures:
         '1': {name: invalid.illegal.barline.abc}
 ...
