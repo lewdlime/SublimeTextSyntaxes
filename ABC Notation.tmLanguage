@@ -200,7 +200,7 @@ brackets separately from the notes.</string>
 					<string>(?x)
   ([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?
   ([A-Ga-g][,']*)
-  (\d*(?!\.)&gt;*(?:\d*(?!\.))?)?</string>
+  (\d*(?!\.)[\&gt;]*(?:\d*(?!\.))?)?</string>
 					<key>name</key>
 					<string>meta.code.note.abc</string>
 				</dict>
@@ -227,7 +227,7 @@ brackets separately from the notes.</string>
 					<string>(?x)
   ([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?
   ([A-Ga-g][,']*)
-  (\d*(?!\.)&lt;*(?:\d*(?!\.))?)?</string>
+  (\d*(?!\.)[\&lt;]*(?:\d*(?!\.))?)?</string>
 					<key>name</key>
 					<string>meta.code.note.abc</string>
 				</dict>
@@ -534,21 +534,7 @@ brackets separately from the notes.</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>([-\.~HLMOPSTuv](?!:))</string>
-					<key>name</key>
-					<string>meta.code.decoration.symbol.abc</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.decoration.symbol.abc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>^([-\.~HLMOPSTuv](?!:))</string>
+					<string>(?:^\s*)?([-\.~HLMOPSTuv](?!:))</string>
 					<key>name</key>
 					<string>meta.code.decoration.symbol.abc</string>
 				</dict>
@@ -1831,7 +1817,7 @@ brackets separately from the notes.</string>
 		<key>slur</key>
 		<dict>
 			<key>begin</key>
-			<string>(\((?![\d!:]))</string>
+			<string>(\((?![\d:])[',]?)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

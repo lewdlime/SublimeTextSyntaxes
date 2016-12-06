@@ -220,7 +220,7 @@ repository:
   slur:
     comment: Slurs
     name: meta.code.slur.abc
-    begin: (\((?![\d:]))
+    begin: (\((?![\d:])[',]?)
     beginCaptures:
       '1': {name: support.type.slur.abc}
     end: (\)(?!\!))
@@ -322,7 +322,7 @@ repository:
     comment: Decoration Symbols
     patterns:
       - name: meta.code.decoration.symbol.abc
-        match: (?:^\s+)?([-\.~HLMOPSTuv](?!:))
+        match: (?:^\s*)?([-\.~HLMOPSTuv](?!:))
         captures:
           '1': {name: variable.parameter.decoration.symbol.abc}
       - name: meta.code.decoration.abc
