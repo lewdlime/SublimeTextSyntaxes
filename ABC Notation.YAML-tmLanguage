@@ -220,23 +220,11 @@ repository:
 
   slur:
     comment: Slurs
-    name: meta.code.slur.abc
-    begin: (\((?![\d:])[',]?)
-    beginCaptures:
-      '1': {name: support.type.slur.abc}
-    end: (\)(?!\!))
-    endCaptures:
-      '1': {name: support.type.slur.abc}
     patterns:
-      - include: '#abc-note-sequence'
-      - include: '#abc-rest-sequence'
-      - include: '#abc-space-sequence'
-      - include: '#abc-chord'
-      - include: '#barline'
-      - include: '#field'
-      - include: '#inline-field'
-      - include: '#decoration'
-      - include: '#slur'
+    - name: support.type.slur.abc
+      match: (\((?![\d:])[',]?)
+    - match: (\))
+      name: support.type.slur.abc
 
   # Inline Fields
   inline-field:

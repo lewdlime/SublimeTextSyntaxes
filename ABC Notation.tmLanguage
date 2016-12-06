@@ -1820,67 +1820,21 @@ brackets separately from the notes.</string>
 		</dict>
 		<key>slur</key>
 		<dict>
-			<key>begin</key>
-			<string>(\((?![\d:])[',]?)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.slur.abc</string>
-				</dict>
-			</dict>
 			<key>comment</key>
 			<string>Slurs</string>
-			<key>end</key>
-			<string>(\)(?!\!))</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.slur.abc</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.code.slur.abc</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>#abc-note-sequence</string>
+					<key>match</key>
+					<string>(\((?![\d:])[',]?)</string>
+					<key>name</key>
+					<string>support.type.slur.abc</string>
 				</dict>
 				<dict>
-					<key>include</key>
-					<string>#abc-rest-sequence</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#abc-space-sequence</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#abc-chord</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#barline</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#field</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#inline-field</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#decoration</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#slur</string>
+					<key>match</key>
+					<string>(\))</string>
+					<key>name</key>
+					<string>support.type.slur.abc</string>
 				</dict>
 			</array>
 		</dict>
