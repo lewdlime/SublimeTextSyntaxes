@@ -301,10 +301,6 @@ repository:
   decoration:
     comment: Decoration Symbols
     patterns:
-      - name: meta.code.decoration.slur.abc
-        match: ((?:\((?![\d:])[',]?)|\)(?!!))
-        captures:
-          '1': {name: support.type.slur.abc}
       - name: meta.code.decoration.symbol.abc
         match: (?:^\s*)?([-\.~HLMOPSTuv](?!:))
         captures:
@@ -329,6 +325,10 @@ repository:
                turn|turnx|upbow|uppermordent|wedge|xstem|\~[()])!)
         captures:
           '1': {name: variable.parameter.decoration.abc}
+      - name: meta.code.decoration.slur.abc
+        match: ((?:\((?![\d:])[',]?)|\))
+        captures:
+          '1': {name: support.type.slur.abc}
 
   strings:
     comment: Chord symbols and String Annotations

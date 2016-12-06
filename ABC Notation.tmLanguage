@@ -534,20 +534,6 @@ brackets separately from the notes.</string>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.slur.abc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>((?:\((?![\d:])[',]?)|\)(?!!))</string>
-					<key>name</key>
-					<string>meta.code.decoration.slur.abc</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
 							<string>variable.parameter.decoration.symbol.abc</string>
 						</dict>
 					</dict>
@@ -594,6 +580,20 @@ brackets separately from the notes.</string>
      turn|turnx|upbow|uppermordent|wedge|xstem|\~[()])!)</string>
 					<key>name</key>
 					<string>meta.code.decoration.abc</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>support.type.slur.abc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>((?:\((?![\d:])[',]?)|\))</string>
+					<key>name</key>
+					<string>meta.code.decoration.slur.abc</string>
 				</dict>
 			</array>
 		</dict>
