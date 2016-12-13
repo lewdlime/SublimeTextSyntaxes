@@ -10,7 +10,8 @@ contexts:
     - match: '^(X:)\s*(\d+)'
       captures:
         1: keyword.control.index.abc
-        2: constant.numeric.index.abc # meta.toc-list.index.abc
+        2: constant.numeric.index.abc
+        # meta.toc-list.index.abc
       push: abc-tune
 
   prototype:
@@ -18,8 +19,14 @@ contexts:
       scope: punctuation.definition.comment.abc
       push: line-comment
     - match: '%%'
-      scope: punctuation.definition.directive.abc
+      scope: punctuation.definition.comment.abc
       push: line-directive
+    - match: '(?:^\s*)?(%)(abc(?:-\d\.\d)?)'
+      scope: comment.line.namespace.abc
+      captures:
+        1: punctuation.definition.comment.abc
+        2: entity.name.tag.namespace.abc
+        # entity.name.namespace.abc
     # Global Fields
     - match: '^([[:alpha:]+&&[^IKPVTXr]]:)'
       scope: punctuation.definition.field.abc
@@ -47,6 +54,8 @@ contexts:
       captures:
         1: entity.other.attribute-name.field.part.abc
       push: part-field
+    - scope: constant.character.escape.abc
+      match: (\\%)
 
   comments:
     - match: '(?:\s*)?%(?!%|abc)'
@@ -56,22 +65,21 @@ contexts:
   directive-value:
     - meta_scope: variable.parameter.directive.abc
     - include: spacing-length
-    - match: '(true|false)\b'
+    - match: '(?i)(true|false|yes|no|on|off)\b'
       scope: constant.language.boolean.abc
     - include: comments
     - match: $
       pop: true
 
   directive-constants:
-    - scope: constant.language.boolean.abc
-      match: '(?i)(true|false)\b'
+    - match: '(?i)(true|false|yes|no|on|off)\b'
+      scope: constant.language.boolean.abc
 
   spacing-length:
     - scope: meta.variable.space-length.abc
       match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)'
       captures:
         1: constant.numeric.float.space-length.abc
-
 
   abc-tune:
     - meta_scope: meta.tune.abc
@@ -131,64 +139,13 @@ contexts:
   abc-note:
     - match: |-
         (?x)
-          ([_\^]{2}|=|[_=\^](?:(?:\d(?!\.))*\/*(?:\d(?!\.))*)?)?
+          ([_=\^](?:\d*\/*\d*)|=|[_\^]{2})?
           ([A-Ga-g][,']*)
-          (\d*(?!\.)/*(?:\d*(?!\.))?)?
+          (\d*[<>/]*\d*)?
       captures:
         1: constant.language.accidental.abc
         2: constant.character.note.abc
         3: constant.numeric.note-length.abc
-    - match: |-
-        (?x)
-          ([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?
-          ([A-Ga-g][,']*)
-          (\d*(?!\.)[\>]*(?:\d*(?!\.))?)?
-      captures:
-        1: constant.language.accidental.abc
-        2: constant.character.note.abc
-        3: constant.numeric.note-length.abc
-    - match: |-
-        (?x)
-          ([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?
-          ([A-Ga-g][,']*)
-          (\d*(?!\.)[\<]*(?:\d*(?!\.))?)?
-      captures:
-        1: constant.language.accidental.abc
-        2: constant.character.note.abc
-        3: constant.numeric.note-length.abc
-    - match: |-
-        (?x)
-          ([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?
-          ([A-Ga-g][,']*)
-          (\d*(?!\.))
-      captures:
-        1: constant.language.accidental.abc
-        2: constant.character.note.abc
-        3: constant.numeric.note-length.abc
-
-  accidental:
-    - match: |-
-        (?x)
-          ([_\^]{2}|=|[_=\^]
-           (?:\d*/*(?:\d*)?)|
-           (?:\d(?!\.))+
-          )
-      captures:
-        1: constant.language.accidental.abc
-
-  note:
-    - match: "([A-Ga-g][,']*)"
-      scope: constant.character.note.abc
-
-  note-length:
-    - match: |-
-        (?x)
-          ((?:\d*/*(?:\d*)?)|
-           (?:\d*>*(?:\d*)?)|
-           (?:\d*<*(?:\d*)?)|
-           (?:\d+(?!\.))
-          )
-      scope: constant.numeric.note-length.abc
 
   abc-rest:
     - scope: meta.code.abc-rest.abc
@@ -216,6 +173,16 @@ contexts:
       captures:
         1: storage.type.spacer.abc
         2: constant.numeric.space-length.abc
+
+  accidental:
+    - match: ([_=\^](?:\d*\/*\d*)|=|[_\^]{2})
+      scope: constant.language.accidental.abc
+  note:
+    - match: ([A-Ga-g][,']*)
+      scope: constant.character.note.abc
+  note-length:
+    - match: (\d*[<>/]*\d*)?
+      scope: constant.numeric.note-length.abc
 
   decoration:
     - scope: variable.parameter.decoration.symbol.abc
@@ -476,11 +443,11 @@ contexts:
 
   escape:
     - scope: constant.character.escape.abc
-      match: '(\\\\)'
+      match: (\\\\)
     - scope: constant.character.escape.abc
-      match: '(\\u\h{4})'
+      match: (\\u\h{4})
     - scope: constant.character.escape.abc
-      match: '(?:\\[[:punct:]&&[\w]&&[^[ \t\v\f]]]{2})'
+      match: (?:\\[[:punct:]&&[\w]&&[^[ \t\v\f]]]{2})
     - scope: constant.character.escape.abc
       match: '(?:&\w+;)'
     - scope: constant.character.escape.abc
@@ -488,4 +455,4 @@ contexts:
     - scope: constant.character.escape.abc
       match: '(?:&#x\h+;)'
     - scope: constant.character.escape.abc
-      match: '(\\%)'
+      match: (\\%)
