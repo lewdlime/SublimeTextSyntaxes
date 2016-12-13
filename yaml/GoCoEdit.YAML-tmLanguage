@@ -1,0 +1,122 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: GoCoEdit JSON
+scopeName: source.gce
+fileTypes: ['gcemode', 'gcetheme']
+uuid: 3e31b235-394a-4963-90cd-cccf56085c45
+
+patterns:
+- include: '#value'
+- include: '#match'
+
+repository:
+  array:
+    name: meta.brackets.array.gce
+    begin: (\[)
+    beginCaptures:
+      '1': {name: keyword.operator.array.gce punctuation.definition.array.begin.gce }
+    contentName: meta.structure.array.gce
+    end: (\])
+    endCaptures:
+      '1': {name: punctuation.definition.array.end.gce keyword.operator.array.gce}
+    patterns:
+      - include: '#value'
+      - match: (,)
+        name: punctuation.separator.array.gce keyword.operator.value.gce
+      - match: ([^\s\]])
+        name: invalid.illegal.expected-array-separator.gce
+      - include: '#comments'
+
+  comments:
+    patterns:
+      - name: comment.block.gce
+        begin: /\*
+        end: \*/
+      - name: comment.line.double-slash.gce
+        match: (//.*)
+
+  constant:
+    match: (?:true|false|null)
+    name: constant.language.gce
+
+  number:
+    comment: handles integer and decimal numbers
+    name: constant.numeric.gce
+    match: (-?(?:0|[1-9]\d*)(?:(?:\.\d+)?(?:[eE][+-]?\d+)?)?)
+
+  object:
+    comment: a JSON object
+    name: meta.object.gce
+    begin: (\{)
+    beginCaptures:
+      '1': {name: punctuation.definition.dictionary.begin.gce}
+    contentName: meta.structure.dictionary.gce
+    end: (\})
+    endCaptures:
+      '1': {name: punctuation.definition.dictionary.end.gce}
+    patterns:
+      - include: '#string'
+      - include: '#comments'
+      - name: meta.structure.dictionary.value.gce
+        match: |-
+          (?x)
+            (?:^\s*)?(\")
+            (token(?:izer)?|name|ext|state|parse|regex|
+             overwriteState|stateAfterMatch|recoverState|
+             onlyOnLineStart|dash_docsets|symbol_search|hint|global)
+            (\")\s*(:)
+        captures:
+          '1': {name: punctuation.definition.string.begin.gce}
+          '2': {name: keyword.control.gce}
+          '3': {name: punctuation.definition.string.end.gce}
+          '4': {name: punctuation.separator.dictionary.key-value.gce}
+        patterns:
+          - match: (,|(?=\}))
+            captures:
+              '1': {name: punctuation.separator.dictionary.pair.gce}
+          - include: '#value'
+          - include: '#comments'
+      # - match: '[^\s,]'
+      #   name: invalid.illegal.expected-dictionary-separator.gce
+      # - match: '[^\s\}]'
+      #   name: invalid.illegal.expected-dictionary-separator.gce
+
+  string:
+    name: meta.string.gce
+    begin: (\")
+    beginCaptures:
+      '1': {name: string.quoted.double.gce punctuation.definition.string.begin.gce}
+    contentName: string.quoted.double.gce
+    end: (\")
+    endCaptures:
+      '1': {name: punctuation.definition.string.end.gce string.quoted.double.gce}
+    patterns:
+      - include: '#comments'
+      - match: (\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))
+        name: constant.character.escape.gce
+      - match: \\.
+        name: invalid.illegal.unrecognized-string-escape.gce
+
+  match:
+    name: meta.definition.error.data.json-tmlanguage
+    begin: '"(match|regex)"\s*?:\s*(")'
+    beginCaptures:
+      '1': {name: keyword.other.control.gce}
+      '2': {name: string.quoted.double.gce punctuation.definition.regex.start.gce}
+    contentName: string.quoted.double.gce
+    end: (")
+    endCaptures:
+      '1': {name: punctuation.definition.regex.end.gce string.quoted.double.gce}
+    patterns:
+      - include: source.escapedregexp
+      - include: '#comments'
+
+  value:
+    patterns:
+      - include: '#constant'
+      - include: '#number'
+      - include: '#string'
+      - include: '#array'
+      - include: '#object'
+      - include: '#comments'
+...

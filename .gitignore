@@ -1,5 +1,7 @@
 # .gitignore
 !*.YAML-tmLanguage
+!*.JSON-tmLanguage
+!*.tmLanguage
 !/.mvn/wrapper/maven-wrapper.jar
 !Build/
 !default.mode1v3
@@ -8,7 +10,6 @@
 !default.perspectivev3
 !TAGS/
 !tags/
-#!*.JSON-tmLanguage
 #(r)(e)ledmac/(r)(e)ledpar
 #*.css
 #*.eps
@@ -48,8 +49,8 @@
 #modules.xml
 #Pods/
 #vendor/Pods/
-*.tm*
-*.tmLanguage
+#*.tm*
+#*.tmLanguage
 *.tmlanguage.cache
 *.tmPreferences.cache
 *.tmproj
