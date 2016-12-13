@@ -48,13 +48,8 @@ contexts:
   number:
     # handles integer and decimal numbers
     - match: |-
-        (?x:
-          -?
-          (?:0|[1-9]\d*)
-          (?:
-            (?:\.\d+)?
-            (?:[eE][+-]?\d+)?
-          )?)
+        (?x:-?(?:0|[1-9]\d*)
+          (?:(?:\.\d+)?(?:[eE][+-]?\d+)?)?)
       scope: constant.numeric.gce
 
   object:
@@ -90,7 +85,7 @@ contexts:
         - match: '\}'
           scope: punctuation.definition.dictionary.end.gce
           pop: true
-        - match: '[^\s\}]'
+        - match: '[^\s:\}]' # '[^\s\}]'
           scope: invalid.illegal.expected-dictionary-separator.gce
 
   string:
