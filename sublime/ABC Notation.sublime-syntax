@@ -9,53 +9,114 @@ contexts:
   main:
     - match: '^(X:)\s*(\d+)'
       captures:
-        1: keyword.control.index.abc
+        1: entity.name.tag.index.abc
         2: constant.numeric.index.abc
         # meta.toc-list.index.abc
       push: abc-tune
 
   prototype:
+    # namespace comment
     - match: '(?:^\s*)?%(?!%|abc)'
       scope: punctuation.definition.comment.abc
       push: line-comment
-    - match: '%%'
+    # directive/pseudo-comment
+    - match: '(?>%%)'
       scope: punctuation.definition.comment.abc
       push: line-directive
-    - match: '(?:^\s*)?(%)(abc(?:-\d\.\d)?)'
+    # comment (ensure only match for single '%')
+    - match: '(?:^\s*)?(?>(%)(abc(?:-\d\.\d)?))'
       scope: comment.line.namespace.abc
       captures:
         1: punctuation.definition.comment.abc
-        2: entity.name.tag.namespace.abc
-        # entity.name.namespace.abc
-    # Global Fields
+        2: keyword.other.special-method.namespace.abc
+    # info fields
     - match: '^([[:alpha:]+&&[^IKPVTXr]]:)'
-      scope: punctuation.definition.field.abc
+      scope: meta.field.abc
       captures:
-        1: entity.other.attribute-name.field.abc
+        1: support.function.field.abc
       push: field-value
+    # instruction field
     - match: '^(I:)'
-      scope: punctuation.definition.field.instruction.abc
+      scope: meta.field.instruction.abc
       captures:
-        1: support.constant.instruction.abc
+        1: entity.name.tag.instruction.abc
       push: instruction-field
+    # remark field
     - match: '^(r:)'
-      scope: punctuation.definition.field.remark.abc
+      scope: meta.field.remark.abc
       captures:
-        1: entity.other.attribute-name.field.remark.abc
+        1: support.function.field.remark.abc
       push: remark-field
-
+    # voice field
     - match: '^(V:)'
-      scope: punctuation.definition.field.voice.abc
+      scope: meta.field.voice.abc
       captures:
-        1: entity.other.attribute-name.field.voice.abc
+        1: entity.name.tag.voice.abc
       push: voice-field
+    # part field
     - match: '^(P:)'
-      scope: punctuation.definition.field.part.abc
+      scope: meta.field.part.abc
       captures:
-        1: entity.other.attribute-name.field.part.abc
+        1: entity.name.tag.part.abc
       push: part-field
+    # escapes for literal characters of operator symbols
     - scope: constant.character.escape.abc
-      match: (\\%)
+      match: (\\.)
+    - include: escape
+
+  field-value:
+    - meta_content_scope: meta.field.abc
+    - match: '[^\n\r]*'
+      scope: string.unquoted.field.abc
+    - match: $
+      pop: true
+
+  instruction-field:
+    - meta_scope: meta.instruction.abc
+    - meta_content_scope: variable.parameter.instruction.abc
+    - match: '\s*(\w+)\s+'
+      captures:
+        1: keyword.operator.word.instruction.abc
+      push:
+        - include: directive-constants
+        - match: $
+          pop: true
+    - match: $
+      pop: true
+
+  remark-field:
+    - meta_scope: meta.field.remark.abc
+    - match: '[^\n\r]*'
+      scope: comment.line.remark.abc
+    - match: $
+      pop: true
+
+  title-field:
+    - meta_scope: meta.field.title.abc
+    - match: '\s*([^%\n\r]+)'
+      captures:
+        1: string.unquoted.title.abc # meta.toc-list.title.abc
+    - match: $
+      pop: true
+
+  voice-field:
+    - meta_scope: meta.field.voice.abc
+    - match: '\s*([^%\n\r]+)'
+      captures:
+        1: storage.modifier.voice.abc meta.toc-list.voice.abc
+    - match: $
+      pop: true
+
+  part-field:
+    - meta_scope: meta.field.part.abc
+    - match: '\s*([^%\n\r]+)'
+      captures:
+        1: storage.modifier.part.abc meta.toc-list.part.abc
+      push:
+        - match: $
+          pop: true
+    - match: $
+      pop: true
 
   comments:
     - match: '(?:\s*)?%(?!%|abc)'
@@ -65,28 +126,28 @@ contexts:
   directive-value:
     - meta_scope: variable.parameter.directive.abc
     - include: spacing-length
-    - match: '(?i)(true|false|yes|no|on|off)\b'
-      scope: constant.language.boolean.abc
+    - include: directive-constants
+    # TODO: include more keywords to be highlighted
     - include: comments
     - match: $
       pop: true
 
   directive-constants:
-    - match: '(?i)(true|false|yes|no|on|off)\b'
-      scope: constant.language.boolean.abc
+    - match: '(?i)\b(true|false|yes|no|on|off)\b'
+      scope: constant.language.directive.abc
 
   spacing-length:
-    - scope: meta.variable.space-length.abc
+    - scope: meta.variable.length-unit.abc
       match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)'
       captures:
-        1: constant.numeric.float.space-length.abc
+        1: constant.numeric.float.length-unit.abc
 
   abc-tune:
     - meta_scope: meta.tune.abc
     - match: '^(T:)'
-      scope: punctuation.definition.field.title.abc
+      scope: meta.field.title.abc
       captures:
-        1: entity.other.attribute-name.field.title.abc
+        1: entity.name.tag.title.abc
       push: title-field
     - include: tune-body
     - match: '^(\s*)?$'
@@ -95,8 +156,9 @@ contexts:
   tune-body:
     - match: '^(K:)\s*([^\r\n]+)?'
       captures:
-        1: keyword.control.key.abc
+        1: entity.name.tag.key.abc
         2: string.unquoted.key.abc
+      # TODO: Capture clef variable keywords within key field
       push:
         - include: abc-chord
         - include: abc-note-sequence
@@ -106,10 +168,11 @@ contexts:
         - include: barline
         - include: inline-field
         - include: decoration
+        # strangely, this is the 1 match that doesn't get consumed when found.
+        # Blank lines are required to set the boundaries of ABC tunes, so this is
+        # a good thing.
         - match: '^(\s*)?$'
           pop: true
-    - match: '^(\s*)?$'
-      pop: true
 
   abc-note-sequence:
     - include: abc-note
@@ -185,11 +248,11 @@ contexts:
       scope: constant.numeric.note-length.abc
 
   decoration:
-    - scope: variable.parameter.decoration.symbol.abc
+    - scope: storage.type.decoration.abc
       match: '(?:^\s*)?([-\.~HLMOPSTuv](?!:))'
-    - scope: variable.parameter.decoration.abc
+    - scope: storage.type.decoration.abc
       match: '(!\w+!)'
-    - scope: variable.parameter.decoration.abc
+    - scope: storage.type.decoration.abc
       match: |-
         (?x)
           (\!(?:
@@ -209,29 +272,39 @@ contexts:
       match: ((?:\((?![\d:])[',]?)|\))
 
   barline:
-    - scope: meta.code.barline.abc
+    - scope: meta.barline.abc
+      match: ([ \|\]]\])
+      captures:
+        1: support.type.barline.abc
+    - scope: comment.block.documentation.abc
+      match: '(\[\|\]|\[\])'
+    - scope: meta.barline.abc
+      match: ((?>\[\|:*))
+      captures:
+        1: keyword.operator.barline.abc
+    - scope: meta.barline.abc
       match: |-
         (?x)
-          ((?:[\|\[\]][\|\[\]](?=:):)|
+          ((?>
+            (?:[\[\|\]][\[\|\]](?=:):)|
             (?:\[+:+)|
             (?::+\[+)|
+            (?::+\]*)|
             (?:\]+:+)|
             (?::+\]+)|
             (?:[|]*\]{2}:*)|
             (?:(?=\|)\|[\[\]])|
             (?:[:|]*\|[:|]*)|
-            (?:[:|]+\[{1,2}))
+            (?:[:|]+\[{1,2})))
           (\d+(?:[,-]\d+)*)?
       captures:
         1: keyword.operator.barline.abc
-        2: support.type.numeric.barline.abc
-    - scope: comment.block.documentation.barline.abc
-      match: '(:*\[\|\]:*|:*\[\]:*)'
+        2: support.type.barline.abc
     - scope: meta.code.barline.abc
       match: '(:*[\|\[\]])(\d(?:[,-]\d)*)+'
       captures:
         1: keyword.operator.barline.abc
-        2: support.type.numeric.barline.abc
+        2: support.type.barline.abc
 
   macro:
     - match: '(\~[a-zA-Z][a-zA-Z0-9]{0,30})'
@@ -267,13 +340,13 @@ contexts:
   abc-chord:
     - match: '(\[(?![:|\[\]\d]|(?:[a-zA-Z]:)))'
       captures:
-        1: support.type.chord.abc
+        1: support.type.chord.abc # meta.brace.square.chord.abc
       push:
         - meta_scope: meta.chord.abc
         - include: abc-chord-elements
         - match: '(\](?<![:|]))'
           captures:
-            1: support.type.chord.abc
+            1: support.type.chord.abc # meta.brace.square.chord.abc
           pop: true
 
   strings:
@@ -320,7 +393,7 @@ contexts:
   line-directive:
     - meta_scope: meta.directive.abc comment.line.percentage.directive.abc
     - include: directive-constants
-    - match: '\s*(\w*)\b'
+    - match: '\s*(\w*)\b' # '\b' is crucial here!
       captures:
         1: support.function.directive.abc
         2: variable.parameter.directive.abc
@@ -328,117 +401,69 @@ contexts:
     - match: $
       pop: true
 
-  field-value:
-    - meta_content_scope: meta.field.abc
-    - match: '[^\n\r]*'
-      scope: string.unquoted.field.abc
-    - match: $
-      pop: true
-  instruction-field:
-    - meta_scope: meta.field.instruction.abc variable.parameter.instruction.abc
-    - match: '\s*(\w+)\s+'
-      captures:
-        1: keyword.operator.word.instruction.abc
-      push:
-        - include: directive-constants
-        - match: $
-          pop: true
-    - match: $
-      pop: true
-  remark-field:
-    - meta_scope: meta.field.remark.abc
-    - match: '[^\n\r]*'
-      scope: comment.line.remark.abc
-    - match: $
-      pop: true
-  title-field:
-    - meta_scope: meta.field.title.abc
-    - match: '\s*([^%\n\r]+)'
-      captures:
-        1: string.unquoted.title.abc meta.toc-list.title.abc
-    - match: $
-      pop: true
-  voice-field:
-    - meta_scope: meta.field.voice.abc
-    - match: '\s*([^%\n\r]+)'
-      captures:
-        1: variable.parameter.voice.abc meta.toc-list.voice.abc
-    - match: $
-      pop: true
-  part-field:
-    - meta_scope: meta.field.part.abc
-    - match: '\s*([^%\n\r]+)'
-      captures:
-        1: variable.parameter.part.abc meta.toc-list.part.abc
-      push:
-        - match: $
-          pop: true
-    - match: $
-      pop: true
-
   inline-field:
     - scope: meta.inline-field.abc
       match: (\[[[:alpha:]&&[^IKPVXr]]:)
       captures:
-        1: entity.other.attribute-name.inline-field.abc
+        1: support.function.inline-field.abc
       push:
         - meta_content_scope: string.unquoted.inline-field.abc
         - match: (\])
           captures:
-            1: entity.other.attribute-name.inline-field.abc
+            1: support.function.inline-field.abc
           pop: true
     - scope: meta.inline-field.remark.abc
       match: (\[r:)
       captures:
-        1: entity.other.attribute-name.inline-field.remark.abc
+        1: support.function.inline-field.remark.abc
       push:
         - meta_content_scope: comment.block.remark.abc
         - match: (\])
           captures:
-            1: entity.other.attribute-name.inline-field.remark.abc
+            1: support.function.inline-field.remark.abc
           pop: true
     - scope: meta.inline-field.instruction.abc
       match: (\[I:)\s*(\w+)
       captures:
-        1: entity.other.attribute-name.inline-field.instruction.abc
+        1: entity.name.tag.inline-field.instruction.abc
         2: keyword.operator.word.instruction.abc
       push:
-        - meta_content_scope: variable.parameter.instruction.abc
+        - meta_content_scope: storage.modifier.instruction.abc
         - include: spacing-length
         - match: (\])
           captures:
-            1: entity.other.attribute-name.inline-field.instruction.abc
+            1: entity.name.tag.inline-field.instruction.abc
           pop: true
     - scope: meta.inline-field.title.abc
       match: (\[T:)
       captures:
-        1: entity.other.attribute-name.inline-field.title.abc
+        1: entity.name.tag.inline-field.title.abc
       push:
         - meta_content_scope: string.unquoted.title.abc meta.toc-list.title.abc
         - include: escape
         - match: (\])
           captures:
-            1: entity.other.attribute-name.inline-field.title.abc
+            1: entity.name.tag.inline-field.title.abc
           pop: true
     - scope: meta.inline-field.voice.abc
       match: (\[V:)
       captures:
-        1: entity.other.attribute-name.inline-field.voice.abc
+        1: entity.name.tag.inline-field.voice.abc
       push:
-        - meta_content_scope: variable.parameter.voice.abc meta.toc-list.voice.abc
+        - meta_content_scope: storage.modifier.voice.abc meta.toc-list.voice.abc
         - match: (\])
           captures:
-            1: entity.other.attribute-name.inline-field.voice.abc
+            1: entity.name.tag.inline-field.voice.abc
           pop: true
     - scope: meta.inline-field.part.abc
       match: (\[P:)
       captures:
-        1: entity.other.attribute-name.inline-field.part.abc
+        1: entity.name.tag.inline-field.part.abc
       push:
-        - meta_content_scope: variable.parameter.part.abc meta.toc-list.part.abc
+        - meta_content_scope: storage.modifier.part.abc meta.toc-list.part.abc
         - match: (\])
           captures:
-            1: entity.other.attribute-name.inline-field.part.abc
+            1: entity.name.tag.inline-field.part.abc
           pop: true
 
   escape:
