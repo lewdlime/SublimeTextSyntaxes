@@ -4,6 +4,7 @@ file_extensions:
   - abc
   - abh
   - abp
+first_line_match: ^%abc(?:-\d\.\d)?
 scope: source.abc
 contexts:
   main:
@@ -15,7 +16,7 @@ contexts:
       push: abc-tune
 
   prototype:
-    # comments, directives, namespace comment, remark fields
+    # comments, directives, namespace comments, remark fields
     - include: comments
     # escape characters
     - include: escape
@@ -35,17 +36,13 @@ contexts:
             1: string.unquoted.title.abc # meta.toc-list.title.abc
         - match: $
           pop: true
-    - include: tune-body
-    - match: '^(\s*)?$'
-      pop: true
-
-  tune-body:
+    # tune-body
     - match: '^(K:)\s*([^\r\n]+)?'
       captures:
         1: entity.name.tag.key.abc
         2: string.unquoted.key.abc
       # TODO: Capture clef variable keywords within key field
-      push:
+      set:
         - include: abc-chord
         - include: abc-note
         - include: abc-rest
@@ -54,16 +51,13 @@ contexts:
         - include: decoration
         - include: macro
         - include: strings
-        - include: macro
         - include: operators
         - include: barline
         - include: inline-field
-        - include: decoration
-        # strangely, this is the 1 match that doesn't get consumed when found.
-        # Blank lines are required to set the boundaries of ABC tunes, so this is
-        # a good thing.
         - match: '^(\s*)?$'
           pop: true
+    - match: '^(\s*)?$'
+      pop: true
 
   comments:
     - match: '(?:^\s*)?(?>%(?!%|abc))'
@@ -111,7 +105,6 @@ contexts:
           scope: comment.line.remark.abc
         - match: $
           pop: true
-
   fields:
     # info fields
     - match: '^([[:alpha:]+&&[^IKPVTXr]]:)'
@@ -168,36 +161,6 @@ contexts:
               pop: true
         - match: $
           pop: true
-
-  # abc-note-sequence:
-  #   - include: abc-note
-  #   - include: grace
-  #   - include: decoration
-  #   - include: macro
-  #   - include: strings
-
-  # abc-rest-sequence:
-  #   - include: abc-rest
-  #   - include: grace
-  #   - include: decoration
-  #   - include: macro
-  #   - include: strings
-
-  # abc-space-sequence:
-  #   - include: abc-space
-  #   - include: grace
-  #   - include: decoration
-  #   - include: macro
-  #   - include: strings
-
-  abc-chord-elements:
-    - include: abc-note
-    - include: abc-rest
-    - include: abc-space
-    - include: decoration
-    - include: macro
-    - include: operators
-
   abc-note:
     - match: |-
         (?x)
@@ -208,7 +171,6 @@ contexts:
         1: constant.language.accidental.abc
         2: constant.character.note.abc
         3: storage.type.note-length.abc # constant.numeric.note-length.abc
-
   abc-rest:
     - scope: meta.code.abc-rest.abc
       match: '([XZ])(\d+)?'
@@ -225,7 +187,6 @@ contexts:
       captures:
         1: storage.type.abc-rest.abc
         2: storage.type.rest-length.abc # constant.numeric.rest-length.abc
-
   abc-space:
     - scope: meta.code.abc-space.abc
       match: |-
@@ -235,17 +196,6 @@ contexts:
       captures:
         1: storage.type.spacer.abc
         2: constant.numeric.space-length.abc
-
-  # accidental:
-  #   - match: ([_=\^](?:\d*\/*\d*)|=|[_\^]{2})
-  #     scope: constant.language.accidental.abc
-  # note:
-  #   - match: ([A-Ga-g][,']*)
-  #     scope: constant.character.note.abc
-  # note-length:
-  #   - match: (\d*[<>/]*\d*)?
-  #     scope: constant.numeric.note-length.abc # storage.type.note-length.abc
-
   decoration:
     - scope: variable.language.decoration.abc
       match: '(?:^\s*)?([-\.HLMOPSTuv](?!:))'
@@ -270,9 +220,8 @@ contexts:
     # excludes matching '~' from macros in tune
     - scope: variable.language.decoration.abc
       match: (~(?![h-wH-W][a-zA-Z0-9]*))
-    - scope: storage.modifier.decoration.slur.abc
+    - scope: support.type.decoration.slur.abc # storage.modifier.decoration.slur.abc
       match: ((?:\((?![\d:])[',]?)|\))
-
   barline:
     - scope: meta.barline.abc
       match: ([ \|\]]\])
@@ -307,11 +256,9 @@ contexts:
       captures:
         1: punctuation.separator.barline.abc
         2: punctuation.separator.barline.repeat-length.abc # support.type.barline.abc
-
   macro:
     - match: '(\~[h-zH-Z][a-zA-Z0-9]{,30})'
       scope: support.type.macro.abc
-
   grace:
     - scope: meta.code.grace.abc
       match: '(\{/?)'
@@ -328,7 +275,6 @@ contexts:
           captures:
             1: support.type.grace.abc
           pop: true
-
   operators:
     - match: '(\(\d+(?::\d*(?::\d*)?)?)'
       scope: support.type.tuplet.abc
@@ -340,42 +286,42 @@ contexts:
       scope: support.constant.line-break.abc
     - match: '(\\(?= *| *$))'
       scope: support.constant.line-continue.abc
-
   abc-chord:
     - match: '(\[(?![:|\[\]\d]|(?:[a-zA-Z]:)))'
       captures:
-        1: storage.modifier.decoration.chord.abc # meta.brace.square.chord.abc
+        1: support.type.decoration.chord.abc # meta.brace.square.chord.abc
       push:
         - meta_scope: meta.chord.abc
-        - include: abc-chord-elements
+        - include: abc-note
+        - include: abc-rest
+        - include: abc-space
+        - include: decoration
+        - include: macro
+        - include: operators
         - match: '(\](?<![:|]))'
           captures:
-            1: storage.modifier.decoration.chord.abc # meta.brace.square.chord.abc
+            1: support.type.decoration.chord.abc # storage.modifier.decoration.chord.abc
           pop: true
-
   strings:
     - match: '("(?![_<>^@]))'
       scope: punctuation.definition.string.chord.begin.abc
-      push: chord_string
+      push:
+        - meta_scope: string.quoted.double.chord.abc
+        - meta_include_prototype: false
+        - include: escape
+        # TODO: Match for symbols in chord strings
+        - match: '"'
+          scope: punctuation.definition.string.chord.end.abc
+          pop: true
     - match: '(\"[_<>^@])'
       scope: punctuation.definition.string.annotation.begin.abc
-      push: annotation_string
-  chord_string:
-    - meta_scope: string.quoted.double.chord.abc
-    - meta_include_prototype: false
-    - include: escape
-    # TODO: Match for symbols in chord strings
-    - match: '"'
-      scope: punctuation.definition.string.chord.end.abc
-      pop: true
-  annotation_string:
-    - meta_include_prototype: false
-    - meta_content_scope: string.quoted.double.annotation.abc
-    - include: escape
-    - match: '"'
-      scope: punctuation.definition.string.annotation.end.abc
-      pop: true
-
+      push:
+        - meta_include_prototype: false
+        - meta_content_scope: string.quoted.double.annotation.abc
+        - include: escape
+        - match: '"'
+          scope: punctuation.definition.string.annotation.end.abc
+          pop: true
   inline-field:
     - scope: meta.inline-field.abc
       match: (\[[[:alpha:]&&[^IKPVXr]]:)
@@ -441,7 +387,6 @@ contexts:
           captures:
             1: entity.name.tag.inline-field.part.abc
           pop: true
-
   escape:
     - scope: constant.character.escape.abc
       match: (\\.)
@@ -459,3 +404,44 @@ contexts:
       match: '(?:&#x\h+;)'
     - scope: constant.character.escape.abc
       match: (\\%)
+
+  # accidental:
+  #   - match: ([_=\^](?:\d*\/*\d*)|=|[_\^]{2})
+  #     scope: constant.language.accidental.abc
+
+  # note:
+  #   - match: ([A-Ga-g][,']*)
+  #     scope: constant.character.note.abc
+
+  # note-length:
+  #   - match: (\d*[<>/]*\d*)?
+  #     scope: constant.numeric.note-length.abc # storage.type.note-length.abc
+
+  # abc-note-sequence:
+  #   - include: abc-note
+  #   - include: grace
+  #   - include: decoration
+  #   - include: macro
+  #   - include: strings
+
+  # abc-rest-sequence:
+  #   - include: abc-rest
+  #   - include: grace
+  #   - include: decoration
+  #   - include: macro
+  #   - include: strings
+
+  # abc-space-sequence:
+  #   - include: abc-space
+  #   - include: grace
+  #   - include: decoration
+  #   - include: macro
+  #   - include: strings
+
+  # abc-chord-elements:
+  #   - include: abc-note
+  #   - include: abc-rest
+  #   - include: abc-space
+  #   - include: decoration
+  #   - include: macro
+  #   - include: operators
