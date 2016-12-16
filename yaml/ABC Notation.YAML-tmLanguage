@@ -1,65 +1,91 @@
 # [PackageDev] target_format: plist, ext: tmLanguage
-# first_line_match: ^%abc(?:-\d\.\d)?
 name: ABC Notation
 scopeName: source.abc
-fileTypes: [abc, abh, abp]
+fileTypes: [abc]
 foldingStartMarker: '^X:\s*\d+'
 foldingStopMarker: '^\s*$'
 uuid: 431a5f26-5897-4146-8415-25a3c4b859c0
+
 patterns:
-  # abc tunes
-  match: '^(X:)\s*(\d+)'
-  captures:
-    '1': {name: entity.name.tag.index.abc}
-    '2': {name: variable.parameter.index.abc} # meta.toc-list.index.abc
-  patterns:
-    - include: '#abc-tune'
+  # Tune Body ends just before the first 'K:' field
+  - comment: ABC Tune
+    name: meta.tune.abc
+    begin: '^(X:)\s*(\d+)'
+    beginCaptures:
+      '1': {name: keyword.control.index.abc}
+      '2': {name: constant.numeric.index.abc meta.toc-list.index.abc}
+    end: '^\s*$'
+    patterns:
+      - include: '#tune-body'
+      - include: '#field'
+      - include: '#comments'
+      - include: '#directive'
+  - include: '#field'
+  - include: '#comments'
+  - include: '#directive'
+  - include: '#embedded'
 
 repository:
-  # global inclusions
-  prototype:
-    patterns:
-      # comments, directives, namespace comments, remark fields
-      - include: '#comments'
-      # escape characters
-      - include: '#escape'
+  # Unparsed text matches for all text outside of an ABC tune or multi-line
+  # block of embedded markup or code content. However, rather than muck
+  # the scope stack, this repository item goes unused.
+  # unparsed:
+  #   name: meta.unparsed.abc
+  #   begin: '^\s*(?!\nX:)'
+  #   beginCaptures:
+  #     '1': {name: comment.block.free-text.abc}
+  #   end: '^\s*$'
 
-  # abc tunes
-  abc-tune:
-    name: meta.tune.abc
-    begin: '^(T:)'
+## Global Elements
+  tune-body:
+    comment: ABC Tune Body
+    name: meta.tune.body.abc
+    begin: ^(K:)\s*([^%\\]+)?
     beginCaptures:
-      '1': {name: entity.name.tag.title.abc}
-    contentName: meta.field.title.abc
-    end: $
+      '1': {name: keyword.control.key.abc}
+      '2': {name: string.unquoted.key.abc}
+    end: ^\s*$
     patterns:
-      - include: '#prototype'
-      # tune-body
-      - match: '^(K:)\s*([^\r\n]+)?'
-        captures:
-          '1': {name: entity.name.tag.key.abc}
-          '2': {name: string.unquoted.key.abc}
-        end: '^(\s*)?$'
-        # TODO: Capture clef variable keywords within key field
-        patterns:
-          - include: '#prototype'
-          - include: '#abc-chord'
-          - include: '#abc-note'
-          - include: '#abc-rest'
-          - include: '#abc-space'
-          - include: '#grace'
-          - include: '#decoration'
-          - include: '#macro'
-          - include: '#strings'
-          - include: '#operators'
-          - include: '#barline'
-          - include: '#inline-field'
+      - include: '#abc-chord'
+      - include: '#abc-note-sequence'
+      - include: '#abc-rest-sequence'
+      - include: '#abc-space-sequence'
+      - include: '#macro'
+      - include: '#operators'
+      - include: '#barline'
+      - include: '#inline-field'
+      - include: '#decoration'
+      - include: '#field'
+      - include: '#comments'
+      - include: '#directive'
 
-  # escapes, HTML entities, literals
-  escape:
+  abc-note-sequence:
+    comment: Note Sequences
     patterns:
-      - name: constant.character.escape.abc
-        match: (\\.)
+      - include: '#abc-note'
+      - include: '#grace'
+      - include: '#decoration'
+      - include: '#strings'
+
+  abc-rest-sequence:
+    comment: Rest Sequences
+    patterns:
+      - include: '#abc-rest'
+      - include: '#grace'
+      - include: '#decoration'
+      - include: '#strings'
+
+  abc-space-sequence:
+    comment: Space Sequences
+    patterns:
+      - include: '#abc-space'
+      - include: '#grace'
+      - include: '#decoration'
+      - include: '#strings'
+
+  escape:
+    comment: Escape Characters
+    patterns:
       - name: constant.character.escape.abc
         match: (\\\\)
       - name: constant.character.escape.abc
@@ -67,139 +93,363 @@ repository:
       - name: constant.character.escape.abc
         match: (?:\\[[:punct:]&&[\w]&&[^[ \t\v\f]]]{2})
       - name: constant.character.escape.abc
-        match: '(?:&\w+;)'
+        match: (?:&\w+;)
       - name: constant.character.escape.abc
-        match: '(?:&#\d+;)'
+        match: (?:&#\d+;)
       - name: constant.character.escape.abc
-        match: '(?:&#x\h+;)'
+        match: (?:&#x\h+;)
       - name: constant.character.escape.abc
         match: (\\%)
 
-  # comments, namespace comments, directives, remark fields
+  directive:
+    comment: Directives and Namespaces
+    patterns:
+      - name: meta.directive.abc
+        match: '((?:^\s*)?%%)\s*(\w*)\b([^%\n\r]*)'
+        captures:
+          '1': {name: comment.line.percentage.abc}
+          '2': {name: support.function.directive.abc}
+          '3': {name: variable.parameter.directive.abc}
+      - name: meta.namespace.abc
+        match: '((?:^\s*)?%)(abc(?:-\d\.\d)?)'
+        captures:
+          '1': {name: comment.line.percentage.abc}
+          '2': {name: entity.name.namespace.abc}
+        patterns:
+        - include: '#comments'
+        - include: '#directive'
+
   comments:
+    comment: ABC Line Comments
+    name: comment.line.percentage.abc
+    match: '(?:^\s*)?%(?!%|abc).*'
+
+  field:
+    comment: Fields, Remark Fields, Instruction Fields, & Key Fields
     patterns:
-      - name: meta.comment.abc
-        begin: '(?:^\s*)?(?>%(?!%|abc))'
-        beginCaptures:
-          '1': {name: punctuation.definition.comment.abc}
-        contentName: comment.line.percentage.abc
-        end: $
-        patterns:
-          - include: '#prototype'
-      # directive/pseudo-comment
-      - name: meta.directive.abc comment.line.percentage.directive.abc
-        begin: '(?>%%)\s*(\w*)\b'
-        # '\b' is crucial here!
-        beginCaptures:
-          '1': {name: punctuation.definition.comment.abc}
-          '2': {name: keyword.operator.word.directive.abc}
-        contentName: variable.parameter.directive.abc
-        end: $
-        patterns:
-          - include: '#prototype'
-          - match: '(?i)\b(true|false|yes|no|on|off)\b'
-            name: storage.type.directive.abc
-            patterns:
-              - match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)'
-                name: constant.numeric.float.length-unit.abc
-              - match: '(?i)\b(true|false|yes|no|on|off)\b'
-                name: storage.type.directive.boolean.abc
-              # TODO: include more keywords to be highlighted in directive parameters
-      # namespace comment
-      - match: '(?:^\s*)?(?>(%)(abc(?:-\d\.\d)?))'
-        name: comment.line.namespace.abc
+      - name: meta.code.field.abc
+        match: ^([[:alpha:]&&[^IKPVTXr]]:)([^%\n\r]*)
         captures:
-          '1': {name: punctuation.definition.comment.abc}
-          '2': {name: keyword.other.special-method.namespace.abc}
-        patterns:
-          - include: '#prototype'
-      # remark field
-      - name: meta.field.remark.abc
-        begin: '^(r:)'
-        beginCaptures:
-          '1': {name: support.function.field.remark.abc}
-        contentName: comment.line.remark.abc
-        end: $
-        patterns:
-          - include: '#prototype'
-
-  fields:
-    patterns:
-      # info fields
-      - name: meta.field.abc
-        begin: '^([[:alpha:]+&&[^IKPVTXr]]:)'
-        beginCaptures:
-          '1': {name: support.function.field.abc}
-        contentName: string.unquoted.field.abc
-        end: $
-        patterns:
-          - include: '#prototype'
-      # instruction field
-      - name: meta.instruction.abc
-        begin: '^(I:)\s*(\w+)\s+'
-        beginCaptures:
-          '1': {name: entity.name.tag.instruction.abc}
-          '2': {name: keyword.operator.word.directive.abc}
-        contentName: variable.parameter.directive.abc
-        patterns:
-          - include: '#prototype'
-          - match: '(?i)\b(true|false|yes|no|on|off)\b'
-            name: storage.type.directive.abc
-      # voice field
-      - name: meta.field.voice.abc
-        begin: '^(V:)'
-        beginCaptures:
-          '1': {name: entity.name.tag.voice.abc}
-        contentName: variable.parameter.voice.abc # meta.toc-list.voice.abc
-        end: $
-        patterns:
-          - include: '#prototype'
-      # part field
-      - name: meta.field.part.abc
-        begin: '^(P:)'
-        beginCaptures:
-          '1': {name: entity.name.tag.part.abc}
-        contentName: variable.parameter.part.abc # meta.toc-list.part.abc
-        end: $
-        patterns:
-          - include: '#prototype'
-
-  abc-note:
-    match: |-
-      (?x)
-        ([_=\^](?:\d*\/*\d*)|=|[_\^]{2})?
-        ([A-Ga-g][,']*)
-        (\d*[<>/]*\d*)?
-    captures:
-      '1': {name: constant.language.accidental.abc}
-      '2': {name: constant.character.note.abc}
-      '3': {name: storage.type.note-length.abc} # constant.numeric.note-length.abc
-    patterns:
-      - include: '#prototype'
-
-  abc-rest:
-    patterns:
-      - name: meta.code.abc-rest.abc
-        match: '([XZ])(\d+)?'
+          '1': {name: entity.other.attribute-name.field.abc}
+          '2': {name: string.unquoted.field.abc}
+      - comment: Remark Field
+        name: meta.code.field.remark.abc
+        match: ^(r:)([^%\n\r]*)
         captures:
-          '1': {name: storage.type.abc-rest.abc}
-          '2': {name: storage.type.rest-length.abc} # constant.numeric.rest-length.abc
+          '1': {name: entity.other.attribute-name.field.remark.abc}
+          '2': {name: comment.block.remark.abc}
+      - comment: Instruction Field
+        name: meta.code.field.instruction.abc
+        match: ^(I:)\s*(\w+)[ \t\v\f]+([^%\n\r]*)
+        captures:
+          '1': {name: support.constant.instruction.abc}
+          '2': {name: keyword.operator.word.instruction.abc}
+          '3': {name: variable.parameter.instruction.abc}
         patterns:
-          - include: '#prototype'
-      - name: meta.code.abc-rest.abc
+          - include: '#spacing-length'
+      - comment: Key Field
+        name: meta.code.field.key.abc
+        match: ^(K:)\s*([^%\n\r]+)
+        captures:
+          '1': {name: keyword.control.key.abc}
+          '2': {name: string.unquoted.key.abc entity.name.function.key.abc}
+      - comment: Title Field
+        name: meta.code.field.title.abc
+        match: ^(T:)\s*([^%\n\r]+)
+        captures:
+          '1': {name: entity.other.attribute-name.title.abc}
+          '2': {name: string.unquoted.title.abc meta.toc-list.title.abc}
+      - comment: Voice Field
+        name: meta.code.field.voice.abc
+        match: ^(V:)\s*([^%\r\n]+)
+        captures:
+          '1': {name: entity.other.attribute-name.field.voice.abc}
+          '2': {name: variable.parameter.voice.abc meta.toc-list.voice.abc}
+      - comment: Part Field
+        name: meta.code.field.part.abc
+        match: ^(P:)\s*([^%\r\n]+)
+        captures:
+          '1': {name: entity.other.attribute-name.field.part.abc}
+          '2': {name: variable.parameter.part.abc meta.toc-list.part.abc}
+
+## ABC Code Elements
+  # Operators
+  operators:
+    comment: Tuplets, Backquotes, Unions, Line Breaks, Line Continuations
+    patterns:
+      - include: '#tuplet'
+      - include: '#backquote'
+      - include: '#overlay'
+      - include: '#line-break'
+      - include: '#line-continue'
+
+  # Chords and Slurs
+  abc-chord:
+    comment: |-
+      Chords
+      PLEASE DO NOT ALTER THIS SECTION WITHOUT GOOD REASON.
+      Because of how chords work, they have to 'escape' from
+      being misinterpreted as inline fields or barlines by the
+      highlighter engine. Initially, they were defined as a pattern that
+      had a start and end, but this interfering with both bar lines and
+      inline field patterns, since a scope for chords would obscure the
+      scope for the other elements. While in the ABC Standard, these rules
+      are not explicitly stated, the highlighting rule for chords expects
+      chords to exist as a single 'unit', similar to how individual notes
+      are highlighted. The only difference is that chords highlight their
+      brackets separately from the notes.
+    name: meta.code.chord.abc
+    begin: (\[(?![:|\[\]\d]|(?:[a-zA-Z]:)))
+    beginCaptures:
+      '1': {name: support.type.chord.abc}
+    end: (\](?<![:|]))
+    endCaptures:
+      '1': {name: support.type.chord.abc}
+    patterns:
+      - include: '#abc-chord-elements'
+
+  abc-chord-elements:
+    comment: Chord Element Sequences
+    patterns:
+      - include: '#abc-note'
+      - include: '#abc-rest'
+      - include: '#abc-space'
+      - include: '#decoration'
+      - include: '#overlay'
+
+  # Inline Fields
+  inline-field:
+    patterns:
+      - comment: Inline Fields
+        name: meta.code.inline-field.abc
+        contentName: string.unquoted.inline-field.abc
+        begin: (\[[[:alpha:]&&[^IKPVXr]]:)
+        beginCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.abc}
+        end: (\])
+        endCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.abc}
+      - comment: Inline Remark Field
+        name: meta.code.inline-field.remark.abc
+        contentName: comment.block.remark.abc
+        begin: (\[r:)
+        beginCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.remark.abc}
+        end: (\])
+        endCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.remark.abc}
+      - comment: Inline Instruction Field
+        name: meta.code.inline-field.instruction.abc
+        contentName: variable.parameter.instruction.abc
+        begin: (\[I:)\s*(\w+)
+        beginCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.instruction.abc}
+          '2': {name: keyword.operator.word.instruction.abc}
+        end: (\])
+        endCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.instruction.abc}
+        patterns:
+        - include: '#spacing-length'
+      - comment: Inline Title Field
+        name: meta.code.inline-field.title.abc
+        begin: (\[T:)\s*([^%\n\r\]]+)
+        beginCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.title.abc}
+          '2': {name: string.unquoted.title.abc meta.toc-list.title.abc}
+        end: (\])
+        endCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.title.abc}
+        patterns:
+          - include: '#escape'
+      - comment: Inline Voice Field
+        name: meta.code.inline-field.voice.abc
+        begin: (\[V:)\s*([^%\r\n\]]+)
+        beginCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.voice.abc}
+          '2': {name: variable.parameter.voice.abc meta.toc-list.voice.abc}
+        end: (\])
+        endCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.voice.abc}
+      - comment: Inline Part Field
+        name: meta.code.inline-field.part.abc
+        begin: (\[P:)\s*([^%\r\n\]]+)
+        beginCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.part.abc}
+          '2': {name: variable.parameter.part.abc meta.toc-list.part.abc}
+        end: (\])
+        endCaptures:
+          '1': {name: entity.other.attribute-name.inline-field.part.abc}
+    # TODO: Voice & Part Fields, using symbol scopes for indexing as
+    # jumplist symbols
+
+## ABC Note Sequence Items
+  grace:
+    comment: Grace Notes
+    name: meta.code.grace.abc
+    begin: (\{\/?)
+    beginCaptures:
+      '1': {name: support.type.grace.abc}
+    end: (\})
+    endCaptures:
+      '1': {name: support.type.grace.abc}
+    patterns:
+      - include: '#note'
+      - include: '#note-length'
+      - include: '#abc-rest'
+      - include: '#decoration'
+
+  decoration:
+    comment: Decoration Symbols
+    patterns:
+      - name: meta.code.decoration.symbol.abc
+        match: (?:^\s*)?([-\.~HLMOPSTuv](?!:))
+        captures:
+          '1': {name: variable.parameter.decoration.symbol.abc}
+      - name: meta.code.decoration.abc
+        match: (!\w+!)
+        captures:
+          '1': {name: variable.parameter.decoration.abc}
+      - name: meta.code.decoration.abc
         match: |-
           (?x)
-            ([xz])
-            ((?:\d*\/*(?:\d*)?)|
-             (?:\d*>*(?:\d*)?)|
-             (?:\d*<*(?:\d*)?))?
+            (!(?:\+|-[()]|\/{1,3}|[0-5]|\<[()]?|\>[()]?|\^|
+               accent|arpeggio|beam-accel|beam-rall|beambr[12]|beamon|
+               breath|coda|courtesy|crescendo[()]?|
+               D\.C\.(?:alcoda|alfine)?|D\.S\.(?:alcoda|alfine)?|
+               dacapo|dacoda|diminuendo[()]?|dot|downbow|editorial|
+               emphasis|f+|fermata|fine|gmark|invertedfermata|
+               invertedturn|invertedturnx|invisible|longphrase|
+               lowermordent|marcato|mediumphrase|mf|mordent|mp|open|p+|
+               plus|pralltriller|rbend|rbstop|roll|segno|sfz|shortphrase|
+               slide|snap|stemless|tenuto|thumb|trem[1-4]|trill[()]?|
+               turn|turnx|upbow|uppermordent|wedge|xstem|\~[()])!)
         captures:
-          '1': {name: storage.type.abc-rest.abc}
-          '2': {name: storage.type.rest-length.abc} # constant.numeric.rest-length.abc
-        patterns:
-          - include: '#prototype'
+          '1': {name: variable.parameter.decoration.abc}
+      - name: meta.code.decoration.slur.abc
+        match: ((?:\((?![\d:])[',]?)|\))
+        captures:
+          '1': {name: support.type.slur.abc}
 
+  strings:
+    comment: Chord symbols and String Annotations
+    patterns:
+      - name: meta.code.string.chord.abc
+        begin: (\"(?![_<>^@]))
+        beginCaptures:
+          '1': {name: punctuation.definition.string.chord.begin.abc}
+        contentName: string.quoted.double.chord.abc
+        end: (\")
+        endCaptures:
+          '1': {name: punctuation.definition.string.chord.end.abc}
+        patterns:
+          - match: '""'
+          - include: '#escape'
+      - comment: String Annotations
+        name: meta.code.string.annotation.abc
+        begin: (\"[_<>^@])
+        beginCaptures:
+          '1': {name: punctuation.definition.string.annotation.begin.abc}
+        contentName: string.quoted.double.annotation.abc
+        end: (\")
+        endCaptures:
+          '1': {name: punctuation.definition.string.annotation.end.abc}
+        patterns:
+          - include: '#escape'
+
+  abc-note:
+    comment: Note Values (Accidentals, Pitch, Note Length)
+    patterns:
+      - name: meta.code.note.abc
+        match: |-
+          (?x)
+            ([_\^]{2}|=|[_=\^](?:(?:\d(?!\.))*\/*(?:\d(?!\.))*)?)?
+            ([A-Ga-g][,']*)
+            (\d*(?!\.)/*(?:\d*(?!\.))?)?
+        captures:
+          '1': {name: constant.language.accidental.abc}
+          '2': {name: constant.character.note.abc}
+          '3': {name: constant.numeric.note-length.abc}
+      - name: meta.code.note.abc
+        match: |-
+          (?x)
+            ([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?
+            ([A-Ga-g][,']*)
+            (\d*(?!\.)[\>]*(?:\d*(?!\.))?)?
+        captures:
+          '1': {name: constant.language.accidental.abc}
+          '2': {name: constant.character.note.abc}
+          '3': {name: constant.numeric.note-length.abc}
+      - name: meta.code.note.abc
+        match: |-
+          (?x)
+            ([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?
+            ([A-Ga-g][,']*)
+            (\d*(?!\.)[\<]*(?:\d*(?!\.))?)?
+        captures:
+          '1': {name: constant.language.accidental.abc}
+          '2': {name: constant.character.note.abc}
+          '3': {name: constant.numeric.note-length.abc}
+      - name: meta.code.note.abc
+        match: |-
+          (?x)
+            ([_\^]{2}|=|[_=\^](?:\d*\/*(?:\d*)?)|(?:\d(?!\.))+)?
+            ([A-Ga-g][,']*)
+            (\d*(?!\.))
+        captures:
+          '1': {name: constant.language.accidental.abc}
+          '2': {name: constant.character.note.abc}
+          '3': {name: constant.numeric.note-length.abc}
+
+  # Accidentals, Pitch Values, and Note Lengths
+  accidental:
+    comment: Accidentals
+    name: meta.code.accidental.abc
+    match: |-
+      ([_\^]{2}|=|[_=\^]
+       (?:\d*/*(?:\d*)?)|
+       (?:\d(?!\.))+
+      )
+    captures:
+      '1': {name: constant.language.accidental.abc}
+
+  note:
+    comment: Pitch Value
+    name: meta.code.note.abc
+    match: ([A-Ga-g][,']*)
+    captures:
+      '1': {name: constant.character.note.abc}
+
+  note-length:
+    comment: Note Lengths
+    name: meta.code.note-length.abc
+    match: |-
+      ((?:\d*/*(?:\d*)?)|
+       (?:\d*>*(?:\d*)?)|
+       (?:\d*<*(?:\d*)?)|
+       (?:\d+(?!\.))
+      )
+    captures:
+      '1': {name: constant.numeric.note-length.abc}
+
+  # Rests
+  abc-rest:
+    comment: Rests & Multi-measure Rests
+    patterns:
+      - name: meta.code.abc-rest.abc
+        match: ([XZ])(\d+)?
+        captures:
+          # constant.character.rest.abc
+          '1': {name: storage.type.abc-rest.abc}
+          '2': {name: constant.numeric.rest-length.abc}
+      - name: meta.code.abc-rest.abc
+        match: ([xz])((?:\d*\/*(?:\d*)?)|(?:\d*>*(?:\d*)?)|(?:\d*<*(?:\d*)?))?
+        captures:
+          '1': {name: storage.type.abc-rest.abc} # constant.character.rest.abc
+          '2': {name: constant.numeric.rest-length.abc}
+
+  # Spacing Elements
   abc-space:
+    comment: Spacer
     name: meta.code.abc-space.abc
     match: |-
       (?x)
@@ -208,294 +458,253 @@ repository:
     captures:
       '1': {name: storage.type.spacer.abc}
       '2': {name: constant.numeric.space-length.abc}
-    patterns:
-      - include: '#prototype'
 
-  decoration:
-    patterns:
-      - name: variable.language.decoration.abc
-        match: '(?:^\s*)?([-\.HLMOPSTuv](?!:))'
-        patterns:
-          - include: '#prototype'
-      - name: variable.language.decoration.abc
-        match: '(!\w+!)'
-        patterns:
-          - include: '#prototype'
-      - name: variable.language.decoration.abc
-        match: |-
-          (?x)
-            (\!(?:
-                \+|\-\(|\-\)|\/{1,3}|[0-5]|\<\(|\<\)|\<|\>\(|\>\)|\>|\^|
-                accent|arpeggio|beam-accel|beam-rall|beambr[12]|beamon|
-                breath|coda|courtesy|crescendo|crescendo\(|crescendo\)|
-                D\.C\.(?:alcoda|alfine)?|D\.S\.(?:alcoda|alfine)?|
-                dacapo|dacoda|diminuendo|diminuendo\(|diminuendo\)|
-                dot|downbow|editorial|emphasis|f+|fermata|fine|gmark|
-                invertedfermata|invertedturn|invertedturnx|invisible|
-                longphrase|lowermordent|marcato|mediumphrase|mf|mordent|
-                mp|open|p+|plus|pralltriller|rbend|rbstop|roll|segno|sfz|
-                shortphrase|slide|snap|stemless|tenuto|thumb|
-                trem[1-4]|trill|trill\(|trill\)|turn|turnx|upbow|uppermordent|wedge|
-                xstem|\~\(|\~\))\!)
-        patterns:
-          - include: '#prototype'
-      # excludes matching '~' from macros in tune
-      - name: variable.language.decoration.abc
-        match: (~(?![h-wH-W][a-zA-Z0-9]*))
-        patterns:
-          - include: '#prototype'
-      - name: support.type.decoration.slur.abc # storage.modifier.decoration.slur.abc
-        match: ((?:\((?![\d:])[',]?)|\))
-        patterns:
-          - include: '#prototype'
+  spacing-length:
+    comment: Spacing Length Parameter
+    name: meta.code.space-length.abc
+    match: (\d*(?:\.\d*)?(?:pt|in|cm)?)
+    captures:
+      '1': {name: constant.numeric.float.space-length.abc}
 
+  # Barlines
+  ## NOTE: Repeat section barlines act as a catch-all for any stray `]`,
+  ## to prevent being matched as the end of a chord.
   barline:
+    comment: Bar lines and Repeat Section Bar Lines
     patterns:
-      - name: meta.barline.abc
-        match: ([ \|\]]\])
-        captures:
-          '1': {name: punctuation.separator.barline.abc}
-        patterns:
-          - include: '#prototype'
-      - name: comment.block.documentation.abc
-        match: '(\[\|\]|\[\])'
-        patterns:
-          - include: '#prototype'
-      - name: meta.barline.abc
-        match: ((?>\[\|:*))
-        captures:
-          '1': {name: punctuation.separator.barline.abc}
-        patterns:
-          - include: '#prototype'
-      - name: meta.barline.abc
-        match: |-
-          (?x)
-            ((?>
-              (?:[\[\|\]][\[\|\]](?=:):)|
-              (?:\[+:+)|
-              (?::+\[+)|
-              (?::+\]*)|
-              (?:\]+:+)|
-              (?::+\]+)|
-              (?:[|]*\]{2}:*)|
-              (?:(?=\|)\|[\[\]])|
-              (?:[:|]*\|[:|]*)|
-              (?:[:|]+\[{1,2})))
-            (\d+(?:[,-]\d+)*)?
-        captures:
-          '1': {name: punctuation.separator.barline.abc}
-          '2': {name: punctuation.separator.barline.repeat-length.abc} # support.type.barline.abc
-        patterns:
-          - include: '#prototype'
-      - name: meta.code.barline.abc
-        match: '(:*[\|\[\]])(\d(?:[,-]\d)*)+'
-        captures:
-          '1': {name: punctuation.separator.barline.abc}
-          '2': {name: punctuation.separator.barline.repeat-length.abc} # support.type.barline.abc
-        patterns:
-          - include: '#prototype'
+    - name: meta.code.barline.abc
+      match: |-
+        (?x)
+          ((?:[\|\[\]][\|\[\]](?=:):)|
+            (?:\[+:+)|
+            (?::+\[+)|
+            (?:\]+:+)|
+            (?::+\]+)|
+            (?:[|]*\]{2}:*)|
+            (?:(?=\|)\|[\[\]])|
+            (?:[:|]*\|[:|]*)|
+            (?:[:|]+\[{1,2}))
+          (\d+(?:[,-]\d+)*)?
+      captures:
+        '1': {name: keyword.operator.barline.abc}
+        '2': {name: support.type.numeric.barline.abc}
+    - name: meta.code.barline.abc
+      match: (:*\[\|\]:*|:*\[\]:*)
+      captures:
+        '1': {name: comment.block.documentation.barline.abc}
+    - name: meta.code.barline.abc
+      match: (:*[\|\[\]])(\d(?:[,-]\d)*)+
+      captures:
+        '1': {name: keyword.operator.barline.abc}
+        '2': {name: support.type.numeric.barline.abc}
 
+  tuplet:
+    comment: Tuplets
+    name: meta.code.tuplet.abc
+    match: (\(\d+(?::\d*(?::\d*)?)?)
+    captures:
+      '1': {name: support.type.tuplet.abc}
+
+  backquote:
+    comment: Backquote (used for spacing between note sequences)
+    name: meta.code.backquote.abc
+    match: (\`)
+    captures:
+      '1': {name: support.constant.backquote.abc}
+
+  overlay:
+    comment: Voice Overlay (Union) Operators
+    name: meta.code.overlay.abc
+    match: (\(\&|\&\&?|\&\))
+    captures:
+      '1': {name: support.function.overlay.abc}
+
+  line-break:
+    comment: Line Break
+    name: meta.code.line-break.abc
+    match: (\$(?= *| *$))
+    captures:
+      '1': {name: support.constant.line-break.abc}
+
+  line-continue:
+    comment: Line Continue
+    name: meta.code.line-continue.abc
+    match: (\\(?= *| *$))
+    captures:
+      '1': {name: support.constant.line-continue.abc}
+
+  # Macros
   macro:
-    match: '(\~[h-zH-Z][a-zA-Z0-9]{,30})'
-    name: support.type.macro.abc
+    comment: User-defined Macro
+    name: meta.code.macro.abc
+    match: (\~[a-zA-Z][a-zA-Z0-9]{0,30})
+    captures:
+      '1': {name: support.function.macro.abc}
+
+## Embedded Content
+  embedded:
+    comment: Typeset Text, Embedded SVG, Embedded PostScript, Embedded HTML, and Embedded JavaScript
     patterns:
-      - include: '#prototype'
+    - name: meta.text.directive.abc
+      contentName: string.unquoted.typeset.abc
+      begin: ((?:^\s*)?%%)\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?
+      beginCaptures:
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+        '3': {name: variable.parameter.directive.abc}
+      end: ((?:^\s*)?%%)\s*(endtext)\b
+      endCaptures:
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+      patterns:
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+    - name: meta.svg.directive.abc
+      begin: ((?:^\s*)?%%)\s*(beginsvg)\b
+      beginCaptures:
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+      end: ((?:^\s*)?%%)\s*(endsvg)\b
+      endCaptures:
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+      patterns:
+      #- include: source.xml
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+    - name: meta.ps.directive.abc
+      begin: ((?:^\s*)?%%)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?
+      beginCaptures:
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+        '3': {name: variable.parameter.directive.abc}
+      end: ((?:^\s*)?%%)\s*(endps)\b
+      endCaptures:
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+      patterns:
+      #- include: source.ps
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+    - name: meta.js.directive.abc
+      begin: ((?:^\s*)?%%)\s*(beginjs)\b
+      beginCaptures:
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+      end: ((?:^\s*)?%%)\s*(endjs)\b
+      endCaptures:
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+      patterns:
+      #- include: source.js
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+    - name: meta.html.directive.abc
+      begin: ((?:^\s*)?%%)\s*(beginml)\b
+      beginCaptures:
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+      end: ((?:^\s*)?%%)\s*(endml)\b
+      endCaptures:
+        '1': {name: comment.line.percentage.abc}
+        '2': {name: support.function.directive.abc}
+      patterns:
+      #- include: source.html
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+    - name: meta.text.instruction.abc
+      contentName: string.unquoted.free.abc
+      begin: ^(I:)\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?
+      beginCaptures:
+        '1': {name: support.constant.instruction.abc}
+        '2': {name: support.function.directive.abc}
+        '3': {name: variable.parameter.directive.abc}
+      end: ^(I:)\s*(endtext)\b
+      endCaptures:
+        '1': {name: support.constant.instruction.abc}
+        '2': {name: support.function.directive.abc}
+      patterns:
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+    - name: meta.svg.instruction.abc
+      begin: (^I:)\s*(beginsvg)\b
+      beginCaptures:
+        '1': {name: support.constant.instruction.abc}
+        '2': {name: support.function.directive.abc}
+      end: (^I:)\s*(endsvg)\b
+      endCaptures:
+        '1': {name: support.constant.instruction.abc}
+        '2': {name: support.function.directive.abc}
+      patterns:
+      #- include: source.xml
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+    - name: meta.ps.instruction.abc
+      begin: (^I:)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?
+      beginCaptures:
+        '1': {name: support.constant.instruction.abc}
+        '2': {name: support.function.directive.abc}
+        '3': {name: variable.parameter.directive.abc}
+      end: ^(I:)\s*(endps)\b
+      endCaptures:
+        '1': {name: support.constant.instruction.abc}
+        '2': {name: support.function.directive.abc}
+      patterns:
+      #- include: source.ps
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+    - name: meta.js.instruction.abc
+      contentName: source.javascript
+      begin: (^I:)\s*(beginjs)\b
+      beginCaptures:
+        '1': {name: support.constant.instruction.abc}
+        '2': {name: support.function.directive.abc}
+      end: ^(I:)\s*(endjs)\b
+      endCaptures:
+        '1': {name: support.constant.instruction.abc}
+        '2': {name: support.function.directive.abc}
+      patterns:
+      #- include: source.js
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
+    - name: meta.svg.instruction.abc
+      contentName: source.html
+      begin: (^I:)\s*(beginml)\b
+      beginCaptures:
+        '1': {name: support.constant.instruction.abc}
+        '2': {name: support.function.directive.abc}
+      end: (^I:)\s*(endml)\b
+      endCaptures:
+        '1': {name: support.constant.instruction.abc}
+        '2': {name: support.function.directive.abc}
+      patterns:
+      #- include: source.html
+      - include: '#escape'
+      - include: '#comments'
+      - include: '#directive'
 
-  grace:
-    name: meta.code.grace.abc
-    begin: '(\{/?)'
-    beginCaptures:
-      '1': {name: support.type.grace.abc}
-    end: '(\})'
-    endCaptures:
-      '1': {name: support.type.grace.abc}
+  illegals:
+    comment: Illegal Syntax
     patterns:
-      - include: '#prototype'
-      - match: ([A-Ga-g][,']*)
-        name: constant.character.note.abc
-      - match: (\d*[<>/]*\d*)?
-        name: constant.numeric.note-length.abc # storage.type.note-length.abc
-      - include: '#abc-rest'
-      - include: '#decoration'
-
-  # operators
-  operators:
-    patterns:
-      - match: '(\(\d+(?::\d*(?::\d*)?)?)'
-        name: support.type.tuplet.abc
-        patterns:
-          - include: '#prototype'
-      - match: '\`'
-        name: support.constant.backquote.abc
-        patterns:
-          - include: '#prototype'
-      - match: '(\(\&|\&\&?|\&\))'
-        name: support.function.overlay.abc
-        patterns:
-          - include: '#prototype'
-      - match: '(\$(?= *| *$))'
-        name: support.constant.line-break.abc
-        patterns:
-          - include: '#prototype'
-      - match: '(\\(?= *| *$))'
-        name: support.constant.line-continue.abc
-        patterns:
-          - include: '#prototype'
-  # chords
-  abc-chord:
-    name: meta.chord.abc
-    begin: '(\[(?![:|\[\]\d]|(?:[a-zA-Z]:)))'
-    beginCaptures:
-      '1': {name: support.type.decoration.chord.abc} # meta.brace.square.chord.abc
-    end: '(\](?<![:|]))'
-    endCaptures:
-      '1': {name: support.type.decoration.chord.abc} # storage.modifier.decoration.chord.abc
-    patterns:
-      - include: '#prototype'
-      - include: '#abc-note'
-      - include: '#abc-rest'
-      - include: '#abc-space'
-      - include: '#decoration'
-      - include: '#macro'
-      - include: '#operators'
-
-  # chord symbols, annotations
-  strings:
-    patterns:
-      - name: meta.string.chord.abc
-        begin: '("(?![_<>^@]))'
-        beginCaptures:
-          '1': {name: punctuation.definition.string.chord.begin.abc}
-        contentName: string.quoted.double.chord.abc
-        end: '(")'
-        endCaptures:
-          '1': {name: punctuation.definition.string.chord.end.abc}
-        patterns:
-          - include: '#prototype'
-          # TODO: Match for symbols in chord strings
-      - name: meta.string.annotation.abc
-        begin: '(\"[_<>^]|\"@(?:\d+(?:\.\d*)?),(?:\d+(?:\.\d*)?))'
-        beginCaptures:
-          '1': {name: punctuation.definition.string.annotation.begin.abc}
-        contentName: string.quoted.double.annotation.abc
-        end: '(")'
-        endCaptures:
-          '1': {name: punctuation.definition.string.annotation.end.abc}
-        patterns:
-          - include: '#prototype'
-
-  # inline fields
-  inline-field:
-    patterns:
-      - comment: General Inline Field
-        name: meta.inline-field.abc
-        begin: (\[[[:alpha:]&&[^IKPVXr]]:)
-        beginCaptures:
-          '1': {name: support.function.inline-field.abc}
-        contentName: string.unquoted.inline-field.abc
-        end: (\])
-        endCaptures:
-          '1': {name: support.function.inline-field.abc}
-        patterns:
-          - include: '#prototype'
-      - comment: Inline Remark
-        name: meta.inline-field.remark.abc
-        begin: (\[r:)
-        beginCaptures:
-          '1': {name: support.function.inline-field.remark.abc}
-        contentName: comment.block.remark.abc
-        end: (\])
-        endCaptures:
-          '1': {name: support.function.inline-field.remark.abc}
-        patterns:
-          - include: '#prototype'
-      - comment: Inline Instruction
-        name: meta.inline-field.instruction.abc
-        begin: (\[I:)\s*(\w+)
-        beginCaptures:
-          '1': {name: entity.name.tag.inline-field.instruction.abc}
-          '2': {name: keyword.operator.word.instruction.abc}
-        contentName: variable.parameter.instruction.abc
-        end: (\])
-        endCaptures:
-          '1': {name: entity.name.tag.inline-field.instruction.abc}
-        patterns:
-          - include: '#prototype'
-          - name: constant.numeric.float.length-unit.abc
-            match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)'
-          # TODO: Add more matches for directive keywords
-      - comment: Inline Title
-        name: meta.inline-field.title.abc
-        begin: (\[T:)
-        beginCaptures:
-          '1': {name: entity.name.tag.inline-field.title.abc}
-        contentName: string.unquoted.title.abc # meta.toc-list.title.abc
-        end: (\])
-        endCaptures:
-          '1': {name: entity.name.tag.inline-field.title.abc}
-        patterns:
-          - include: '#prototype'
-      - comment: Inline Voice
-        name: meta.inline-field.voice.abc
-        begin: (\[V:)
-        beginCaptures:
-          '1': {name: entity.name.tag.inline-field.voice.abc}
-        contentName: variable.parameter.voice.abc # meta.toc-list.voice.abc
-        end: (\])
-        endCaptures:
-          '1': {name: entity.name.tag.inline-field.voice.abc}
-        patterns:
-          - include: '#prototype'
-        # TODO: add keyword for voice's transposition parameters
-      - comment: Inline Part
-        name: meta.inline-field.part.abc
-        begin: (\[P:)
-        beginCaptures:
-          '1': {name: entity.name.tag.inline-field.part.abc}
-        contentName: variable.parameter.part.abc # meta.toc-list.part.abc
-        end: (\])
-        endCaptures:
-          '1': {name: entity.name.tag.inline-field.part.abc}
-        patterns:
-          - include: '#prototype'
-
-  # accidental:
-  #   - match: ([_=\^](?:\d*\/*\d*)|=|[_\^]{2})
-  #     name: constant.language.accidental.abc
-
-  # note:
-  #   - match: "([A-Ga-g][,']*)"
-  #     name: constant.character.note.abc
-
-  # note-length:
-  #   - match: (\d*[<>/]*\d*)?
-  #     name: constant.numeric.note-length.abc # storage.type.note-length.abc
-
-  # abc-note-sequence:
-  #   - include: '#abc-note'
-  #   - include: '#grace'
-  #   - include: 'decoration'
-  #   - include: '#macro'
-  #   - include: '#strings'
-
-  # abc-rest-sequence:
-  #   - include: '#abc-rest'
-  #   - include: '#grace'
-  #   - include: '#decoration'
-  #   - include: '#macro'
-  #   - include: '#strings'
-
-  # abc-space-sequence:
-  #   - include: '#abc-space'
-  #   - include: '#grace'
-  #   - include: '#decoration'
-  #   - include: '#macro'
-  #   - include: '#strings'
-
-  # abc-chord-elements:
-  #   - include: '#abc-note'
-  #   - include: '#abc-rest'
-  #   - include: '#abc-space'
-  #   - include: '#decoration'
-  #   - include: '#macro'
-  #   - include: '#operators'
+    - name: meta.code.illegal.abc
+      match: ([\[]{2,}(?<!\|)(?!:))
+      captures:
+        '1': {name: invalid.illegal.barline.abc}
+    - name: meta.code.illegal.abc
+      match: ([\]](?!:)(?<![|\]]))
+      captures:
+        '1': {name: invalid.illegal.barline.abc}
+    - name: meta.code.illegal.abc
+      match: ([\[]{2,}(?!:))
+      captures:
+        '1': {name: invalid.illegal.barline.abc}
+...
