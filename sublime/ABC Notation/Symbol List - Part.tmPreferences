@@ -7,6 +7,8 @@
     <string>source.abc meta.field.voice.abc</string>
     <key>settings</key>
     <dict>
+        <key>showInSymbolList</key>
+        <integer>1</integer>
         <key>symbolTransformation</key>
         <string>s/\[?V:\s*([^%\n\r\]])/Voice $1/</string>
     </dict>

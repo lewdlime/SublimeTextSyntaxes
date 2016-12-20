@@ -132,6 +132,26 @@ contexts:
         - match: $
           pop: true
 
+  key-field:
+    - match: '^(K:)\s*({{field_value}}+)?'
+      captures:
+        1: entity.name.tag.key.abc
+        2: string.unquoted.key.abc
+      push:
+        - meta_scope: meta.field.key.abc
+        - match: $
+          pop: true
+
+  title-field:
+    - match: '^(T:)\s*({{field_value}}+)?'
+      captures:
+        1: entity.name.tag.title.abc
+        2: string.unquoted.title.abc
+      push:
+        - meta_scope: meta.field.key.abc
+        - match: $
+          pop: true
+
   escape:
     - scope: constant.character.escape.abc
       match: (\\(?:\\|%|[^ \n\r]|u\h{4}|u\h{8}|\\[[:punct:]&&[\w]&&[^[ \t\v\f]]]{2}))
@@ -154,17 +174,7 @@ contexts:
 
   abc-tune:
     - meta_scope: meta.tune.abc
-    - match: '^(T:)'
-      scope: meta.field.title.abc
-      captures:
-        1: entity.name.tag.title.abc
-      push:
-        - meta_scope: meta.field.title.abc
-        - match: '\s*({{field_value}}+)'
-          captures:
-            1: string.unquoted.title.abc
-        - match: $
-          pop: true
+    - include: title-field
     # tune-body
     - match: '^(K:)\s*([^\r\n]+)?'
       captures:
@@ -173,10 +183,8 @@ contexts:
       # TODO: Capture clef variable keywords within key field
       set:
         - meta_scope: meta.tune.abc
-        - match: '^(K:)\s*([^\r\n]+)?'
-          captures:
-            1: entity.name.tag.key.abc
-            2: string.unquoted.key.abc
+        - include: title-field
+        - include: key-field
         - include: abc-chord
         - include: abc-note
         - include: abc-rest
