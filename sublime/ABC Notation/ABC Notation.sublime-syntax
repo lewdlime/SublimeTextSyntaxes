@@ -146,6 +146,7 @@ contexts:
   main:
     # abc tunes
     - match: '^(X:)\s*(\d+)'
+      scope: meta.field.index.abc
       captures:
         1: entity.name.tag.index.abc
         2: variable.parameter.index.abc # meta.toc-list.index.abc
@@ -171,6 +172,7 @@ contexts:
         2: string.unquoted.key.abc
       # TODO: Capture clef variable keywords within key field
       set:
+        - meta_scope: meta.tune.abc
         - match: '^(K:)\s*([^\r\n]+)?'
           captures:
             1: entity.name.tag.key.abc
@@ -186,9 +188,9 @@ contexts:
         - include: operators
         - include: barline
         - include: inline-field
-        - match: '^(\s*)?$'
+        - match: '$'
           pop: true
-    - match: '^(\s*)?$'
+    - match: '$'
       pop: true
 
   abc-note:

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+    <key>name</key>
+    <string>Symbol List - Voice</string>
+    <key>scope</key>
+    <string>source.abc meta.field.index.abc</string>
+    <key>settings</key>
+    <dict>
+        <key>symbolTransformation</key>
+        <string>s/^X:\s*(\d+)\nT:\s*([^%\n\r]*)/Tune #$1: $2/</string>
+    </dict>
+</dict>
+</plist>
