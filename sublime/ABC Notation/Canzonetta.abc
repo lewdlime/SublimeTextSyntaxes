@@ -1,0 +1,166 @@
+% SYNTAX TEST "Packages/User/ABC Notation.sublime-syntax"
+%abc-2.1
+%<- comment.line.namespace.abc
+%^^^^^^^ keyword.other.special-method.namespace.abc
+%%pagewidth      21cm
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%pageheight     29.7cm
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%topspace       0.5cm
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%topmargin      1cm
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%botmargin      0cm
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%leftmargin     1cm
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%rightmargin    1cm
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%titlespace     0cm
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%titlefont      Times-Bold 32
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^ keyword.operator.word.directive.abc
+%                           ^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%subtitlefont   Times-Bold 24
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^^^^ keyword.operator.word.directive.abc
+%                           ^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%composerfont   Times 16
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^^^^ keyword.operator.word.directive.abc
+%                      ^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%vocalfont      Times-Roman 14
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^ keyword.operator.word.directive.abc
+%                            ^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%staffsep       60pt
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%sysstaffsep    20pt
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%musicspace     1cm
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%vocalspace     5pt
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%measurenb      0
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%barsperstaff   5
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%%scale          0.7
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^^^^^ keyword.operator.word.directive.abc
+%                ^^^ constant.numeric.float.length-unit.abc
+% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+X: 1
+%^ entity.name.tag.index.abc
+% ^ variable.parameter.index.abc
+T: Canzonetta a tre voci
+%^ meta.field.title.abc entity.name.tag.title.abc
+% ^^^^^^^^^^^^^^^^^^^^^^ meta.field.title.abc string.unquoted.title.abc
+C: Claudio Monteverdi (1567-1643)
+%^ meta.field.abc support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
+M: C
+%^ meta.field.abc support.function.field.abc
+% ^^ meta.field.abc string.unquoted.field.abc
+L: 1/4
+%^ meta.field.abc support.function.field.abc
+% ^^^^ meta.field.abc string.unquoted.field.abc
+Q: "Andante mosso" 1/4 = 110
+%^ meta.field.abc support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
+%%score [1 2 3]
+%^ meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^ keyword.operator.word.directive.abc
+% ^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+V: 1 clef=treble name="Soprano"sname="A"
+%^ meta.field.voice.abc entity.name.tag.voice.abc
+%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.voice.abc meta.toc-list.voice.abc
+%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.voice.abc
+V: 2 clef=treble name="Alto"   sname="T"
+%^ meta.field.voice.abc entity.name.tag.voice.abc
+%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.voice.abc meta.toc-list.voice.abc
+%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.voice.abc
+V: 3 clef=bass   name="Tenor"  sname="B" octave=-2
+%^ meta.field.voice.abc entity.name.tag.voice.abc
+%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.voice.abc meta.toc-list.voice.abc
+%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.voice.abc
+%%MIDI program 1 75 % recorder
+%%MIDI program 2 75
+%%MIDI program 3 75
+K: Eb
+% 1 - 4
+[V: 1] |:z4  |z4  |f2ec         |_ddcc        |
+w: Son que-sti~i cre-spi cri-ni~e
+w: Que-sti son gli~oc-chi che mi-
+[V: 2] |:c2BG|AAGc|(F/G/A/B/)c=A|B2AA         |
+w: Son que-sti~i cre-spi cri-ni~e que - - - - sto~il vi-so e
+w: Que-sti son~gli oc-chi che mi-ran - - - - do fi-so mi-
+[V: 3] |:z4  |f2ec|_ddcf        |(B/c/_d/e/)ff|
+w: Son que-sti~i cre-spi cri-ni~e que - - - - sto~il
+w: Que-sti son~gli oc-chi che mi-ran - - - - do
+% 5 - 9
+[V: 1] cAB2     |cAAA |c3B|G2!fermata!Gz ::e4|
+w: que-sto~il vi-so ond' io ri-man-go~uc-ci-so. Deh,
+w: ran-do fi-so, tut-to re-stai con-qui-so.
+[V: 2] AAG2     |AFFF |A3F|=E2!fermata!Ez::c4|
+w: que-sto~il vi-so ond' io ri-man-go~uc-ci-so. Deh,
+w: ran-do fi-so tut-to re-stai con-qui-so.
+[V: 3] (ag/f/e2)|A_ddd|A3B|c2!fermata!cz ::A4|
+w: vi - - - so ond' io ti-man-go~uc-ci-so. Deh,
+w: fi - - - so tut-to re-stai con-qui-so.
+% 10 - 15
+[V: 1] f_dec |B2c2|zAGF  |\
+w: dim-me-lo ben mi-o, che que-sto\
+=EFG2          |1F2z2:|2F8|] % more notes
+w: sol de-si-o_. % more lyrics
+[V: 2] ABGA  |G2AA|GF=EF |(GF3/2=E//D//E)|1F2z2:|2F8|]
+w: dim-me-lo ben mi-o, che que-sto sol de-si - - - - o_.
+[V: 3] _dBc>d|e2AF|=EFc_d|c4             |1F2z2:|2F8|]
+w: dim-me-lo ben mi-o, che que-sto sol de-si-o_.
