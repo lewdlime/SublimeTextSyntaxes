@@ -1,4 +1,4 @@
-% SYNTAX TEST "Packages/ABC Notation/ABC Notation.sublime-syntax"
+% SYNTAX TEST "Packages/User/ABC Notation.sublime-syntax"
 %abc-2.1
 %<- source.abc comment.line.namespace.abc punctuation.definition.comment.abc
 %^^^^^^^ source.abc comment.line.namespace.abc keyword.other.special-method.namespace.abc
