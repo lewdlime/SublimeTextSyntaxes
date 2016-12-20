@@ -117,7 +117,7 @@ contexts:
         - include: comments
         - match: '\s*({{field_value}}+)'
           captures:
-            1: variable.parameter.voice.abc # meta.toc-list.voice.abc
+            1: variable.parameter.voice.abc
         - match: $
           pop: true
     # part field
@@ -126,7 +126,7 @@ contexts:
         1: entity.name.tag.part.abc
       push:
         - meta_scope: meta.field.part.abc
-        - meta_content_scope: variable.parameter.part.abc # meta.toc-list.part.abc
+        - meta_content_scope: variable.parameter.part.abc
         - include: escape
         - include: comments
         - match: $
@@ -149,7 +149,7 @@ contexts:
       scope: meta.field.index.abc
       captures:
         1: entity.name.tag.index.abc
-        2: variable.parameter.index.abc # meta.toc-list.index.abc
+        2: variable.parameter.index.abc
       push: abc-tune
 
   abc-tune:
@@ -162,7 +162,7 @@ contexts:
         - meta_scope: meta.field.title.abc
         - match: '\s*({{field_value}}+)'
           captures:
-            1: string.unquoted.title.abc # meta.toc-list.title.abc
+            1: string.unquoted.title.abc
         - match: $
           pop: true
     # tune-body
@@ -425,7 +425,7 @@ contexts:
       captures:
         1: entity.name.tag.inline-field.voice.abc
       push:
-        - meta_content_scope: variable.parameter.voice.abc # meta.toc-list.voice.abc
+        - meta_content_scope: variable.parameter.voice.abc
         - match: (\])
           captures:
             1: entity.name.tag.inline-field.voice.abc
@@ -435,7 +435,7 @@ contexts:
       captures:
         1: entity.name.tag.inline-field.part.abc
       push:
-        - meta_content_scope: variable.parameter.part.abc # meta.toc-list.part.abc
+        - meta_content_scope: variable.parameter.part.abc
         - match: (\])
           captures:
             1: entity.name.tag.inline-field.part.abc
