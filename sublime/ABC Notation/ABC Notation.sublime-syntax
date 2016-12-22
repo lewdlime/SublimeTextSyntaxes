@@ -115,7 +115,7 @@ contexts:
         - include: comments
         - match: '\s*({{field_value}}+)'
           captures:
-            1: variable.parameter.voice.abc # meta.toc-list.voice.abc
+            1: variable.parameter.voice.abc
         - match: $
           pop: true
     # part field
@@ -171,7 +171,7 @@ contexts:
       scope: meta.field.index.abc
       captures:
         1: entity.name.tag.index.abc
-        2: variable.parameter.index.abc # meta.toc-list.index.abc
+        2: variable.parameter.index.abc
       push: abc-tune
 
   abc-tune:
@@ -189,6 +189,8 @@ contexts:
         - meta_content_scope: meta.tune.abc
         - include: title-field
         - include: key-field
+        - include: barline
+        - include: inline-field
         - include: abc-chord
         - include: abc-note
         - include: abc-rest
@@ -198,8 +200,6 @@ contexts:
         - include: macro
         - include: strings
         - include: operators
-        - include: barline
-        - include: inline-field
         - match: '^(\s*)?$'
           pop: true
     - match: '^(\s*)?$'
@@ -231,7 +231,7 @@ contexts:
            (?:\d*<*(?:\d*)?))?
       captures:
         1: storage.type.abc-rest.abc
-        2: storage.type.rest-length.abc # constant.numeric.rest-length.abc
+        2: storage.type.rest-length.abc
 
   abc-space:
     - scope: meta.code.abc-space.abc
@@ -360,17 +360,21 @@ contexts:
       captures:
         1: punctuation.separator.barline.abc
     - scope: meta.barline.abc
-      match: '((?>:*\|+:*))((?>\d+(?:[,-]\d+)*))?'
+      match: ((?>[\[\|\]]:+))
+      captures:
+        1: punctuation.separator.barline.abc
+    - scope: meta.barline.abc
+      match: '((?>:*\|+))((?>\d+(?:[,-]\d+)*))?'
       captures:
         1: punctuation.separator.barline.abc
         2: punctuation.separator.barline.repeat-length.abc
     - scope: meta.barline.abc
-      match: '((?>:*\]+:*))((?>\d+(?:[,-]\d+)*))?'
+      match: '((?>:*\]+))((?>\d+(?:[,-]\d+)*))?'
       captures:
         1: punctuation.separator.barline.abc
         2: punctuation.separator.barline.repeat-length.abc
     - scope: meta.barline.abc
-      match: '((?>:*\[+(?![a-zA-Z]:|[^\[\s\r\n:\d\|\]]):*))((?>\d+(?:[,-]\d+)*))?'
+      match: '((?>:*\[+(?![a-zA-Z]:|[^\[\s\r\n:\d\|\]])))((?>\d+(?:[,-]\d+)*))?'
       captures:
         1: punctuation.separator.barline.abc
         2: punctuation.separator.barline.repeat-length.abc
@@ -451,7 +455,7 @@ contexts:
         1: entity.name.tag.inline-field.voice.abc
       push:
         - meta_scope: meta.inline-field.voice.abc
-        - meta_content_scope: variable.parameter.voice.abc # meta.toc-list.voice.abc
+        - meta_content_scope: variable.parameter.voice.abc
         - meta_include_prototype: false
         - include: escape
         - match: \s*((?>\]))
@@ -463,7 +467,7 @@ contexts:
         1: entity.name.tag.inline-field.part.abc
       push:
         - meta_scope: meta.inline-field.part.abc
-        - meta_content_scope: variable.parameter.part.abc # meta.toc-list.part.abc
+        - meta_content_scope: meta.inline-field.part.abc variable.parameter.part.abc
         - meta_include_prototype: false
         - include: escape
         - match: \s*((?>\]))

@@ -12,12 +12,12 @@
         <key>symbolTransformation</key>
         <string>
             s/^X:\s*(\d+)/Tune #$1/;
-            s/^T:\s*([^%\n\r]+)/Title $1/;
-            s/\[T:\s*([^%\r\n\]]+)\]/Title $1/;
-            s/^P:\s*([^%\n\r]+)/Part #$1/;
-            s/\[P:\s*([^%\r\n\]]+)\]/Part #$1/;
-            s/^V:\s*([^%\n\r]+)/Voice #$1/;
-            s/\[V:\s*([^%\r\n\]]+)\]/Voice #$1/;
+            s/^T:\s*([^%\n\r]+)\s*%.*/Title: $1/;
+            s/\[T:\s*([^%\r\n\]]+)\]/Title: $1/;
+            s/^P:\s*([^%\n\r]+)\s*%.*/Part: $1/;
+            s/\[P:\s*([^%\r\n\]]+)\]/Part: $1/;
+            s/^V:\s*([^%\n\r]+)\s*%.*/Voice: $1/;
+            s/\[V:\s*([^%\r\n\]]+)\]/Voice: $1/;
         </string>
     </dict>
 </dict>
