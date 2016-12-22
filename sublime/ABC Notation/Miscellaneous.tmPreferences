@@ -9,10 +9,12 @@
     <dict>
         <key>increaseIndentPattern</key>
         <string>^[[:alpha:]+]:[^\t ]+</string>
+<!--
         <key>shellVariables</key>
         <array>
-            <!-- TODO -->
+            TODO
         </array>
+-->
     </dict>
 </dict>
 </plist>

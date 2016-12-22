@@ -124,7 +124,7 @@ contexts:
         1: entity.name.tag.part.abc
       push:
         - meta_scope: meta.field.part.abc
-        - meta_content_scope: variable.parameter.part.abc # meta.toc-list.part.abc
+        - meta_content_scope: variable.parameter.part.abc
         - include: escape
         - include: comments
         - match: $
@@ -150,7 +150,7 @@ contexts:
         - meta_scope: meta.field.title.abc
         - match: '\s*({{field_value}}+)'
           captures:
-            1: string.unquoted.title.abc # meta.toc-list.title.abc
+            1: string.unquoted.title.abc
         - match: $
           pop: true
 
@@ -168,6 +168,7 @@ contexts:
   main:
     # abc tunes
     - match: '^(X:)\s*(\d+)'
+      scope: meta.field.index.abc
       captures:
         1: entity.name.tag.index.abc
         2: variable.parameter.index.abc # meta.toc-list.index.abc
@@ -185,6 +186,7 @@ contexts:
         3: string.unquoted.key.abc
       # TODO: Capture clef variable keywords within key field
       set:
+        - meta_content_scope: meta.tune.abc
         - include: title-field
         - include: key-field
         - include: abc-chord
