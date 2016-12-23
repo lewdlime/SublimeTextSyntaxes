@@ -8,6 +8,10 @@
 		<string>abh</string>
 		<string>abp</string>
 	</array>
+	<key>foldingStartMarker</key>
+	<string>^X:|\(</string>
+	<key>foldingStopMarker</key>
+	<string>^(?:\s*)?$|\)</string>
 	<key>name</key>
 	<string>ABC Notation</string>
 	<key>patterns</key>

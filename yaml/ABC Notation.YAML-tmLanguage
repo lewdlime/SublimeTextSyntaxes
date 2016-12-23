@@ -3,6 +3,8 @@
 name: ABC Notation
 scopeName: source.abc
 fileTypes: [abc, abh, abp]
+foldingStartMarker: '^X:|\('
+foldingStopMarker: '^(?:\s*)?$|\)'
 uuid: c87e9f8a-efbb-4aa8-83e2-c6c26f2aa6fb
 
 patterns:
