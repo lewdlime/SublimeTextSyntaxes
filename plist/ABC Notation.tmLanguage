@@ -1726,7 +1726,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>entity.name.tag.part.abc</string>
+					<string>entity.name.tag.key.abc</string>
 				</dict>
 				<key>2</key>
 				<dict>
@@ -1868,15 +1868,20 @@
 		<key>tune-body</key>
 		<dict>
 			<key>begin</key>
-			<string>^(?&gt;(K:)\s*([^% \n\r]+)?)\b</string>
+			<string>^(?&gt;(K:)\s*(\w+)?)\b\s*([^%\r\n]*)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control.key.abc</string>
+					<string>entity.name.tag.key.abc</string>
 				</dict>
 				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.key.abc</string>
+				</dict>
+				<key>3</key>
 				<dict>
 					<key>name</key>
 					<string>string.unquoted.key.abc</string>
