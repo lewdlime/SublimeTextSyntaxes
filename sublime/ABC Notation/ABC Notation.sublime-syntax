@@ -192,9 +192,7 @@ contexts:
       match: |-
         (?x)
           ([xz])
-          ((?:\d*\/*(?:\d*)?)|
-           (?:\d*>*(?:\d*)?)|
-           (?:\d*<*(?:\d*)?))?
+          (\d*[<>/]*\d*)?
       captures:
         1: storage.type.abc-rest.abc
         2: storage.type.rest-length.abc
@@ -235,8 +233,8 @@ contexts:
       match: (~(?![h-wH-W][a-zA-Z0-9]*))
 
   macro:
-    - match: '(\~[h-zH-Z][a-zA-Z0-9]{,30})'
-      scope: support.type.macro.abc
+    - scope: support.type.macro.abc
+      match: '(\~[h-zH-Z][a-zA-Z0-9]{,30})'
 
   grace:
     - scope: meta.code.grace.abc
@@ -425,6 +423,10 @@ contexts:
       captures:
         1: punctuation.separator.barline.abc
     - scope: meta.barline.abc
+      match: '(\|\])'
+      captures:
+        1: punctuation.separator.barline.abc
+    - scope: meta.barline.abc
       match: ((?>[\[\|\]]:+))
       captures:
         1: punctuation.separator.barline.abc
@@ -434,7 +436,7 @@ contexts:
         1: punctuation.separator.barline.abc
         2: punctuation.separator.barline.repeat-length.abc
     - scope: meta.barline.abc
-      match: '((?>:*\]+))((?>\d+(?:[,-]\d+)*))?'
+      match: '((?>:*\]))((?>\d+(?:[,-]\d+)*))'
       captures:
         1: punctuation.separator.barline.abc
         2: punctuation.separator.barline.repeat-length.abc
