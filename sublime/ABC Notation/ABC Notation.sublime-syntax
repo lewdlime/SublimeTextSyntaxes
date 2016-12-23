@@ -338,7 +338,7 @@ contexts:
 
   instruction-field:
     # instruction field
-    - match: '^(?>(I:)\s*(\w+)\b)'
+    - match: '^(I:)\s*(\w+)\b'
       captures:
         1: entity.name.tag.instruction.abc
         2: keyword.operator.word.directive.abc
