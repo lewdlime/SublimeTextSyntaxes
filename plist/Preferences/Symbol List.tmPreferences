@@ -2,7 +2,7 @@
 <plist version="1.0">
 <dict>
     <key>name</key>
-    <string>Symbol List: Index</string>
+    <string>Symbol List</string>
     <key>scope</key>
     <string>meta.field.index.abc, meta.field.title.abc, meta.inline-field.title.abc, meta.field.part.abc, meta.inline-field.part.abc, meta.field.voice.abc, meta.inline-field.voice.abc</string>
     <key>settings</key>
