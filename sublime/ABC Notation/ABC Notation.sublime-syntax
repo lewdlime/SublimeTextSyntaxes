@@ -99,7 +99,7 @@ contexts:
   key-field:
     - match: '^(?>(K:)\s*\b({{key_value}}+)?\b *({{field_value}}*)?)'
       captures:
-        1: entity.name.tag.part.abc
+        1: entity.name.tag.key.abc
         2: variable.parameter.key.abc
         3: string.unquoted.key.abc
       push:

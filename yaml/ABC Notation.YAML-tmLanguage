@@ -81,7 +81,7 @@ repository:
     name: meta.field.key.abc
     begin: '^(?>(K:)\s*\b([^% \n\r]+)?\b)'
     beginCaptures:
-      '1': {name: entity.name.tag.part.abc}
+      '1': {name: entity.name.tag.key.abc}
       '2': {name: variable.parameter.key.abc}
     # '3': {name: string.unquoted.key.abc}
     contentName: string.unquoted.key.abc
@@ -136,10 +136,11 @@ repository:
   tune-body:
     comment: ABC Tune Body
     name: meta.tune.body.abc
-    begin: '^(?>(K:)\s*([^% \n\r]+)?)\b'
+    begin: '^(?>(K:)\s*(\w+)?)\b\s*([^%\r\n]*)'
     beginCaptures:
-      '1': {name: keyword.control.key.abc}
-      '2': {name: string.unquoted.key.abc}
+      '1': {name: entity.name.tag.key.abc}
+      '2': {name: keyword.control.key.abc}
+      '3': {name: string.unquoted.key.abc}
     end: '^(\s*)?$'
     patterns:
       - include: '#fields'
