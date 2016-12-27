@@ -1,4 +1,4 @@
-% SYNTAX TEST "Packages/User/ABC Notation.sublime-syntax"
+% SYNTAX TEST "Packages/ABC Notation/ABC Notation.sublime-syntax"
 %abc-2.1
 %<- comment.line.namespace.abc
 %^^^^^^^ keyword.other.special-method.namespace.abc
@@ -6,97 +6,97 @@
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%pageheight     29.7cm
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%           ^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%topspace       0.5cm
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%         ^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%topmargin      1cm
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%botmargin      0cm
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%leftmargin     1cm
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%           ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%rightmargin    1cm
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%            ^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%titlespace     0cm
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%           ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%titlefont      Times-Bold 32
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                           ^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%                ^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%subtitlefont   Times-Bold 24
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^^^ keyword.operator.word.directive.abc
 %                           ^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%             ^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%composerfont   Times 16
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^^^ keyword.operator.word.directive.abc
 %                      ^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%             ^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%vocalfont      Times-Roman 14
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                            ^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%staffsep       60pt
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%         ^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%sysstaffsep    20pt
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%            ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%musicspace     1cm
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%           ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%vocalspace     5pt
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%           ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%measurenb      0
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%barsperstaff   5
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%             ^^^^ meta.directive.abc variable.parameter.directive.abc
 %%scale          0.7
 %^ meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 X: 1
 %^ entity.name.tag.index.abc
 % ^ variable.parameter.index.abc
