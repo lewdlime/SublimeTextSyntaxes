@@ -1,0 +1,12 @@
+<snippet>
+    <content><![CDATA[
+X:${1:1}
+T:${2:Title}
+M:${3:4}/${4:4}
+L:1/8
+K:${5:Key}
+$6
+]]></content>
+    <tabTrigger>X:</tabTrigger>
+    <scope>source.abc</scope>
+</snippet>
