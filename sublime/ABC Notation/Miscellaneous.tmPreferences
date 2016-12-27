@@ -7,8 +7,6 @@
     <string>source.abc</string>
     <key>settings</key>
     <dict>
-        <key>increaseIndentPattern</key>
-        <string>^[[:alpha:]+]:[^\t ]+</string>
 <!--
         <key>shellVariables</key>
         <array>
