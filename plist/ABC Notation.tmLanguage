@@ -1667,6 +1667,11 @@
 					<key>name</key>
 					<string>keyword.operator.word.directive.abc</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>variable.parameter.directive.abc</string>
+				</dict>
 			</dict>
 			<key>comment</key>
 			<string>Instruction Field</string>
@@ -1675,7 +1680,7 @@
 			<key>end</key>
 			<string>$</string>
 			<key>match</key>
-			<string>^(?&gt;(I:)\s*(\w+)\b)</string>
+			<string>^(I:)(\s*\w+\b)?(\s+[^%\r\n]*)?</string>
 			<key>name</key>
 			<string>meta.field.instruction.abc</string>
 			<key>patterns</key>
@@ -1719,34 +1724,53 @@
 		</dict>
 		<key>key-field</key>
 		<dict>
-			<key>begin</key>
-			<string>^(?&gt;(K:)\s*\b([^% \n\r]+)?\b)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.key.abc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>variable.parameter.key.abc</string>
-				</dict>
-			</dict>
 			<key>comment</key>
 			<string>Key Field. The key is significant in that it indicates where the start of the tune body is.</string>
-			<key>contentName</key>
-			<string>string.unquoted.key.abc</string>
-			<key>end</key>
-			<string>$</string>
-			<key>name</key>
-			<string>meta.field.key.abc</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>#prototype</string>
+					<key>begin</key>
+					<string>^(?&gt;(K:)\s*\b([^% \n\r]+)?\b)?</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.key.abc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.key.abc</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>string.unquoted.key.abc</string>
+					<key>end</key>
+					<string>$</string>
+					<key>name</key>
+					<string>meta.field.key.abc</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#prototype</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.key.abc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>^(K:)</string>
+					<key>name</key>
+					<string>meta.field.key.abc</string>
 				</dict>
 			</array>
 		</dict>
@@ -1839,36 +1863,62 @@
 		</dict>
 		<key>title-field</key>
 		<dict>
-			<key>begin</key>
-			<string>^((?&gt;T:))</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.tag.title.abc</string>
-				</dict>
-			</dict>
 			<key>comment</key>
 			<string>Title Field. This field is only permitted in the header or body of a tune.</string>
-			<key>contentName</key>
-			<string>string.unquoted.title.abc</string>
-			<key>end</key>
-			<string>$</string>
-			<key>name</key>
-			<string>meta.field.title.abc</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>#prototype</string>
+					<key>begin</key>
+					<string>^((?&gt;T:))</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.title.abc</string>
+						</dict>
+					</dict>
+					<key>contentName</key>
+					<string>string.unquoted.title.abc</string>
+					<key>end</key>
+					<string>$</string>
+					<key>name</key>
+					<string>meta.field.title.abc</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#prototype</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.tag.title.abc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>^(T:)</string>
+					<key>name</key>
+					<string>meta.field.title.abc</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#prototype</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
 		<key>tune-body</key>
 		<dict>
 			<key>begin</key>
-			<string>^(?&gt;(K:)\s*(\w+)?)\b\s*([^%\r\n]*)</string>
+			<string>^(?&gt;(K:)\s*(\w+)?)\b(\s*[^%\r\n]*)?</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>

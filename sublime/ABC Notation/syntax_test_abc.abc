@@ -1,111 +1,111 @@
-% SYNTAX TEST "Packages/User/ABC Notation.sublime-syntax"
+% SYNTAX TEST "Packages/ABC Notation/ABC Notation.sublime-syntax"
 %abc-2.1
 %<- comment.line.namespace.abc
 %^^^^^^^ keyword.other.special-method.namespace.abc
 %%pagewidth      21cm
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%pageheight     29.7cm
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%           ^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%topspace       0.5cm
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%         ^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%topmargin      1cm
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%botmargin      0cm
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%leftmargin     1cm
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%           ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%rightmargin    1cm
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%            ^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%titlespace     0cm
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%           ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%titlefont      Times-Bold 32
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                           ^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%                ^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%subtitlefont   Times-Bold 24
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^^^ keyword.operator.word.directive.abc
 %                           ^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%             ^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%composerfont   Times 16
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^^^ keyword.operator.word.directive.abc
 %                      ^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%             ^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%vocalfont      Times-Roman 14
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                            ^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%staffsep       60pt
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%         ^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%sysstaffsep    20pt
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%            ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%musicspace     1cm
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%           ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%vocalspace     5pt
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%           ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%measurenb      0
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%          ^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 %%barsperstaff   5
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^^^^^^^^ keyword.operator.word.directive.abc
 %                ^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%             ^^^^ meta.directive.abc variable.parameter.directive.abc
 %%scale          0.7
-%^ meta.directive.abc comment.line.percentage.directive.abc
-% ^^^^^^^^^ keyword.operator.word.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
+% ^^^^^ keyword.operator.word.directive.abc
 %                ^^^ constant.numeric.float.length-unit.abc
-% ^^^^^^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%      ^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 X: 1
 %^ entity.name.tag.index.abc
-% ^ variable.parameter.index.abc
+%  ^ variable.parameter.index.abc
 T: Canzonetta a tre voci
 %^ meta.field.title.abc entity.name.tag.title.abc
-% ^^^^^^^^^^^^^^^^^^^^^^ meta.field.title.abc string.unquoted.title.abc
+%  ^^^^^^^^^^^^^^^^^^^^^ meta.field.title.abc string.unquoted.title.abc
 C: Claudio Monteverdi (1567-1643)
 %^ meta.field.abc support.function.field.abc
-% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
+%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 M: C
 %^ meta.field.abc support.function.field.abc
 % ^^ meta.field.abc string.unquoted.field.abc
@@ -116,51 +116,367 @@ Q: "Andante mosso" 1/4 = 110
 %^ meta.field.abc support.function.field.abc
 % ^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 %%score [1 2 3]
-%^ meta.directive.abc comment.line.percentage.directive.abc
+%<- meta.directive.abc comment.line.percentage.directive.abc
 % ^^^^^ keyword.operator.word.directive.abc
-% ^^^^^^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
+%      ^^^^^^^^ meta.directive.abc variable.parameter.directive.abc
 V: 1 clef=treble name="Soprano"sname="A"
-%^ meta.field.voice.abc entity.name.tag.voice.abc
-%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.voice.abc meta.toc-list.voice.abc
-%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.voice.abc
+%<- meta.field.voice.abc
+%^ entity.name.tag.voice.abc
+%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.voice.abc
 V: 2 clef=treble name="Alto"   sname="T"
-%^ meta.field.voice.abc entity.name.tag.voice.abc
-%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.voice.abc meta.toc-list.voice.abc
-%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.voice.abc
+%<- meta.field.voice.abc
+%^ entity.name.tag.voice.abc
+%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.voice.abc
 V: 3 clef=bass   name="Tenor"  sname="B" octave=-2
+%<- meta.field.voice.abc
 %^ meta.field.voice.abc entity.name.tag.voice.abc
-%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.voice.abc meta.toc-list.voice.abc
-%^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.voice.abc
+%  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.voice.abc
 %%MIDI program 1 75 % recorder
+%<- meta.directive.abc
+%^comment.line.percentage.directive.abc punctuation.definition.comment.abc
+% ^^^^ keyword.operator.word.directive.abc
+%              ^ constant.numeric.float.length-unit.abc
+%                ^^ constant.numeric.float.length-unit.abc
+%                   ^^^^^^^^^^ comment.line.percentage.abc
+%     ^^^^^^^^^^^^^^^^^^^^^^^^ variable.parameter.directive.abc
 %%MIDI program 2 75
+%<- meta.directive.abc
+%^comment.line.percentage.directive.abc punctuation.definition.comment.abc
+% ^^^^ keyword.operator.word.directive.abc
+%              ^ constant.numeric.float.length-unit.abc
+%                ^^ constant.numeric.float.length-unit.abc
+%     ^^^^^^^^^^^^^ variable.parameter.directive.abc
 %%MIDI program 3 75
+%<- meta.directive.abc
+%^comment.line.percentage.directive.abc punctuation.definition.comment.abc
+% ^^^^ keyword.operator.word.directive.abc
+%              ^ constant.numeric.float.length-unit.abc
+%                ^^ constant.numeric.float.length-unit.abc
+%     ^^^^^^^^^^^^^ variable.parameter.directive.abc
 K: Eb
+%<- meta.field.key.head.abc
+%^ entity.name.tag.key.abc
+%  ^^ variable.parameter.key.abc
 % 1 - 4
+%<- comment.line.percentage.abc
 [V: 1] |:z4  |z4  |f2ec         |_ddcc        |
+%                  ^ constant.character.note.abc
+%                    ^^ constant.character.note.abc
+%                                 ^^^^ constant.character.note.abc
+%                   ^ storage.type.note-length.abc
+%                                ^ constant.language.accidental.abc
+%        ^^ meta.abc-rest.abc
+%             ^^ meta.abc-rest.abc
+%        ^ meta.abc-rest.abc storage.type.abc-rest.abc
+%             ^ meta.abc-rest.abc storage.type.abc-rest.abc
+%         ^ meta.abc-rest.abc storage.type.rest-length.abc
+%              ^ meta.abc-rest.abc storage.type.rest-length.abc
+%^^ meta.inline-field.voice.abc entity.name.tag.inline-field.voice.abc
+%   ^ meta.inline-field.voice.abc variable.parameter.voice.abc
+%    ^ meta.inline-field.voice.abc entity.name.tag.inline-field.voice.abc
+%      ^^ meta.barline.abc punctuation.separator.barline.abc
+%            ^ meta.barline.abc punctuation.separator.barline.abc
+%                 ^ meta.barline.abc punctuation.separator.barline.abc
+%                               ^ meta.barline.abc punctuation.separator.barline.abc
+%                                             ^ meta.barline.abc punctuation.separator.barline.abc
 w: Son que-sti~i cre-spi cri-ni~e
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 w: Que-sti son gli~oc-chi che mi-
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 [V: 2] |:c2BG|AAGc|(F/G/A/B/)c=A|B2AA         |
 w: Son que-sti~i cre-spi cri-ni~e que - - - - sto~il vi-so e
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 w: Que-sti son~gli oc-chi che mi-ran - - - - do fi-so mi-
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 [V: 3] |:z4  |f2ec|_ddcf        |(B/c/_d/e/)ff|
 w: Son que-sti~i cre-spi cri-ni~e que - - - - sto~il
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 w: Que-sti son~gli oc-chi che mi-ran - - - - do
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 % 5 - 9
+%<- meta.tune.abc comment.line.percentage.abc
 [V: 1] cAB2     |cAAA |c3B|G2!fermata!Gz ::e4|
 w: que-sto~il vi-so ond' io ri-man-go~uc-ci-so. Deh,
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 w: ran-do fi-so, tut-to re-stai con-qui-so.
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 [V: 2] AAG2     |AFFF |A3F|=E2!fermata!Ez::c4|
 w: que-sto~il vi-so ond' io ri-man-go~uc-ci-so. Deh,
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 w: ran-do fi-so tut-to re-stai con-qui-so.
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 [V: 3] (ag/f/e2)|A_ddd|A3B|c2!fermata!cz ::A4|
 w: vi - - - so ond' io ti-man-go~uc-ci-so. Deh,
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 w: fi - - - so tut-to re-stai con-qui-so.
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 % 10 - 15
+%<- meta.tune.abc comment.line.percentage.abc
 [V: 1] f_dec |B2c2|zAGF  |\
+%^^ meta.tune.abc meta.inline-field.voice.abc entity.name.tag.inline-field.voice.abc
+%   ^ meta.tune.abc meta.inline-field.voice.abc variable.parameter.voice.abc
+%    ^ meta.tune.abc meta.inline-field.voice.abc entity.name.tag.inline-field.voice.abc
+%      ^ meta.tune.abc constant.character.note.abc
+%       ^ meta.tune.abc constant.language.accidental.abc
+%        ^^^ meta.tune.abc constant.character.note.abc
+%            ^ meta.tune.abc meta.barline.abc punctuation.separator.barline.abc
+%             ^ meta.tune.abc constant.character.note.abc
+%              ^ meta.tune.abc storage.type.note-length.abc
+%               ^ meta.tune.abc constant.character.note.abc
+%                ^ meta.tune.abc storage.type.note-length.abc
+%                 ^ meta.tune.abc meta.barline.abc punctuation.separator.barline.abc
+%                  ^ meta.tune.abc meta.abc-rest.abc storage.type.abc-rest.abc
+%                   ^^^ meta.tune.abc constant.character.note.abc
+%                        ^ meta.tune.abc meta.barline.abc punctuation.separator.barline.abc
+%                         ^ meta.tune.abc support.function.line-continue.abc
 w: dim-me-lo ben mi-o, che que-sto\
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 =EFG2          |1F2z2:|2F8|] % more notes
+%^^^ source.abc meta.tune.abc constant.character.note.abc
+%   ^ source.abc meta.tune.abc storage.type.note-length.abc
+%              ^ source.abc meta.tune.abc meta.barline.abc punctuation.separator.barline.abc
+%               ^ source.abc meta.tune.abc meta.barline.abc punctuation.separator.barline.repeat-length.abc
+%              ^^ source.abc meta.tune.abc meta.barline.abc
+%                ^ source.abc meta.tune.abc constant.character.note.abc
+%                 ^ source.abc meta.tune.abc storage.type.note-length.abc
+%                  ^ source.abc meta.tune.abc meta.abc-rest.abc storage.type.abc-rest.abc
+%                   ^ source.abc meta.tune.abc meta.abc-rest.abc storage.type.rest-length.abc
+%                    ^^ source.abc meta.tune.abc meta.barline.abc punctuation.separator.barline.abc
+%                      ^ source.abc meta.tune.abc meta.barline.abc punctuation.separator.barline.repeat-length.abc
+%                    ^^^ source.abc meta.tune.abc meta.barline.abc
+%                       ^ source.abc meta.tune.abc constant.character.note.abc
+%                        ^ source.abc meta.tune.abc storage.type.note-length.abc
+%                         ^^ source.abc meta.tune.abc meta.barline.abc punctuation.separator.barline.abc
+%                            ^ source.abc meta.tune.abc comment.line.percentage.abc punctuation.definition.comment.abc
+%                            ^^^^^^^^^^^^ source.abc meta.tune.abc comment.line.percentage.abc
 w: sol de-si-o_. % more lyrics
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
+%                ^ meta.tune.abc meta.field.abc comment.line.percentage.abc punctuation.definition.comment.abc
+%                ^^^^^^^^^^^^^ meta.tune.abc meta.field.abc comment.line.percentage.abc
 [V: 2] ABGA  |G2AA|GF=EF |(GF3/2=E//D//E)|1F2z2:|2F8|]
+%^^ meta.inline-field.voice.abc entity.name.tag.inline-field.voice.abc
+%   ^ 
+%    ^ 
+%^^^^^ meta.inline-field.voice.abc
+%      ^^^^ constant.character.note.abc
+%            ^ punctuation.separator.barline.abc
+%              ^ storage.type.note-length.abc
+%             ^ constant.character.note.abc
+%               ^^ constant.character.note.abc
+%                 ^ punctuation.separator.barline.abc
+%                  ^^ constant.character.note.abc
+%                    ^ constant.language.accidental.abc
+%                     ^^ constant.character.note.abc
+%                        ^ punctuation.separator.barline.abc
+%                         ^ support.function.slur.abc
+%                          ^^ constant.character.note.abc
+%                            ^^^ storage.type.note-length.abc
+%                               ^ constant.language.accidental.abc
+%                                ^ constant.character.note.abc
+%                                 ^^ storage.type.note-length.abc
+%                                   ^ constant.character.note.abc
+%                                    ^^ storage.type.note-length.abc
+%                                      ^ constant.character.note.abc
+%                                       ^ support.function.slur.abc
+%                                        ^ punctuation.separator.barline.abc
+%                                         ^ punctuation.separator.barline.repeat-length.abc
+%                                        ^^ meta.barline.abc
+%                                          ^ constant.character.note.abc
+%                                           ^ storage.type.note-length.abc
+%                                            ^ storage.type.abc-rest.abc
+%                                             ^ storage.type.rest-length.abc
+%                                            ^^ meta.abc-rest.abc
+%                                              ^^ punctuation.separator.barline.abc
+%                                                ^ punctuation.separator.barline.repeat-length.abc
+%                                              ^^^ meta.barline.abc
+%                                                 ^ constant.character.note.abc
+%                                                  ^ storage.type.note-length.abc
+%                                                   ^^ punctuation.separator.barline.abc
 w: dim-me-lo ben mi-o, che que-sto sol de-si - - - - o_.
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
 [V: 3] _dBc>d|e2AF|=EFc_d|c4             |1F2z2:|2F8|]
+%^^ meta.inline-field.voice.abc entity.name.tag.inline-field.voice.abc
+%   ^ 
+%    ^ 
+%^^^^^ meta.inline-field.voice.abc
+%      ^ constant.language.accidental.abc
+%       ^^^ constant.character.note.abc
+%          ^ storage.type.note-length.abc
+%           ^ constant.character.note.abc
+%            ^ punctuation.separator.barline.abc
+%             ^ constant.character.note.abc
+%              ^ storage.type.note-length.abc
+%               ^^ constant.character.note.abc
+%                 ^ punctuation.separator.barline.abc
+%                  ^ constant.language.accidental.abc
+%                   ^^^ constant.character.note.abc
+%                      ^ constant.language.accidental.abc
+%                       ^ constant.character.note.abc
+%                        ^ punctuation.separator.barline.abc
+%                         ^ constant.character.note.abc
+%                          ^ storage.type.note-length.abc
+%                                        ^ punctuation.separator.barline.abc
+%                                         ^ punctuation.separator.barline.repeat-length.abc
+%                                        ^^ meta.barline.abc
+%                                          ^ constant.character.note.abc
+%                                           ^ storage.type.note-length.abc
+%                                            ^ storage.type.abc-rest.abc
+%                                             ^ storage.type.rest-length.abc
+%                                            ^^ meta.abc-rest.abc
+%                                              ^^ punctuation.separator.barline.abc
+%                                                ^ punctuation.separator.barline.repeat-length.abc
+%                                              ^^^ meta.barline.abc
+%                                                 ^ constant.character.note.abc
+%                                                  ^ storage.type.note-length.abc
+%                                                   ^^ punctuation.separator.barline.abc
 w: dim-me-lo ben mi-o, che que-sto sol de-si-o_.
+%<- meta.field.abc
+%^ support.function.field.abc
+% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ meta.field.abc string.unquoted.field.abc
+
+X:2
+%<- meta.tune.abc meta.field.index.abc
+T:A. A. Cameron's
+%<- meta.tune.abc meta.field.title.abc
+M:4/4
+%<- meta.tune.abc meta.field.abc
+O:Scottish
+%<- meta.tune.abc meta.field.abc
+R:Strathspey
+%<- meta.tune.abc meta.field.abc
+K:D
+%<- meta.field.key.head.abc
+e<A A2 B>G d>B|e<A A2 d>g (3fed|e<A A2 B>G d>B|B<G G>B d>g (3fed:|
+%<- meta.tune.abc
+%                         ^^ meta.tune.abc support.type.tuplet.abc
+%                                                          ^^ meta.tune.abc support.type.tuplet.abc
+B<e e>f g>e a>f|B<e e>f g>e (3fed|B<e e>f g>e a>f|d<B G>B d>g (3fed:|
+%<- meta.tune.abc
+%                           ^^ meta.tune.abc support.type.tuplet.abc
+%                                                             ^^ meta.tune.abc support.type.tuplet.abc
+
+X:3
+%<- meta.field.index.abc
+T:Atholl Brose
+%<- meta.field.title.abc
+M:4/4
+%<- meta.field.abc
+O:Scottish
+%<- meta.field.abc
+R:Strathspey
+%<- meta.field.abc
+% in this example, which reproduces Highland Bagpipe gracing,
+%<- comment.line.percentage.abc
+%  the large number of grace notes mean that it is more convenient to be specific about
+%<- comment.line.percentage.abc
+%  score line-breaks (using the $ symbol), rather than using code line breaks to indicate them
+%<- comment.line.percentage.abc
+I:linebreak $
+%<- meta.instruction.abc
+%^ meta.instruction.abc entity.name.tag.instruction.abc
+% ^^^^^^^^^ meta.instruction.abc keyword.operator.word.directive.abc
+%          ^^ meta.instruction.abc variable.parameter.directive.abc
+K:D
+%<- meta.field.key.head.abc
+{gcd}c<{e}A {gAGAG}A2 {gef}e>A {gAGAG}Ad|
+%^^^^ meta.grace.abc
+%   ^ support.type.grace.abc
+%      ^ support.type.grace.abc
+%        ^ support.type.grace.abc
+%      ^^^ meta.grace.abc
+%           ^ support.type.grace.abc
+%                 ^ support.type.grace.abc
+%           ^^^^^^^ meta.grace.abc
+%                     ^ support.type.grace.abc
+%                         ^ support.type.grace.abc
+%                     ^^^^^ meta.grace.abc
+%                              ^ support.type.grace.abc
+%                                    ^ support.type.grace.abc
+%                              ^^^^^^^ meta.grace.abc
+{gcd}c<{e}A {gAGAG}A>e {ag}a>f {gef}e>d|
+%^^^^ meta.grace.abc
+%      ^^^ meta.grace.abc
+%           ^^^^^^^ meta.grace.abc
+%                      ^^^^ meta.grace.abc
+%                              ^^^^^ meta.grace.abc
+{gcd}c<{e}A {gAGAG}A2 {gef}e>A {gAGAG}Ad|
+%^^^^ meta.grace.abc
+%      ^^^ meta.grace.abc
+%           ^^^^^^^ meta.grace.abc
+%                     ^^^^^ meta.grace.abc
+%                              ^^^^^^^ meta.grace.abc
+{g}c/d/e {g}G>{d}B {gf}gG {dc}d>B:|$
+%^^ meta.grace.abc
+%        ^^^ meta.grace.abc
+%             ^^^ meta.grace.abc
+%                  ^^^^ meta.grace.abc
+%                         ^^^^ meta.grace.abc
+%                                  ^ support.type.line-break.abc
+{g}c<e {gf}g>e {ag}a>e {gf}g>e|
+%^^ meta.grace.abc
+%      ^^^^ meta.grace.abc
+%              ^^^^ meta.grace.abc
+%                      ^^^^ meta.grace.abc
+{g}c<e {gf}g>e {ag}a2 {GdG}a>d|
+%^^ meta.grace.abc
+%      ^^^^ meta.grace.abc
+%              ^^^^ meta.grace.abc
+%                     ^^^^^ meta.grace.abc
+{g}c<e {gf}g>e {ag}a>e {gf}g>f|
+%^^ meta.grace.abc
+%      ^^^^ meta.grace.abc
+%              ^^^^ meta.grace.abc
+%                      ^^^^ meta.grace.abc
+{gef}e>d {gf}g>d {gBd}B<{e}G {dc}d>B|
+{g}c<e {gf}g>e {ag}a>e {gf}g>e|
+%^^ meta.grace.abc
+%      ^^^^ meta.grace.abc
+%              ^^^^ meta.grace.abc
+%                      ^^^^ meta.grace.abc
+{g}c<e {gf}g>e {ag}a2 {GdG}ad|
+%^^ meta.grace.abc
+%      ^^^^ meta.grace.abc
+%              ^^^^ meta.grace.abc
+%                     ^^^^^ meta.grace.abc
+{g}c<{GdG}e {gf}ga {f}g>e {g}f>d|
+%^^ meta.grace.abc
+%    ^^^^^ meta.grace.abc
+%           ^^^^ meta.grace.abc
+%                  ^^^ meta.grace.abc
+%                         ^^^ meta.grace.abc
+{g}e/f/g {Gdc}d>c {gBd}B<{e}G {dc}d2|]
+%^^ meta.grace.abc
+%        ^^^^^ meta.grace.abc
+%                 ^^^^^ meta.grace.abc
+%                        ^^^ meta.grace.abc
+%                             ^^^^ meta.grace.abc
