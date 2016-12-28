@@ -302,7 +302,7 @@ contexts:
   # The following 3 contexts cover highlighting of directives,
   # instruction fields, & inline instruction fields.
   directive:
-    - match: '((?>%%))\s*(\w*)\b'
+    - match: '(%%)\s*(\w+)\b'
       scope: meta.directive.abc comment.line.percentage.directive.abc
       captures:
         1: punctuation.definition.comment.abc
@@ -335,6 +335,10 @@ contexts:
               pop: true
         - match: $
           pop: true
+    - match: '(%%)'
+      scope: meta.directive.abc comment.line.percentage.directive.abc
+      captures:
+        1: punctuation.definition.comment.abc
 
   instruction-field:
     # instruction field
