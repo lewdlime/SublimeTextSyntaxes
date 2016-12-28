@@ -1,0 +1,127 @@
+%YAML 1.2
+---
+name: GoCoEdit Mode
+file_extensions: ["gcemode"]
+scope: source.gcemode
+
+contexts:
+  prototype:
+    - include: comments
+
+  main:
+    - include: value
+
+  array:
+    - match: '\['
+      scope: punctuation.definition.array.begin.gcemode
+      push:
+        - meta_scope: meta.structure.array.gcemode
+        - match: '\]'
+          scope: punctuation.definition.array.end.gcemode
+          pop: true
+        - include: value
+        - match: ","
+          scope: punctuation.separator.array.gcemode
+    # - match: '[^\s\]]'
+    #   scope: invalid.illegal.expected-array-separator.gcemode
+
+  comments:
+    - match: /\*\*
+      scope: punctuation.definition.comment.gcemode
+      push:
+        - meta_scope: comment.block.documentation.gcemode
+        - match: \*/
+          pop: true
+    - match: /\*
+      scope: punctuation.definition.comment.gcemode
+      push:
+        - meta_scope: comment.block.gcemode
+        - match: \*/
+          pop: true
+    - match: (//).*$\n?
+      scope: comment.line.double-slash.gcemode
+      captures:
+        1: punctuation.definition.comment.gcemode
+
+  constant:
+    - match: \b(?:true|false|null)\b
+      scope: constant.language.gcemode
+
+  number:
+    # handles integer and decimal numbers
+    - match: |-
+        (?x:-?(?:0|[1-9]\d*)
+          (?:(?:\.\d+)?(?:[eE][+-]?\d+)?)?)
+      scope: constant.numeric.gcemode
+
+  object:
+    # a JSON object
+    - match: '\{'
+      scope: punctuation.definition.dictionary.begin.gcemode
+      push:
+        - meta_scope: meta.structure.dictionary.gcemode
+        - include: string
+        - include: comments
+        - match: |-
+            (?x)
+              (?:^\s*)?(\")
+              (token(?:izer)?|name|ext|state|parse|regex|
+               overwriteState|stateAfterMatch|recoverState|
+               onlyOnLineStart|dash_docsets|symbol_search|hint|global)
+              (\")\s*(:)
+          scope: meta.structure.key.gcemode
+          captures:
+            1: punctuation.definition.string.begin.gcemode
+            2: keyword.control.gcemode
+            3: punctuation.definition.string.end.gcemode
+            4: punctuation.separator.dictionary.key-value.gcemode
+          push:
+            - meta_scope: meta.structure.dictionary.value.gcemode
+            - match: '(,)|(?=\})'
+              captures:
+                1: punctuation.separator.dictionary.pair.gcemode
+              pop: true
+            - include: value
+            - match: '[^\s,]'
+              scope: invalid.illegal.expected-dictionary-separator.gcemode
+        - match: '\}'
+          scope: punctuation.definition.dictionary.end.gcemode
+          pop: true
+        # '[^\s\}]'
+        - match: '[^\s:\}]'
+          scope: invalid.illegal.expected-dictionary-separator.gcemode
+
+  string:
+    - match: '"'
+      scope: punctuation.definition.string.begin.gcemode
+      push:
+        - meta_scope: string.quoted.double.gcemode
+        - include: keywords
+        - match: (?x:\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))
+          scope: constant.character.escape.gcemode
+        - match: \\.
+          scope: invalid.illegal.unrecognized-string-escape.gcemode
+        - match: '"'
+          scope: punctuation.definition.string.end.gcemode
+          pop: true
+
+  keywords:
+    - match: |-
+        (?x)
+          (?:^\s*)?(\")
+          (name|defaults|gutters|tokens|(?:comment|number|atom|
+          property|attribute|keyword|builtin|string|
+          variable|variable2|variable3|def|bracket|tag|
+          header|link|error)_(?:color|background|style|decoration|weight)|
+          (?:\w+)_(?:color|background|style|decoration|weight)|
+           onlyOnLineStart|dash_docsets|symbol_search|hint|global)
+          (\")\s*(:)
+      scope: keyword.control.gcemode
+
+  value:
+    - include: constant
+    - include: number
+    - include: string
+    - include: array
+    - include: object
+...

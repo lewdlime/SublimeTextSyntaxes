@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+    <key>name</key>
+    <string>Symbol List</string>
+    <key>scope</key>
+    <string>meta.field.index.abc, meta.field.title.abc, meta.inline-field.title.abc, meta.field.part.abc, meta.inline-field.part.abc, meta.field.voice.abc, meta.inline-field.voice.abc</string>
+    <key>settings</key>
+    <dict>
+        <key>showInSymbolList</key>
+        <integer>1</integer>
+        <key>symbolTransformation</key>
+        <string>
+            s/^X:\s*(\d+)/Tune #$1/;
+            s/^T:\s*([^%\n\r]+)(?:\s*%.*)?/Title: $1/;
+            s/\[T:\s*([^%\r\n\]]+)\]/Title: $1/;
+            s/^P:\s*([^%\s\n\r]+)\b(?:\s+[^%\r\n]*)?(?:\s*%.*)?/Part: $1/;
+            s/\[P:\s*([^%\s\r\n\]]+)\b(?:\s+[^%\r\n\]]*)?\]/Part: $1/;
+            s/^V:\s*([^%\s\n\r]+)\b(?:\s+[^%\r\n]*)?(?:\s*%.*)?/Voice: $1/;
+            s/\[V:\s*([^%\s\r\n\]]+)\b(?:\s+[^%\r\n\]]*)?\]/Voice: $1/;
+        </string>
+    </dict>
+</dict>
+</plist>

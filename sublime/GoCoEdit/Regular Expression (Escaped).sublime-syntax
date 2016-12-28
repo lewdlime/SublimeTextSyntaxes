@@ -1,0 +1,104 @@
+%YAML 1.2
+---
+name: Regular Expression (Escaped)
+file_extensions:
+  - ere
+scope: source.escapedregexp
+contexts:
+  main:
+    - include: classes
+    - include: anchorsWithBackslash
+    - include: allEscapes
+    - include: anchors
+    - include: quantifiers
+    - include: granularQuantifier
+    - include: operators
+    - include: sets
+    - include: groups
+
+  allEscapes:
+    # Order matters.
+    - include: regexpEscapeSequences
+    - include: regexpEscapedBackslash
+    - include: jsonEscapeSequences
+
+  anchors:
+    - match: '[$^]'
+      scope: entity.other.attribute-name.anchor.escapedregexp
+
+  anchorsWithBackslash:
+    - match: '(?:\\\\[AbBZ])'
+      scope: entity.other.attribute-name.anchor.escapedregexp
+
+  classes:
+    # 'XXX: Add unicode escapes \x00 and escapes within comments.'
+    - match: '\\\\[dDsSwW]'
+      scope: keyword.other.character-class.escapedregexp
+
+  granularQuantifier:
+    - scope: meta.granular.quantifier.escapedregexp
+      match: (\{)([0-9]+)(,)?([0-9]+)?(\})
+      captures:
+        1: keyword.other.punctuation.quantifier.start.escapedregexp
+        2: constant.numeric.escapedregexp
+        3: keyword.other.separator.escapedregexp
+        4: constant.numeric.escapedregexp
+        5: keyword.other.punctuation.quantifier.end.escapedregexp
+
+  groups:
+    - match: (\()
+      captures:
+        1: string.regexp.group.escapedregexp
+      # 'XXX: Implement named groups, options and yes/no groups.'
+      push:
+        - meta_scope: meta.group.escapedregexp
+        - match: (\))
+          captures:
+            0: string.regexp.group.escapedregexp
+          pop: true
+        - match: '(\?(?:[:=!>]|<[=!]))'
+          scope: support.function.assertion.escapedregexp
+        - include: main
+
+  jsonEscapeSequences:
+    - match: '\\[bfntr"/]'
+      scope: entity.other.attribute-name.escape.sequence.json.escapedregexp
+
+  operators:
+    - match: '[|.]'
+      scope: keyword.other.operator.escapedregexp
+
+  quantifiers:
+    - match: '(\+|\*|\?)(\?)?'
+      scope: keyword.other.quantifier.escapedregexp
+
+  regexpEscapeSequences:
+    # Escape next char if the slash isn't being escaped itself.
+    - match: '(?<!\\\\)\\\\(?:[]^+?*.(){}$\[])'
+      scope: constant.character.escape.sequence.regexp.escapedregexp
+
+  regexpEscapedBackslash:
+    - match: \\\\
+      scope: constant.character.escape.sequence.regexp.escapedregexp
+
+  sets:
+    - match: (\[)(\^)?(\])?
+      captures:
+        1: keyword.other.set.escapedregexp
+        2: keyword.other.set.operator.negate.escapedregexp
+        3: string.set.element.escapedregexp
+      push:
+        - meta_scope: meta.set.escapedregexp
+        - match: '(\])'
+          captures:
+            1: keyword.other.set.escapedregexp
+          pop: true
+        - match: '[A-Za-z0-9](-)[A-Za-z0-9]'
+          captures:
+            1: keyword.operator.other.set.range.separator.escapedregexp
+          scope: support.function.set.range.escapedregexp
+        - include: regexpEscapeSequences
+        - include: classes
+        - include: jsonEscapeSequences
+        - match: '.*?'
+          scope: string.set.element.escapedregexp

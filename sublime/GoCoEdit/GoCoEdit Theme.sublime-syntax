@@ -1,0 +1,114 @@
+%YAML 1.2
+---
+file_extensions: ["gcetheme"]
+scope: source.gcetheme
+
+contexts:
+  prototype:
+    - include: comments
+
+  main:
+    - include: value
+
+  array:
+    - match: '\['
+      scope: punctuation.definition.array.begin.gcetheme
+      push:
+        - meta_scope: meta.structure.array.gcetheme
+        - match: '\]'
+          scope: punctuation.definition.array.end.gcetheme
+          pop: true
+        - include: value
+        - match: ","
+          scope: punctuation.separator.array.gcetheme
+    - match: '[^\s\]]'
+      scope: invalid.illegal.expected-array-separator.gcetheme
+
+  comments:
+    - match: /\*\*
+      scope: punctuation.definition.comment.gcetheme
+      push:
+        - meta_scope: comment.block.documentation.gcetheme
+        - match: \*/
+          pop: true
+    - match: /\*
+      scope: punctuation.definition.comment.gcetheme
+      push:
+        - meta_scope: comment.block.gcetheme
+        - match: \*/
+          pop: true
+    - match: (//).*$\n?
+      scope: comment.line.double-slash.gcetheme
+      captures:
+        1: punctuation.definition.comment.gcetheme
+
+  constant:
+    - match: \b(?:true|false|null)\b
+      scope: constant.language.gcetheme
+
+  number:
+    # handles integer and decimal numbers
+    - match: |-
+        (?x:-?(?:0|[1-9]\d*)
+          (?:(?:\.\d+)?(?:[eE][+-]?\d+)?)?)
+      scope: constant.numeric.gcetheme
+
+  object:
+    # a JSON object
+    - match: '\{'
+      scope: punctuation.definition.dictionary.begin.gcetheme
+      push:
+        - meta_scope: meta.structure.dictionary.gcetheme
+        - include: string
+        - include: comments
+        - match: |-
+            (?x)
+              (?:^\s*)?(\")
+              (name|defaults|gutters|tokens|(?:comment|number|atom|
+              property|attribute|keyword|builtin|string|
+              variable|variable2|variable3|def|bracket|tag|
+              header|link|error)_(?:color|background|style|decoration|weight)|
+              (?:\w+)_(?:color|background|style|decoration|weight)|
+               onlyOnLineStart|dash_docsets|symbol_search|hint|global)
+              (\")\s*(:)
+          scope: meta.structure.key.gcetheme
+          captures:
+            1: punctuation.definition.string.begin.gcetheme
+            2: keyword.control.gcetheme
+            3: punctuation.definition.string.end.gcetheme
+            4: punctuation.separator.dictionary.key-value.gcetheme
+          push:
+            - meta_scope: meta.structure.dictionary.value.gcetheme
+            - match: '(,)|(?=\})'
+              captures:
+                1: punctuation.separator.dictionary.pair.gcetheme
+              pop: true
+            - include: value
+            - match: '[^\s,]'
+              scope: invalid.illegal.expected-dictionary-separator.gcetheme
+        - match: '\}'
+          scope: punctuation.definition.dictionary.end.gcetheme
+          pop: true
+    - match: '[^\s:\}]' # '[^\s\}]'
+      scope: invalid.illegal.expected-dictionary-separator.gcetheme
+
+  string:
+    - match: '"'
+      scope: punctuation.definition.string.begin.gcetheme
+      push:
+        - meta_scope: string.quoted.double.gcetheme
+        - match: (?x:\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))
+          scope: constant.character.escape.gcetheme
+        - match: \\.
+          scope: invalid.illegal.unrecognized-string-escape.gcetheme
+        - match: '"'
+          scope: punctuation.definition.string.end.gcetheme
+          pop: true
+
+  value:
+    - include: constant
+    - include: number
+    - include: string
+    - include: array
+    - include: object
+    - include: comments
