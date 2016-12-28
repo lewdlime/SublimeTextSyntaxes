@@ -10,6 +10,7 @@
   <body>
     <pre class="abc">
 %abc-2.2
+%%measurenb 1
 %%linebreak none
 
 X:${2:1}
