@@ -59,7 +59,10 @@ contexts:
               (?:^\s*)?(\")
               (token(?:izer)?|name|ext|state|parse|
                overwriteState|stateAfterMatch|recoverState|
-               onlyOnLineStart|dash_docsets|symbol_search|hint|global)
+               onlyOnLineStart|dash_docsets|symbol_search|hint|global|
+               comment|number|atom|property|attribute|keyword|builtin|
+               string|string-2|variable|variable-2|variable2|variable3|def|
+               bracket|tag|header|link|error)\b
               (\")\s*(:)
           scope: meta.structure.key.gcemode
           captures:
@@ -96,9 +99,14 @@ contexts:
         1: punctuation.definition.string.begin.gcemode
       push:
         - meta_scope: string.quoted.double.gcemode
-        - include: keywords
         - match: (?x:\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))
           scope: constant.character.escape.gcemode
+        - match: |-
+            (?x)
+              \b(comment|number|atom|property|attribute|keyword|builtin|
+                 string|string-2|variable|variable-2|variable2|variable3|
+                 def|bracket|tag|header|link|error)\b
+          scope: support.constant.gcemode
         - match: '\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4}).'
           scope: invalid.illegal.unrecognized-string-escape.gcemode
         - match: '(")'
@@ -125,23 +133,15 @@ contexts:
     - match: '(")'
       scope: punctuation.definition.string.begin.gcemode
       push:
+        - meta_scope: string.quoted.double.regex.gcemode
+        - clear_scopes: true
         - include: "Packages/GoCoEdit/Regular Expression (Escaped).sublime-syntax"
-        - match: '((?!\\)(?=\")\",?)'
-          scope: punctuation.definition.string.end.gcemode
+        - match: ','
+          scope: punctuation.separator.array.gcemode
+        - match: '(?!\\)((?=\")\")'
+          captures:
+            1: punctuation.definition.string.end.gcemode
           pop: true
-
-  keywords:
-    # TODO: Make 'token' value match only from allowed list of theme tokens
-    - match: |-
-        (?x)
-          (?:^\s*)?
-          (?=\")(name|ext|gutters|token(?:izer)?|state|parse|token|extends|
-          onlyOnLineStart|stateAfterMatch|overwriteState|recoverState|
-          dash_docsets|symbol_search)(?=\")
-          \s*(:)
-      captures:
-        1: punctuation.definition.string.begin.gcemode
-        2: keyword.control.gcemode
 
   value:
     - include: constant
