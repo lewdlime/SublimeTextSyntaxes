@@ -7,7 +7,7 @@
 		<string>gcemode</string>
 	</array>
 	<key>name</key>
-	<string>GoCoEdit Custom Mode</string>
+	<string>GoCoEdit Mode</string>
 	<key>patterns</key>
 	<array>
 		<dict>
@@ -57,91 +57,24 @@
 					<key>name</key>
 					<string>punctuation.separator.array.gcemode</string>
 				</dict>
-				<dict>
-					<key>match</key>
-					<string>[^\s\]]</string>
-					<key>name</key>
-					<string>invalid.illegal.expected-array-separator.gcemode</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#comments</string>
-				</dict>
 			</array>
 		</dict>
 		<key>comments</key>
 		<dict>
-			<key>patterns</key>
-			<array>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
 				<dict>
-					<key>begin</key>
-					<string>(/\*\*)</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.gcemode</string>
-						</dict>
-					</dict>
-					<key>comment</key>
-					<string>Block Documentation Comments</string>
-					<key>end</key>
-					<string>(\*/)</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.gcemode</string>
-						</dict>
-					</dict>
 					<key>name</key>
-					<string>comment.block.documentation.gcemode</string>
+					<string>punctuation.definition.comment.gcemode</string>
 				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(/\*)</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.gcemode</string>
-						</dict>
-					</dict>
-					<key>comment</key>
-					<string>Block Comments</string>
-					<key>end</key>
-					<string>(\*/)</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.gcemode</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>comment.block.gcemode</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.comment.gcemode</string>
-						</dict>
-					</dict>
-					<key>comment</key>
-					<string>Line Comments</string>
-					<key>match</key>
-					<string>(//).*$\n?</string>
-					<key>name</key>
-					<string>comment.line.double-slash.gcemode</string>
-				</dict>
-			</array>
+			</dict>
+			<key>comment</key>
+			<string>Line Comments</string>
+			<key>match</key>
+			<string>(//).*$\n?</string>
+			<key>name</key>
+			<string>comment.line.double-slash.gcemode</string>
 		</dict>
 		<key>constant</key>
 		<dict>
@@ -153,109 +86,239 @@
 		<key>number</key>
 		<dict>
 			<key>comment</key>
-			<string>handles integer and decimal numbers</string>
+			<string>Handles integer and decimal numbers</string>
 			<key>match</key>
-			<string>(?x:-?(?:0|[1-9]\d*)
-  (?:(?:\.\d+)?(?:[eE][+-]?\d+)?)?)</string>
+			<string>(?x)
+  (-?(?:0|[1-9]\d*)(?:(?:\.\d+)?(?:[eE][+-]?\d+)?)?)</string>
 			<key>name</key>
 			<string>constant.numeric.gcemode</string>
 		</dict>
 		<key>object</key>
 		<dict>
-			<key>begin</key>
-			<string>(\{)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.dictionary.begin.gcemode</string>
-				</dict>
-			</dict>
-			<key>comment</key>
-			<string>a JSON object</string>
-			<key>end</key>
-			<string>(\})</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.dictionary.end.gcemode</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.structure.dictionary.gcemode</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>#string</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#comments</string>
-				</dict>
-				<dict>
 					<key>begin</key>
-					<string>(?x)
-  (?:^\s*)?(\")
-  (token(?:izer)?|name|ext|state|parse|regex|
-   overwriteState|stateAfterMatch|recoverState|
-   onlyOnLineStart|dash_docsets|symbol_search|hint|global)
-  (\")\s*(:)</string>
+					<string>(\{)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.begin.gcemode</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.control.gcemode</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string.end.gcemode</string>
-						</dict>
-						<key>4</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.separator.dictionary.key-value.gcemode</string>
+							<string>punctuation.definition.dictionary.begin.gcemode</string>
 						</dict>
 					</dict>
-					<key>contentName</key>
-					<string>meta.structure.dictionary.value.gcemode</string>
+					<key>comment</key>
+					<string>A JSON object</string>
 					<key>end</key>
-					<string>(,)|(?=\})</string>
+					<string>(\})</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.separator.dictionary.pair.gcemode</string>
+							<string>punctuation.definition.dictionary.end.gcemode</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.structure.key.gcemode</string>
+					<string>meta.structure.dictionary.gcemode</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#value</string>
+							<string>#string</string>
 						</dict>
 						<dict>
 							<key>include</key>
 							<string>#comments</string>
 						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?x)
+  (?:^\s*)?(\")
+  (token(?:izer)?|name|ext|state|parse|
+   overwriteState|stateAfterMatch|recoverState|
+   onlyOnLineStart|dash_docsets|symbol_search|hint|global|
+   comment|number|atom|property|attribute|keyword|builtin|
+   string(?:-2)?|variable(?:-2)?|variable2|variable3|def|
+   bracket|tag|header|link|error)
+  (\")\s*(:)</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.begin.gcemode</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.control.gcemode</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.end.gcemode</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.dictionary.key-value.gcemode</string>
+								</dict>
+							</dict>
+							<key>contentName</key>
+							<string>meta.structure.dictionary.value.gcemode</string>
+							<key>end</key>
+							<string>(,)|(?=\})</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.dictionary.pair.gcemode</string>
+								</dict>
+							</dict>
+							<key>name</key>
+							<string>meta.structure.key.gcemode</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#value</string>
+								</dict>
+							</array>
+						</dict>
+						<dict>
+							<key>begin</key>
+							<string>(?:^\s*)?(?&gt;(\")(regex)(\")\s*(:))</string>
+							<key>beginCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.begin.gcemode</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.control.regex.gcemode</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.definition.string.end.gcemode</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.dictionary.key-value.gcemode</string>
+								</dict>
+							</dict>
+							<key>contentName</key>
+							<string>meta.structure.dictionary.value.gcemode</string>
+							<key>end</key>
+							<string>(,)|(?=\})</string>
+							<key>endCaptures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>punctuation.separator.dictionary.pair.gcemode</string>
+								</dict>
+							</dict>
+							<key>name</key>
+							<string>meta.structure.key.regex.gcemode</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#regexString</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#array</string>
+								</dict>
+							</array>
+						</dict>
 					</array>
 				</dict>
+			</array>
+		</dict>
+		<key>regexArray</key>
+		<dict>
+			<key>begin</key>
+			<string>(\[)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.array.begin.gcemode</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\])</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.array.end.gcemode</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>meta.structure.array.regex.gcemode</string>
+			<key>patterns</key>
+			<array>
 				<dict>
 					<key>include</key>
-					<string>#comments</string>
+					<string>#regexString</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>,</string>
+					<key>name</key>
+					<string>punctuation.separator.array.gcemode</string>
+				</dict>
+			</array>
+		</dict>
+		<key>regexString</key>
+		<dict>
+			<key>begin</key>
+			<string>((?!\\)"(?!regex))</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.gcemode</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Escaped Regex Strings</string>
+			<key>end</key>
+			<string>((?!regex|\\)")</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.gcemode</string>
+				</dict>
+			</dict>
+			<key>name</key>
+			<string>string.quoted.double.regex.gcemode</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.escapedregexp</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\\"</string>
+					<key>name</key>
+					<string>constant.character.escape.regexp.gcemode</string>
 				</dict>
 			</array>
 		</dict>
@@ -271,6 +334,8 @@
 					<string>punctuation.definition.string.begin.gcemode</string>
 				</dict>
 			</dict>
+			<key>comment</key>
+			<string>Strings</string>
 			<key>end</key>
 			<string>(")</string>
 			<key>endCaptures</key>
@@ -293,7 +358,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\\.</string>
+					<string>\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4}).</string>
 					<key>name</key>
 					<string>invalid.illegal.unrecognized-string-escape.gcemode</string>
 				</dict>
@@ -323,16 +388,12 @@
 					<key>include</key>
 					<string>#object</string>
 				</dict>
-				<dict>
-					<key>include</key>
-					<string>#comments</string>
-				</dict>
 			</array>
 		</dict>
 	</dict>
 	<key>scopeName</key>
 	<string>source.gcemode</string>
 	<key>uuid</key>
-	<string>3e31b235-394a-4963-90cd-cccf56085c45</string>
+	<string>d354a39b-b86a-4ee1-8535-40cbfe06b4dc</string>
 </dict>
 </plist>

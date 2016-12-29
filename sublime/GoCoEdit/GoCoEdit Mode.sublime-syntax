@@ -12,32 +12,20 @@ contexts:
     - include: value
 
   array:
-    - match: '\['
-      scope: punctuation.definition.array.begin.gcemode
+    - match: '(\[)'
+      captures:
+        1: punctuation.definition.array.begin.gcemode
       push:
         - meta_scope: meta.structure.array.gcemode
-        - match: '\]'
-          scope: punctuation.definition.array.end.gcemode
+        - match: '(\])'
+          captures:
+            1: punctuation.definition.array.end.gcemode
           pop: true
         - include: value
-        - match: ","
+        - match: ','
           scope: punctuation.separator.array.gcemode
-    # - match: '[^\s\]]'
-    #   scope: invalid.illegal.expected-array-separator.gcemode
 
   comments:
-    - match: /\*\*
-      scope: punctuation.definition.comment.gcemode
-      push:
-        - meta_scope: comment.block.documentation.gcemode
-        - match: \*/
-          pop: true
-    - match: /\*
-      scope: punctuation.definition.comment.gcemode
-      push:
-        - meta_scope: comment.block.gcemode
-        - match: \*/
-          pop: true
     - match: (//).*$\n?
       scope: comment.line.double-slash.gcemode
       captures:
@@ -48,9 +36,10 @@ contexts:
       scope: constant.language.gcemode
 
   number:
-    # handles integer and decimal numbers
+    # Handles integer and decimal numbers
     - match: |-
-        (?x:-?(?:0|[1-9]\d*)
+        (?x)
+          (-?(?:0|[1-9]\d*)
           (?:(?:\.\d+)?(?:[eE][+-]?\d+)?)?)
       scope: constant.numeric.gcemode
 
@@ -60,12 +49,15 @@ contexts:
       scope: punctuation.definition.dictionary.begin.gcemode
       push:
         - meta_scope: meta.structure.dictionary.gcemode
+        - match: '\}'
+          scope: punctuation.definition.dictionary.end.gcemode
+          pop: true
         - include: string
-        - include: comments
+      # Global Keys
         - match: |-
             (?x)
               (?:^\s*)?(\")
-              (token(?:izer)?|name|ext|state|parse|regex|
+              (token(?:izer)?|name|ext|state|parse|
                overwriteState|stateAfterMatch|recoverState|
                onlyOnLineStart|dash_docsets|symbol_search|hint|global)
               (\")\s*(:)
@@ -82,41 +74,74 @@ contexts:
                 1: punctuation.separator.dictionary.pair.gcemode
               pop: true
             - include: value
-            - match: '[^\s,]'
-              scope: invalid.illegal.expected-dictionary-separator.gcemode
-        - match: '\}'
-          scope: punctuation.definition.dictionary.end.gcemode
-          pop: true
-        # '[^\s\}]'
-        - match: '[^\s:\}]'
-          scope: invalid.illegal.expected-dictionary-separator.gcemode
+      # Regexp Key(s)
+        - match: '(?:^\s*)?(\")(regex)(\")\s*(:)'
+          scope: meta.structure.key.gcemode
+          captures:
+            1: punctuation.definition.string.begin.gcemode
+            2: keyword.control.regex.gcemode
+            3: punctuation.definition.string.end.gcemode
+            4: punctuation.separator.dictionary.key-value.gcemode
+          push:
+            - meta_scope: meta.structure.dictionary.value.gcemode
+            - match: '(,)|(?=\})'
+              captures:
+                1: punctuation.separator.dictionary.pair.gcemode
+              pop: true
+            - include: regexString
 
   string:
-    - match: '"'
-      scope: punctuation.definition.string.begin.gcemode
+    - match: '(")'
+      captures:
+        1: punctuation.definition.string.begin.gcemode
       push:
         - meta_scope: string.quoted.double.gcemode
         - include: keywords
         - match: (?x:\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))
           scope: constant.character.escape.gcemode
-        - match: \\.
+        - match: '\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4}).'
           scope: invalid.illegal.unrecognized-string-escape.gcemode
-        - match: '"'
+        - match: '(")'
+          captures:
+            1: punctuation.definition.string.end.gcemode
+          pop: true
+
+  regexArray:
+    - scope: meta.structure.array.regex.gcemode
+      match: '(\[)'
+      captures:
+        1: punctuation.definition.array.begin.gcemode
+      push:
+        - match: '(\])'
+          captures:
+            1: punctuation.definition.array.end.gcemode
+          pop: true
+      patterns:
+        - include: '#regexString'
+        - match: ','
+          name: punctuation.separator.array.gcemode
+
+  regexString:
+    - match: '(")'
+      scope: punctuation.definition.string.begin.gcemode
+      push:
+        - include: "Packages/GoCoEdit/Regular Expression (Escaped).sublime-syntax"
+        - match: '((?!\\)(?=\")\")'
           scope: punctuation.definition.string.end.gcemode
           pop: true
 
   keywords:
+    # TODO: Make 'token' value match only from allowed list of theme tokens
     - match: |-
         (?x)
-          (?:^\s*)?(\")
-          (name|defaults|gutters|tokens|(?:comment|number|atom|
-          property|attribute|keyword|builtin|string|
-          variable|variable2|variable3|def|bracket|tag|
-          header|link|error)_(?:color|background|style|decoration|weight)|
-          (?:\w+)_(?:color|background|style|decoration|weight)|
-           onlyOnLineStart|dash_docsets|symbol_search|hint|global)
-          (\")\s*(:)
-      scope: keyword.control.gcemode
+          (?:^\s*)?
+          (?=\")(name|ext|gutters|token(?:izer)?|state|parse|token|extends|
+          onlyOnLineStart|stateAfterMatch|overwriteState|recoverState|
+          dash_docsets|symbol_search)(?=\")
+          \s*(:)
+      captures:
+        1: punctuation.definition.string.begin.gcemode
+        2: keyword.control.gcemode
 
   value:
     - include: constant

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+    <key>name</key>
+    <string>GoCoEdit Indents</string>
+    <key>scope</key>
+    <string>source.gcemode, source.gcetheme</string>
+    <key>settings</key>
+    <dict>
+        <key>decreaseIndentPattern</key>
+        <string>
+          (?x)
+            (^("(?:[^"\\]|\\.)*"|[^"/{\n])*\}.*$)|
+            (^(.*\*/)?\s*\].*$)
+        </string>
+        <key>increaseIndentPattern</key>
+        <string>
+          (?x)
+            (^.*\{
+              ("(?:[^"\\]|\\.)*"|[^"/}])*
+              ($|/[/*])
+            )|
+            (^.*\[
+              ("(?:[^"\\]|\\.)*"|[^"/\]])*
+              ($|/[/*])
+            )
+        </string>
+        <key>indentSquareBrackets</key>
+        <true />
+    </dict>
+</dict>
+</plist>

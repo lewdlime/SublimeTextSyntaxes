@@ -1,0 +1,146 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: GoCoEdit Mode
+scopeName: source.gcemode
+fileTypes: ["gcemode"]
+uuid: d354a39b-b86a-4ee1-8535-40cbfe06b4dc
+
+patterns:
+  - include: '#value'
+  - include: '#comments'
+
+repository:
+  array:
+    name: meta.structure.array.gcemode
+    begin: '(\[)'
+    beginCaptures:
+      '1': {name: punctuation.definition.array.begin.gcemode}
+    end: '(\])'
+    endCaptures:
+      '1': {name: punctuation.definition.array.end.gcemode}
+    patterns:
+      - include: '#value'
+      - match: ','
+        name: punctuation.separator.array.gcemode
+
+  comments:
+    comment: Line Comments
+    name: comment.line.double-slash.gcemode
+    match: '(//).*$\n?'
+    captures:
+      '1': {name: punctuation.definition.comment.gcemode}
+
+  constant:
+    match: '\b(?:true|false|null)\b'
+    name: constant.language.gcemode
+
+  number:
+    comment: Handles integer and decimal numbers
+    name: constant.numeric.gcemode
+    match: |-
+      (?x)
+        (-?(?:0|[1-9]\d*)(?:(?:\.\d+)?(?:[eE][+-]?\d+)?)?)
+
+  object:
+    patterns: 
+      - comment: A JSON object
+        name: meta.structure.dictionary.gcemode
+        begin: '(\{)'
+        beginCaptures:
+          '1': {name: punctuation.definition.dictionary.begin.gcemode}
+        end: '(\})'
+        endCaptures:
+          '1': {name: punctuation.definition.dictionary.end.gcemode}
+        patterns:
+          - include: '#string'
+          - include: '#comments'
+          - name: meta.structure.key.gcemode
+            begin: |-
+              (?x)
+                (?:^\s*)?(\")
+                (token(?:izer)?|name|ext|state|parse|
+                 overwriteState|stateAfterMatch|recoverState|
+                 onlyOnLineStart|dash_docsets|symbol_search|hint|global|
+                 comment|number|atom|property|attribute|keyword|builtin|
+                 string(?:-2)?|variable(?:-2)?|variable2|variable3|def|
+                 bracket|tag|header|link|error)
+                (\")\s*(:)
+            beginCaptures:
+              '1': {name: punctuation.definition.string.begin.gcemode}
+              '2': {name: keyword.control.gcemode}
+              '3': {name: punctuation.definition.string.end.gcemode}
+              '4': {name: punctuation.separator.dictionary.key-value.gcemode}
+            contentName: meta.structure.dictionary.value.gcemode
+            end: '(,)|(?=\})'
+            endCaptures:
+              '1': {name: punctuation.separator.dictionary.pair.gcemode}
+            patterns:
+              - include: '#value'
+          - name: meta.structure.key.regex.gcemode
+            begin: '(?:^\s*)?(?>(\")(regex)(\")\s*(:))'
+            beginCaptures:
+              '1': {name: punctuation.definition.string.begin.gcemode}
+              '2': {name: keyword.control.regex.gcemode}
+              '3': {name: punctuation.definition.string.end.gcemode}
+              '4': {name: punctuation.separator.dictionary.key-value.gcemode}
+            contentName: meta.structure.dictionary.value.gcemode
+            end: '(,)|(?=\})'
+            endCaptures:
+              '1': {name: punctuation.separator.dictionary.pair.gcemode}
+            patterns:
+              - include: '#regexString'
+              - include: '#array'
+    # '[^\s\}]'
+    # - match: '[^\s:\}]'
+    #   name: invalid.illegal.expected-dictionary-separator.gcemode
+
+  string:
+    comment: Strings
+    name: string.quoted.double.gcemode
+    begin: '(")'
+    beginCaptures:
+      '1': {name: punctuation.definition.string.begin.gcemode}
+    end: '(")'
+    endCaptures:
+      '1': {name: punctuation.definition.string.end.gcemode}
+    patterns:
+      - match: '(?x:\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))'
+        name: constant.character.escape.gcemode
+      - match: '\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4}).'
+        name: invalid.illegal.unrecognized-string-escape.gcemode
+
+  regexArray:
+    name: meta.structure.array.regex.gcemode
+    begin: '(\[)'
+    beginCaptures:
+      '1': {name: punctuation.definition.array.begin.gcemode}
+    end: '(\])'
+    endCaptures:
+      '1': {name: punctuation.definition.array.end.gcemode}
+    patterns:
+      - include: '#regexString'
+      - match: ','
+        name: punctuation.separator.array.gcemode
+
+  regexString:
+    comment: Escaped Regex Strings
+    name: string.quoted.double.regex.gcemode
+    begin: '((?!\\)"(?!regex))'
+    beginCaptures:
+      '1': {name: punctuation.definition.string.begin.gcemode}
+    end: '((?!regex|\\)")'
+    endCaptures:
+      '1': {name: punctuation.definition.string.end.gcemode}
+    patterns:
+      - include: source.escapedregexp
+      - match: '\\"'
+        name: constant.character.escape.regexp.gcemode
+
+  value:
+    patterns:
+      - include: '#constant'
+      - include: '#number'
+      - include: '#string'
+      - include: '#array'
+      - include: '#object'
+...

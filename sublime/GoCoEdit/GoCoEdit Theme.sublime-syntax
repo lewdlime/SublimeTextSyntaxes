@@ -25,18 +25,6 @@ contexts:
       scope: invalid.illegal.expected-array-separator.gcetheme
 
   comments:
-    - match: /\*\*
-      scope: punctuation.definition.comment.gcetheme
-      push:
-        - meta_scope: comment.block.documentation.gcetheme
-        - match: \*/
-          pop: true
-    - match: /\*
-      scope: punctuation.definition.comment.gcetheme
-      push:
-        - meta_scope: comment.block.gcetheme
-        - match: \*/
-          pop: true
     - match: (//).*$\n?
       scope: comment.line.double-slash.gcetheme
       captures:
@@ -60,7 +48,6 @@ contexts:
       push:
         - meta_scope: meta.structure.dictionary.gcetheme
         - include: string
-        - include: comments
         - match: |-
             (?x)
               (?:^\s*)?(\")
@@ -84,24 +71,22 @@ contexts:
                 1: punctuation.separator.dictionary.pair.gcetheme
               pop: true
             - include: value
-            - match: '[^\s,]'
-              scope: invalid.illegal.expected-dictionary-separator.gcetheme
         - match: '\}'
           scope: punctuation.definition.dictionary.end.gcetheme
           pop: true
-    - match: '[^\s:\}]' # '[^\s\}]'
-      scope: invalid.illegal.expected-dictionary-separator.gcetheme
 
   string:
-    - match: '"'
-      scope: punctuation.definition.string.begin.gcetheme
+    - match: '(")'
+      captures:
+        1: punctuation.definition.string.begin.gcetheme
       push:
         - meta_scope: string.quoted.double.gcetheme
-        - match: (?x:\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))
+        - meta_include_prototype: false
+        - match: '(?x:\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))'
           scope: constant.character.escape.gcetheme
-        - match: \\.
+        - match: '\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4}).'
           scope: invalid.illegal.unrecognized-string-escape.gcetheme
-        - match: '"'
+        - match: '(")'
           scope: punctuation.definition.string.end.gcetheme
           pop: true
 
@@ -111,4 +96,3 @@ contexts:
     - include: string
     - include: array
     - include: object
-    - include: comments
