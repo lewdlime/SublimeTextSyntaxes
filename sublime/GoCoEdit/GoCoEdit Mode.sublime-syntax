@@ -126,7 +126,7 @@ contexts:
       scope: punctuation.definition.string.begin.gcemode
       push:
         - include: "Packages/GoCoEdit/Regular Expression (Escaped).sublime-syntax"
-        - match: '((?!\\)(?=\")\")'
+        - match: '((?!\\)(?=\")\",?)'
           scope: punctuation.definition.string.end.gcemode
           pop: true
 
