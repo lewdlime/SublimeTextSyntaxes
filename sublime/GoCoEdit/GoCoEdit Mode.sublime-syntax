@@ -61,8 +61,8 @@ contexts:
                overwriteState|stateAfterMatch|recoverState|
                onlyOnLineStart|dash_docsets|symbol_search|hint|global|
                comment|number|atom|property|attribute|keyword|builtin|
-               string|string-2|variable|variable-2|variable2|variable3|def|
-               bracket|tag|header|link|error)\b
+               string|variable|variable2|variable3|def|bracket|tag|
+               header|link|error)\b
               (\")\s*(:)
           scope: meta.structure.key.gcemode
           captures:
@@ -91,7 +91,33 @@ contexts:
               captures:
                 1: punctuation.separator.dictionary.pair.gcemode
               pop: true
-            - include: regexString
+            # Regexp Strings
+            - match: '(")'
+              captures:
+                1: punctuation.definition.string.begin.gcemode
+              push:
+                - meta_scope: string.quoted.double.regex.gcemode
+                - clear_scopes: true
+                - include: "Packages/GoCoEdit/Regular Expression (Escaped).sublime-syntax"
+                - match: '(?!\\)((?=\")\")'
+                  captures:
+                    1: punctuation.definition.string.end.gcemode
+                  pop: true
+                - match: ','
+                  scope: punctuation.separator.array.gcemode
+            # Regexp Array
+            - match: '(\[)'
+              captures:
+                1: punctuation.definition.array.begin.gcemode
+              push:
+                - meta_scope: meta.structure.array.regex.gcemode
+                - match: '(\])'
+                  captures:
+                    1: punctuation.definition.array.end.gcemode
+                  pop: true
+                - include: regexString
+                - match: ','
+                  scope: punctuation.separator.array.gcemode
 
   string:
     - match: '(")'
@@ -114,21 +140,6 @@ contexts:
             1: punctuation.definition.string.end.gcemode
           pop: true
 
-  regexArray:
-    - scope: meta.structure.array.regex.gcemode
-      match: '(\[)'
-      captures:
-        1: punctuation.definition.array.begin.gcemode
-      push:
-        - match: '(\])'
-          captures:
-            1: punctuation.definition.array.end.gcemode
-          pop: true
-      patterns:
-        - include: '#regexString'
-        - match: ','
-          name: punctuation.separator.array.gcemode
-
   regexString:
     - match: '(")'
       scope: punctuation.definition.string.begin.gcemode
@@ -136,12 +147,12 @@ contexts:
         - meta_scope: string.quoted.double.regex.gcemode
         - clear_scopes: true
         - include: "Packages/GoCoEdit/Regular Expression (Escaped).sublime-syntax"
-        - match: ','
-          scope: punctuation.separator.array.gcemode
         - match: '(?!\\)((?=\")\")'
           captures:
             1: punctuation.definition.string.end.gcemode
           pop: true
+        - match: ','
+          scope: punctuation.separator.array.gcemode
 
   value:
     - include: constant
