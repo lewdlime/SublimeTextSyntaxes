@@ -61,8 +61,8 @@ contexts:
                overwriteState|stateAfterMatch|recoverState|
                onlyOnLineStart|dash_docsets|symbol_search|hint|global|
                comment|number|atom|property|attribute|keyword|builtin|
-               string|variable|variable2|variable3|def|bracket|tag|
-               header|link|error)\b
+               string(?:-2)?|variable(?:-2)?|variable2|variable3|def|
+               bracket|tag|header|link|error)\b
               (\")\s*(:)
           scope: meta.structure.key.gcemode
           captures:
@@ -129,7 +129,7 @@ contexts:
           scope: constant.character.escape.gcemode
         - match: |-
             (?x)
-              \b(comment|number|atom|property|attribute|keyword|builtin|
+              \b(start|comment|number|atom|property|attribute|keyword|builtin|
                  string|string-2|variable|variable-2|variable2|variable3|
                  def|bracket|tag|header|link|error)\b
           scope: support.constant.gcemode
