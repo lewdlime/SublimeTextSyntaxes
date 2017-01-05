@@ -305,7 +305,7 @@ contexts:
   # The following 3 contexts cover highlighting of directives,
   # instruction fields, & inline instruction fields.
   directive:
-    - match: '(%%)\s*(\w+)\b'
+    - match: '(%%)\s*((?!begin|end(?:text|svg|ps|js|md|ml))\w+)\b'
       scope: meta.directive.abc comment.line.percentage.directive.abc
       captures:
         1: punctuation.definition.comment.abc
@@ -318,22 +318,23 @@ contexts:
         - match: '(?i)\b(true|false|yes|no|on|off)\b'
           scope: storage.type.directive.abc
         # TODO: include more keywords to be highlighted
-        - match: '\s*(?>%(?!%|abc))'
-          scope: comment.line.percentage.abc punctuation.definition.comment.abc
+        - match: '\s*(%(?!%|abc))'
+          captures:
+            1: punctuation.definition.comment.abc
           push:
-            - meta_content_scope: comment.line.percentage.abc
+            - meta_scope: comment.line.percentage.abc
             - match: $
               pop: true
         - match: $
           pop: true
-    - match: '(%%)'
+    - match: '(%%(?!begin|end(?:text|svg|ps|js|md|ml)))'
       scope: meta.directive.abc comment.line.percentage.directive.abc
       captures:
         1: punctuation.definition.comment.abc
 
   instruction-field:
     # instruction field
-    - match: '^(I:)\s*(\w+)\b'
+    - match: '^(I:)\s*((?!begin|end(?:text|svg|ps|js|md|ml))\w+)\b'
       captures:
         1: entity.name.tag.instruction.abc
         2: keyword.operator.word.directive.abc
@@ -539,14 +540,15 @@ contexts:
 
   embedded-content:
     - comment: Typeset Text
-      match: '(%%)(begintext)(\s+(?:obeylines|fill|ragged|justify|align|skip))?\b'
+      match: '(%%)(begintext)\b(\s+(?:obeylines|fill|ragged|justify|align|skip))?\b'
       captures:
         1: comment.line.percentage.abc
         2: support.function.directive.abc
         3: variable.parameter.directive.abc
-      set:
+      push:
         - meta_scope: meta.typeset.abc
         - meta_content_scope: string.unquoted.typeset.abc
+        - include: prototype
         - match: '(%%)\s*(endtext)'
           captures:
             1: comment.line.percentage.abc
