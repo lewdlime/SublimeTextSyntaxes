@@ -162,7 +162,7 @@ repository:
 ## Instructions / Directives
   directive:
     name: meta.directive.abc
-    begin: '((?>%%))\s*(\w*)\b'
+    begin: '(%%)\s*((?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps)\w*)\b'
     beginCaptures:
       '1': {name: comment.line.percentage.directive.abc punctuation.definition.comment.abc}
       '2': {name: keyword.operator.word.directive.abc}
@@ -190,66 +190,89 @@ repository:
       - include: '#comments'
 
   instruction-field:
-    comment: Instruction Field
-    name: meta.field.instruction.abc
-    match: '^(I:)\s*(\w+)\b\s+([^%\r\n]*)'
-    captures:
-      '1': {name: entity.name.tag.instruction.abc}
-      '2': {name: keyword.operator.word.directive.abc}
-      '3': {name: variable.parameter.directive.abc}
-    contentName: variable.parameter.directive.abc
-    end: $
     patterns:
-      - include: '#escape'
-      - include: '#comments'
-      # MIDI keywords
-      - name: keyword.operator.word.directive.midi.abc
-        match: |-
-          (?x)
-            (MIDI +
-              (?:no)?barlines|bassprog|(?:no)?beataccents|beat(?:mod|string)?|
-              bend(?:velocity|string)|chord(?:attack|name|program)|
-              control(?:combo|string)?|deltaloudness|droneo(?:n|ff)|
-              drum(?:on|off|bars|map)|expand|fermata(?:fixed|proportional)?|
-              gchord(?:on|off)?|grace(?:divider)?|makechordchannels|pitchbend|
-              portamento|program|ptstress|randomchordattack|ratio|stressmodel|
-              snt|rtranspose|temperament(?:linear|equal|normal)|transpose|
-              trim|vol(inc)?)\b
-      - name: storage.type.directive.abc
-        match: '(?i)(true|false|yes|no|on|off)\b'
-      - name: constant.numeric.float.length-unit.abc
-        match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)\b'
+      - comment: Instruction Field
+        name: meta.field.instruction.abc
+        begin: '(^I:)\s*((?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps)\w+)\b\s+([^%\r\n]*)'
+        beginCaptures:
+          '1': {name: entity.name.tag.instruction.abc}
+          '2': {name: keyword.operator.word.directive.abc}
+          '3': {name: variable.parameter.directive.abc}
+        contentName: variable.parameter.directive.abc
+        end: $
+        patterns:
+          - include: '#escape'
+          - include: '#comments'
+          # MIDI keywords
+          - name: keyword.operator.word.directive.midi.abc
+            match: |-
+              (?x)
+                (MIDI +
+                  (?:no)?barlines|bassprog|(?:no)?beataccents|beat(?:mod|string)?|
+                  bend(?:velocity|string)|chord(?:attack|name|program)|
+                  control(?:combo|string)?|deltaloudness|droneo(?:n|ff)|
+                  drum(?:on|off|bars|map)|expand|fermata(?:fixed|proportional)?|
+                  gchord(?:on|off)?|grace(?:divider)?|makechordchannels|pitchbend|
+                  portamento|program|ptstress|randomchordattack|ratio|stressmodel|
+                  snt|rtranspose|temperament(?:linear|equal|normal)|transpose|
+                  trim|vol(inc)?)\b
+          - name: storage.type.directive.abc
+            match: '(?i)(true|false|yes|no|on|off)\b'
+          - name: constant.numeric.float.length-unit.abc
+            match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)\b'
+      - comment: PostScript Instruction Field
+        name: meta.ps.abc
+        begin: '(^I:)\s*(postscript|ps)\b'
+        beginCaptures:
+          '1': {name: entity.name.tag.instruction.abc}
+          '2': {name: support.function.directive.abc}
+        end: $
+        patterns:
+          - include: source.postscript
+          - include: '#prototype'
 
   inline-instruction:
-    comment: Inline Instruction Field
-    name: meta.inline-field.instruction.abc
-    begin: ((?>\[I:)\s*(\w+)\b)
-    captures:
-      '1': {name: entity.name.tag.inline-field.instruction.abc}
-      '2': {name: keyword.operator.word.instruction.abc}
-    contentName: variable.parameter.instruction.abc
-    end: \s*((?>\]))
-    endCaptures:
-      '1': {name: entity.name.tag.inline-field.instruction.abc}
     patterns:
-      - include: '#escape'
-      # MIDI keywords
-      - name: keyword.operator.word.directive.midi.abc
-        match: |-
-          (?x)
-            (MIDI +
-              (?:no)?barlines|bassprog|(?:no)?beataccents|beat(?:mod|string)?|
-              bend(?:velocity|string)|chord(?:attack|name|program)|
-              control(?:combo|string)?|deltaloudness|droneo(?:n|ff)|
-              drum(?:on|off|bars|map)|expand|fermata(?:fixed|proportional)?|
-              gchord(?:on|off)?|grace(?:divider)?|makechordchannels|pitchbend|
-              portamento|program|ptstress|randomchordattack|ratio|stressmodel|
-              snt|rtranspose|temperament(?:linear|equal|normal)|transpose|
-              trim|vol(inc)?)\b
-      - name: storage.type.directive.abc
-        match: '(?i)(true|false|yes|no|on|off)\b'
-      - name: constant.numeric.float.length-unit.abc
-        match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)\b'
+    - comment: Inline Instruction Field
+      name: meta.inline-field.instruction.abc
+      begin: '(?:(\[I:)\s*((?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps)\w+)\b)'
+      beginCaptures:
+        '1': {name: entity.name.tag.inline-field.instruction.abc}
+        '2': {name: keyword.operator.word.instruction.abc}
+      contentName: variable.parameter.instruction.abc
+      end: '\s*((?>\]))'
+      endCaptures:
+        '1': {name: entity.name.tag.inline-field.instruction.abc}
+      patterns:
+        - include: '#escape'
+        # MIDI keywords
+        - name: keyword.operator.word.directive.midi.abc
+          match: |-
+            (?x)
+              (MIDI +
+                (?:no)?barlines|bassprog|(?:no)?beataccents|beat(?:mod|string)?|
+                bend(?:velocity|string)|chord(?:attack|name|program)|
+                control(?:combo|string)?|deltaloudness|droneo(?:n|ff)|
+                drum(?:on|off|bars|map)|expand|fermata(?:fixed|proportional)?|
+                gchord(?:on|off)?|grace(?:divider)?|makechordchannels|pitchbend|
+                portamento|program|ptstress|randomchordattack|ratio|stressmodel|
+                snt|rtranspose|temperament(?:linear|equal|normal)|transpose|
+                trim|vol(inc)?)\b
+        - name: storage.type.directive.abc
+          match: '(?i)(true|false|yes|no|on|off)\b'
+        - name: constant.numeric.float.length-unit.abc
+          match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)\b'
+    - comment: Inline PostScript Field
+      name: meta.ps.abc
+      begin: '(\[I:)\s*(postscript|ps)\b'
+      beginCaptures:
+        '1': {name: entity.name.tag.inline-field.instruction.abc}
+        '2': {name: keyword.operator.word.instruction.abc}
+      end: '\s*((?>\]))'
+      endCaptures:
+        '1': {name: entity.name.tag.inline-field.instruction.abc}
+      patterns:
+        - include: source.postscript
 
 ## ABC Code Elements
   abc-note:
@@ -592,6 +615,17 @@ repository:
         patterns:
           - include: text.html.markdown
           - include: '#prototype'
+      - comment: Inline Postscript Instructions
+        patterns:
+          - name: meta.ps.abc
+            begin: '(%%)\s*(postscript|ps)\b'
+            beginCaptures:
+              '1': {name: comment.line.percentage.abc}
+              '2': {name: support.function.directive.abc}
+            end: $
+            patterns:
+              - include: source.postscript
+              - include: '#prototype'
 
   illegals:
     comment: Illegal Syntax
