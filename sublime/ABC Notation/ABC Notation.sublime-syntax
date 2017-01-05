@@ -305,7 +305,7 @@ contexts:
   # The following 3 contexts cover highlighting of directives,
   # instruction fields, & inline instruction fields.
   directive:
-    - match: '(%%)\s*((?!begin|end(?:text|svg|ps|js|md|ml))\w+)\b'
+    - match: '(%%)\s*((?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps)\w+)\b'
       scope: meta.directive.abc comment.line.percentage.directive.abc
       captures:
         1: punctuation.definition.comment.abc
@@ -327,14 +327,24 @@ contexts:
               pop: true
         - match: $
           pop: true
-    - match: '(%%(?!begin|end(?:text|svg|ps|js|md|ml)))'
+    - match: '(%%(?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps))'
       scope: meta.directive.abc comment.line.percentage.directive.abc
       captures:
         1: punctuation.definition.comment.abc
+    - comment: Inline Postscript Instructions
+      match: '(%%)\s*(postscript|ps)\b'
+      captures:
+        1: comment.line.percentage.abc
+        2: support.function.directive.abc
+      push: 'scope:source.ps'
+      with_prototype:
+        - match: $
+          pop: true
+        - include: prototype
 
   instruction-field:
-    # instruction field
-    - match: '^(I:)\s*((?!begin|end(?:text|svg|ps|js|md|ml))\w+)\b'
+    - comment: Instruction Field
+      match: '^(I:)\s*((?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps)\w+)\b'
       captures:
         1: entity.name.tag.instruction.abc
         2: keyword.operator.word.directive.abc
@@ -351,9 +361,21 @@ contexts:
           match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)'
         - match: $
           pop: true
+    - comment: PostScript Instruction Field
+      scope: meta.ps.abc
+      match: '(^I:)\s*(postscript|ps)\b'
+      captures:
+        1: entity.name.tag.instruction.abc
+        2: support.function.directive.abc
+      push: 'scope:source.ps'
+      with_prototype:
+        - match: $
+          pop: true
+        - include: prototype
 
   inline-instruction:
-    - match: ((?>\[I:)\s*((?!begin|end(?:text|svg|ps|js|md|ml))\w+)\b)
+    - comment: Inline Instruction Field
+      match: ((?>\[I:)\s*((?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps)\w+)\b)
       captures:
         1: entity.name.tag.inline-field.instruction.abc
         2: keyword.operator.word.instruction.abc
@@ -368,6 +390,18 @@ contexts:
         - scope: constant.numeric.float.length-unit.abc
           match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)'
         - match: \s*((?>\]))
+          captures:
+            1: entity.name.tag.inline-field.instruction.abc
+          pop: true
+    - comment: Inline PostScript Field
+      scope: meta.ps.abc
+      match: '(\[I:)\s*(postscript|ps)\b'
+      captures:
+        1: entity.name.tag.inline-field.instruction.abc
+        2: keyword.operator.word.instruction.abc
+      push: 'scope:source.ps'
+      with_prototype:
+        - match: '\s*((?>\]))'
           captures:
             1: entity.name.tag.inline-field.instruction.abc
           pop: true
@@ -559,7 +593,7 @@ contexts:
       captures:
         1: comment.line.percentage.abc
         2: support.function.directive.abc
-      push: "Packages/HTML/HTML.sublime-syntax"
+      push: 'scope:text.html.basic'
       with_prototype:
         - include: prototype
         - match: '(%%)\s*(endml)'
@@ -572,7 +606,7 @@ contexts:
       captures:
         1: comment.line.percentage.abc
         2: support.function.directive.abc
-      push: "Packages/JavaScript/JavaScript.sublime-syntax"
+      push: 'scope:source.js'
       with_prototype:
         - include: prototype
         - match: '(%%)\s*(endjs)'
@@ -585,7 +619,7 @@ contexts:
       captures:
         1: comment.line.percentage.abc
         2: support.function.directive.abc
-      push: "Packages/XML/XML.sublime-syntax"
+      push: 'scope:text.xml'
       with_prototype:
         - include: prototype
         - match: '(%%)\s*(endsvg)'
@@ -599,7 +633,7 @@ contexts:
         1: comment.line.percentage.abc
         2: support.function.directive.abc
         3: variable.parameter.directive.abc
-      push: "Packages/ABC Notation/PostScript.sublime-syntax"
+      push: 'scope:source.ps'
       with_prototype:
         - include: prototype
         - match: '(%%)\s*(endps)'
@@ -607,15 +641,16 @@ contexts:
             1: comment.line.percentage.abc
             2: support.function.directive.abc
           pop: true
-
-  # This doesn't work because it extends it's scope past it's ending boundaries.
-  embedded-markdown:
+    # Embedded Markdown will ONLY work when theres a blank line before the '%%endmd'.
+    # Otherwise, the scopes used in Markdown will extend past '%%endmd', since
+    # the syntax engine would consider the line beneath any Markdown text within
+    # the Markdown scope, instead of escaping to the ABC Notation scope as intended.
     - comment: Embedded Markdown
       match: '(%%)\s*(beginmd)\b'
       captures:
         1: comment.line.percentage.abc
         2: support.function.directive.abc
-      push: "Packages/Markdown/Markdown.sublime-syntax"
+      push: 'scope:text.html.markdown'
       with_prototype:
         - include: prototype
         - match: '(%%)\s*(endmd)'
