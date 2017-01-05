@@ -68,7 +68,7 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#embedded</string>
+			<string>#embedded-content</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -657,15 +657,13 @@
 				</dict>
 			</array>
 		</dict>
-		<key>embedded</key>
+		<key>embedded-content</key>
 		<dict>
-			<key>comment</key>
-			<string>Typeset Text, Embedded SVG, Embedded PostScript, Embedded HTML, and Embedded JavaScript</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>((?&gt;%%))\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?\b</string>
+					<string>(%%)(begintext)\b(\s+(?:obeylines|fill|ragged|justify|align|skip))?\b</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -684,10 +682,12 @@
 							<string>variable.parameter.directive.abc</string>
 						</dict>
 					</dict>
+					<key>comment</key>
+					<string>Typeset Text</string>
 					<key>contentName</key>
 					<string>string.unquoted.typeset.abc</string>
 					<key>end</key>
-					<string>((?:^\s*)?(?&gt;%%))\s*(endtext)\b</string>
+					<string>(%%)\s*(endtext)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -702,22 +702,18 @@
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>meta.free-text.abc</string>
+					<string>meta.typeset.abc</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#escape</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
+							<string>#prototype</string>
 						</dict>
 					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>((?:^\s*)?%%)\s*(beginsvg)\b</string>
+					<string>(%%)\s*(beginml)\b</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -731,148 +727,10 @@
 							<string>support.function.directive.abc</string>
 						</dict>
 					</dict>
+					<key>comment</key>
+					<string>Embedded HTML</string>
 					<key>end</key>
-					<string>((?:^\s*)?%%)\s*(endsvg)\b</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>comment.line.percentage.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.svg.abc</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#escape</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>((?:^\s*)?%%)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>comment.line.percentage.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.directive.abc</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>((?:^\s*)?%%)\s*(endps)\b</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>comment.line.percentage.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.ps.abc</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#escape</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>((?:^\s*)?%%)\s*(beginjs)\b</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>comment.line.percentage.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>((?:^\s*)?%%)\s*(endjs)\b</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>comment.line.percentage.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.js.abc</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#escape</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>((?:^\s*)?%%)\s*(beginml)\b</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>comment.line.percentage.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>((?:^\s*)?%%)\s*(endml)\b</string>
+					<string>(%%)\s*(endml)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
@@ -892,187 +750,40 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#escape</string>
+							<string>text.html.basic</string>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#comments</string>
+							<string>#prototype</string>
 						</dict>
 					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^(I:)\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?</string>
+					<string>(%%)\s*(beginjs)\b</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>support.constant.instruction.abc</string>
+							<string>comment.line.percentage.abc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
 							<string>support.function.directive.abc</string>
 						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.directive.abc</string>
-						</dict>
 					</dict>
-					<key>contentName</key>
-					<string>string.unquoted.free.abc</string>
+					<key>comment</key>
+					<string>Embedded JavaScript</string>
 					<key>end</key>
-					<string>^(I:)\s*(endtext)\b</string>
+					<string>(%%)\s*(endjs)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>support.constant.instruction.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.free-text.abc</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#escape</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(^I:)\s*(beginsvg)\b</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>support.constant.instruction.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>(^I:)\s*(endsvg)\b</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>support.constant.instruction.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.svg.abc</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#escape</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(^I:)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>support.constant.instruction.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>variable.parameter.directive.abc</string>
-						</dict>
-					</dict>
-					<key>end</key>
-					<string>^(I:)\s*(endps)\b</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>support.constant.instruction.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-					</dict>
-					<key>name</key>
-					<string>meta.ps.abc</string>
-					<key>patterns</key>
-					<array>
-						<dict>
-							<key>include</key>
-							<string>#escape</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
-						</dict>
-					</array>
-				</dict>
-				<dict>
-					<key>begin</key>
-					<string>(^I:)\s*(beginjs)\b</string>
-					<key>beginCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>support.constant.instruction.abc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>support.function.directive.abc</string>
-						</dict>
-					</dict>
-					<key>contentName</key>
-					<string>source.javascript</string>
-					<key>end</key>
-					<string>^(I:)\s*(endjs)\b</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>support.constant.instruction.abc</string>
+							<string>comment.line.percentage.abc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1086,23 +797,23 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#escape</string>
+							<string>source.js</string>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#comments</string>
+							<string>#prototype</string>
 						</dict>
 					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(^I:)\s*(beginml)\b</string>
+					<string>(%%)\s*(beginsvg)\b</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>support.constant.instruction.abc</string>
+							<string>comment.line.percentage.abc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1110,16 +821,16 @@
 							<string>support.function.directive.abc</string>
 						</dict>
 					</dict>
-					<key>contentName</key>
-					<string>source.html</string>
+					<key>comment</key>
+					<string>Embedded SVG</string>
 					<key>end</key>
-					<string>(^I:)\s*(endml)\b</string>
+					<string>(%%)\s*(endsvg)</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>support.constant.instruction.abc</string>
+							<string>comment.line.percentage.abc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1133,11 +844,108 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#escape</string>
+							<string>text.xml</string>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#comments</string>
+							<string>#prototype</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(%%)\s*(beginps)(\s+(?:nosvg))?\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>comment.line.percentage.abc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.directive.abc</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>variable.parameter.directive.abc</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>Embedded PostScript</string>
+					<key>end</key>
+					<string>(%%)\s*(endps)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>comment.line.percentage.abc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.directive.abc</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.ps.abc</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>source.postscript</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#prototype</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(%%)\s*(beginmd)\b</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>comment.line.percentage.abc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.directive.abc</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>Embedded Markdown</string>
+					<key>end</key>
+					<string>(%%)\s*(endmd)</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>comment.line.percentage.abc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>support.function.directive.abc</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>text.html.markdown</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#prototype</string>
 						</dict>
 					</array>
 				</dict>

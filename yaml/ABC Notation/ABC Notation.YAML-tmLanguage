@@ -23,7 +23,7 @@ patterns:
       - include: '#comments'
       - include: '#directive'
   - include: '#prototype'
-  - include: '#embedded'
+  - include: '#embedded-content'
 
 repository:
 ## Escapes, Fields, Comments
@@ -511,145 +511,87 @@ repository:
           - include: '#escape'
 
 ## Embedded Content
-  embedded:
-    comment: Typeset Text, Embedded SVG, Embedded PostScript, Embedded HTML, and Embedded JavaScript
+  embedded-content:
     patterns:
-      - name: meta.free-text.abc
-        begin: ((?>%%))\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?\b
+      - comment: Typeset Text
+        name: meta.typeset.abc
+        begin: '(%%)(begintext)\b(\s+(?:obeylines|fill|ragged|justify|align|skip))?\b'
         beginCaptures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: support.function.directive.abc}
           '3': {name: variable.parameter.directive.abc}
         contentName: string.unquoted.typeset.abc
-        end: ((?:^\s*)?(?>%%))\s*(endtext)\b
+        end: '(%%)\s*(endtext)'
         endCaptures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: support.function.directive.abc}
         patterns:
-          - include: '#escape'
-          - include: '#comments'
-      - name: meta.svg.abc
-        begin: ((?:^\s*)?%%)\s*(beginsvg)\b
+          - include: '#prototype'
+      - comment: Embedded HTML
+        name: meta.html.abc
+        begin: '(%%)\s*(beginml)\b'
         beginCaptures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: support.function.directive.abc}
-        end: ((?:^\s*)?%%)\s*(endsvg)\b
+        end: '(%%)\s*(endml)'
         endCaptures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: support.function.directive.abc}
         patterns:
-          #- include: source.xml
-          - include: '#escape'
-          - include: '#comments'
-      - name: meta.ps.abc
-        begin: ((?:^\s*)?%%)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?
+          - include: text.html.basic
+          - include: '#prototype'
+      - comment: Embedded JavaScript
+        name: meta.js.abc
+        begin: '(%%)\s*(beginjs)\b'
+        beginCaptures:
+          '1': {name: comment.line.percentage.abc}
+          '2': {name: support.function.directive.abc}
+        end: '(%%)\s*(endjs)'
+        endCaptures:
+          '1': {name: comment.line.percentage.abc}
+          '2': {name: support.function.directive.abc}
+        patterns:
+          - include: source.js
+          - include: '#prototype'
+      - comment: Embedded SVG
+        name: meta.svg.abc
+        begin: '(%%)\s*(beginsvg)\b'
+        beginCaptures:
+          '1': {name: comment.line.percentage.abc}
+          '2': {name: support.function.directive.abc}
+        end: '(%%)\s*(endsvg)'
+        endCaptures:
+          '1': {name: comment.line.percentage.abc}
+          '2': {name: support.function.directive.abc}
+        patterns:
+          - include: text.xml
+          - include: '#prototype'
+      - comment: Embedded PostScript
+        name: meta.ps.abc
+        begin: '(%%)\s*(beginps)(\s+(?:nosvg))?\b'
         beginCaptures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: support.function.directive.abc}
           '3': {name: variable.parameter.directive.abc}
-        end: ((?:^\s*)?%%)\s*(endps)\b
+        end: '(%%)\s*(endps)'
         endCaptures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: support.function.directive.abc}
         patterns:
-          #- include: source.ps
-          - include: '#escape'
-          - include: '#comments'
-      - name: meta.js.abc
-        begin: ((?:^\s*)?%%)\s*(beginjs)\b
+          - include: source.postscript
+          - include: '#prototype'
+      - comment: Embedded Markdown
+        begin: '(%%)\s*(beginmd)\b'
         beginCaptures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: support.function.directive.abc}
-        end: ((?:^\s*)?%%)\s*(endjs)\b
-        endCaptures:
-          '1': {name: comment.line.percentage.abc}
-          '2': {name: support.function.directive.abc}
-        patterns:
-          #- include: source.js
-          - include: '#escape'
-          - include: '#comments'
-      - name: meta.html.abc
-        begin: ((?:^\s*)?%%)\s*(beginml)\b
-        beginCaptures:
-          '1': {name: comment.line.percentage.abc}
-          '2': {name: support.function.directive.abc}
-        end: ((?:^\s*)?%%)\s*(endml)\b
+        end: '(%%)\s*(endmd)'
         endCaptures:
           '1': {name: comment.line.percentage.abc}
           '2': {name: support.function.directive.abc}
         patterns:
-          #- include: source.html
-          - include: '#escape'
-          - include: '#comments'
-      - name: meta.free-text.abc
-        contentName: string.unquoted.free.abc
-        begin: ^(I:)\s*(begintext)\b([ \t\v\f]+(?:obeylines|fill|ragged|justify|align|skip))?
-        beginCaptures:
-          '1': {name: support.constant.instruction.abc}
-          '2': {name: support.function.directive.abc}
-          '3': {name: variable.parameter.directive.abc}
-        end: ^(I:)\s*(endtext)\b
-        endCaptures:
-          '1': {name: support.constant.instruction.abc}
-          '2': {name: support.function.directive.abc}
-        patterns:
-          - include: '#escape'
-          - include: '#comments'
-      - name: meta.svg.abc
-        begin: (^I:)\s*(beginsvg)\b
-        beginCaptures:
-          '1': {name: support.constant.instruction.abc}
-          '2': {name: support.function.directive.abc}
-        end: (^I:)\s*(endsvg)\b
-        endCaptures:
-          '1': {name: support.constant.instruction.abc}
-          '2': {name: support.function.directive.abc}
-        patterns:
-          #- include: source.xml
-          - include: '#escape'
-          - include: '#comments'
-      - name: meta.ps.abc
-        begin: (^I:)\s*(beginps)\b([ \t\v\f]+(?:nosvg))?
-        beginCaptures:
-          '1': {name: support.constant.instruction.abc}
-          '2': {name: support.function.directive.abc}
-          '3': {name: variable.parameter.directive.abc}
-        end: ^(I:)\s*(endps)\b
-        endCaptures:
-          '1': {name: support.constant.instruction.abc}
-          '2': {name: support.function.directive.abc}
-        patterns:
-          #- include: source.ps
-          - include: '#escape'
-          - include: '#comments'
-      - name: meta.js.abc
-        contentName: source.javascript
-        begin: (^I:)\s*(beginjs)\b
-        beginCaptures:
-          '1': {name: support.constant.instruction.abc}
-          '2': {name: support.function.directive.abc}
-        end: ^(I:)\s*(endjs)\b
-        endCaptures:
-          '1': {name: support.constant.instruction.abc}
-          '2': {name: support.function.directive.abc}
-        patterns:
-          #- include: source.js
-          - include: '#escape'
-          - include: '#comments'
-      - name: meta.svg.abc
-        contentName: source.html
-        begin: (^I:)\s*(beginml)\b
-        beginCaptures:
-          '1': {name: support.constant.instruction.abc}
-          '2': {name: support.function.directive.abc}
-        end: (^I:)\s*(endml)\b
-        endCaptures:
-          '1': {name: support.constant.instruction.abc}
-          '2': {name: support.function.directive.abc}
-        patterns:
-          #- include: source.html
-          - include: '#escape'
-          - include: '#comments'
+          - include: text.html.markdown
+          - include: '#prototype'
 
   illegals:
     comment: Illegal Syntax
