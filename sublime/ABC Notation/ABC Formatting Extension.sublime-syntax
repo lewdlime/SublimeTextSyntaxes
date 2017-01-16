@@ -1,0 +1,165 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+file_extensions:
+  - fmt
+scope: source.fmt
+variables:
+  field_value: '[^%\n\r]'
+
+contexts:
+  prototype:
+    - include: comments
+
+  main:
+    - include: comments
+    - include: directive
+    - include: embedded-content
+
+  comments:
+    # line comments
+    - match: '(?:^\s*)?(%(?!%|abc))'
+      captures:
+        1: punctuation.definition.comment.abc
+      push:
+        - meta_scope: comment.line.percentage.abc
+        - match: $
+          pop: true
+    # namespace comment
+    - match: '(?:^\s*)?(?>(%)(abc(?:-\d\.\d)?))'
+      scope: comment.line.namespace.abc
+      captures:
+        1: punctuation.definition.comment.abc
+        2: keyword.other.special-method.namespace.abc
+    # remark field
+    - match: '^(r:)'
+      scope: meta.field.remark.abc
+      captures:
+        1: support.function.field.remark.abc
+      push:
+        - meta_scope: meta.field.remark.abc
+        - match: '{{field_value}}*'
+          scope: comment.line.remark.abc
+        - match: $
+          pop: true
+
+  directive:
+    - match: '^\s*((?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps)\w+)\b'
+      scope: meta.directive.abc comment.line.percentage.directive.abc
+      captures:
+        1: keyword.operator.word.directive.abc
+      push:
+        - meta_content_scope: variable.parameter.directive.abc
+        - include: midi-keywords
+        - scope: constant.numeric.float.length-unit.abc
+          match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)'
+        - match: '(?i)\b(true|false|yes|no|on|off)\b'
+          scope: storage.type.directive.abc
+        # TODO: include more keywords to be highlighted
+        - match: '^\s*(%(?!%|abc))'
+          captures:
+            1: punctuation.definition.comment.abc
+          push:
+            - meta_scope: comment.line.percentage.abc
+            - match: $
+              pop: true
+        - match: $
+          pop: true
+    - comment: Inline Postscript Instructions
+      match: '^\s*(postscript|ps)\b'
+      captures:
+        1: support.function.directive.abc
+      push: 'scope:source.ps'
+      with_prototype:
+        - match: $
+          pop: true
+        - include: prototype
+
+  embedded-content:
+    - comment: Typeset Text
+      match: '^\s*(begintext)\b(\s+(?:obeylines|fill|ragged|justify|align|skip))?\b'
+      captures:
+        1: support.function.directive.abc
+        2: variable.parameter.directive.abc
+      push:
+        - meta_scope: meta.typeset.abc
+        - meta_content_scope: string.unquoted.typeset.abc
+        - include: prototype
+        - match: '^\s*(endtext)'
+          captures:
+            1: support.function.directive.abc
+          pop: true
+    - comment: Embedded HTML
+      match: '^\s*(beginml)\b'
+      captures:
+        1: support.function.directive.abc
+      push: 'scope:text.html.basic'
+      with_prototype:
+        - include: prototype
+        - match: '^\s*(endml)'
+          captures:
+            1: support.function.directive.abc
+          pop: true
+    - comment: Embedded JavaScript
+      match: '^\s*(beginjs)\b'
+      captures:
+        1: support.function.directive.abc
+      push: 'scope:source.js'
+      with_prototype:
+        - include: prototype
+        - match: '^\s*(endjs)'
+          captures:
+            1: support.function.directive.abc
+          pop: true
+    - comment: Embedded SVG
+      match: '^\s*(beginsvg)\b'
+      captures:
+        1: support.function.directive.abc
+      push: 'scope:text.xml'
+      with_prototype:
+        - include: prototype
+        - match: '^\s*(endsvg)'
+          captures:
+            1: support.function.directive.abc
+          pop: true
+    - comment: Embedded PostScript
+      match: '^\s*(beginps)(\s+(?:nosvg))?\b'
+      captures:
+        1: support.function.directive.abc
+        2: variable.parameter.directive.abc
+      push: 'scope:source.ps'
+      with_prototype:
+        - include: prototype
+        - match: '^\s*(endps)'
+          captures:
+            1: support.function.directive.abc
+          pop: true
+    # Embedded Markdown will ONLY work when theres a blank line before the '%%endmd'.
+    # Otherwise, the scopes used in Markdown will extend past '%%endmd', since
+    # the syntax engine would consider the line beneath any Markdown text within
+    # the Markdown scope, instead of escaping to the ABC Notation scope as intended.
+    - comment: Embedded Markdown
+      match: '^\s*(beginmd)\b'
+      captures:
+        1: support.function.directive.abc
+      push: 'scope:text.html.markdown'
+      with_prototype:
+        - include: prototype
+        - match: '^\s*(endmd)'
+          captures:
+            1: support.function.directive.abc
+          pop: true
+
+  midi-keywords:
+    - scope: keyword.operator.word.directive.midi.abc
+      match: |-
+        (?x)
+          (MIDI\b +
+            (?:no)?barlines|bassprog|(?:no)?beataccents|beat(?:mod|string)?|
+            bend(?:velocity|string)|chord(?:attack|name|program)|
+            control(?:combo|string)?|deltaloudness|droneo(?:n|ff)|
+            drum(?:on|off|bars|map)|expand|fermata(?:fixed|proportional)?|
+            gchord(?:on|off)?|grace(?:divider)?|makechordchannels|pitchbend|
+            portamento|program|ptstress|randomchordattack|ratio|stressmodel|
+            snt|rtranspose|temperament(?:linear|equal|normal)|transpose|
+            trim|vol(inc)?)\b
