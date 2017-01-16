@@ -1,0 +1,1626 @@
+% *************
+%   ps.fmt
+% *************
+% This file is a format-file 
+% containing postscript definitions and the corresponding "decos"
+% to be used in conjonction with "abcm2ps version 7.x.x" ,
+% the program written by Jean-François Moine.
+% ===================================================================
+% Copyright (C) 2013, David Lacroix.
+% ====================================================================
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 51 Franklin Street, Suite 500, Boston, MA  02110-1335  USA
+% ==============================================================================
+% There are some fragments of code from Jef Moine, coming from the file "syms.c", 
+% which is part of the abcm2ps program, and from the file "deco.abc",
+% which is an experimental proposition to create or modify some deco.
+% This part is published under the GNU GPL License 
+% The primary abcm2ps site is: http://moinejf.free.fr/    
+% -----------------------------------------------------------------------
+% There are some fragments of code from Hudson Flávio Meneses Lacerda, coming from the
+% files "guitar.fmt", "translate.fmt" and "decomanual-en.pdf".
+% This part is published under the GNU GPL License
+% The site of Hudson Lacerda ABC resources is: http://hudsonlacerda.webs.com/
+% -----------------------------------------------------------------------------
+% There are some fragments of code from CMN (pedal glyphes)
+% This part is published under the GNU GPL License
+% http://ccrma-www.stanford.edu/software/cmn/cmn/cmn.html
+% ---------------------------------------------------------
+% The rest of the code is written by myself; basically, this consists of writting
+% new symbols adapted to contemporary music typography,
+% and adding dynamic symbols too.
+% This part is published under the GNU GPL License
+% http://davidlacroix.fr  
+% email: contact(at)davidlacroix(dot)fr
+% *********************************************************************
+beginps
+% ========================== REDEFINITIONS ===========================
+% (abreviations of adobe ps conventions)
+% --définition de SGR
+/SGR{setgray}!
+% --définition de RGB
+/RGB{setrgbcolor}!
+% ============================================================
+% (written by Jean-François Moine, modified by Hudson LACERDA and David Lacroix)
+%redéfinition de l'épaisseur des liaisons 
+	/SL{M RC RL RC closepath
+	gsave
+		.1 setlinewidth
+		1 setlinecap 1 setlinejoin
+		stroke
+	grestore
+	 fill}!
+% ===========================================================
+% (written by Jean-François Moine, modified by David Lacroix)
+%redéfinition de la place des nuances standard
+/pf{	M -4 5 RM
+	/Times-New-Roman-BoldItalic 16 selectfont show}!
+/sfz{	M -7 5 RM pop
+	/Times-New-Roman-Italic 14 selectfont(s)show
+	/Times-New-Roman-BoldItalic 16 selectfont(f)show
+	/Times-New-Roman-Italic 14 selectfont(z)show}!
+%redéfinition de l'épaisseur des liaisons en pointillé
+/dSL{	M [4] 0 setdash 1  SLW
+	RC stroke [] 0 setdash}!
+%redéfinition de l'épaisseur des lignes de la portée
+/dlw{0.4 setlinewidth}!
+%redéfinition de la taille des grace notes
+/ghd{	xymove
+	 gsave 1.7 1.25 RM 1.5 1.5 scale
+	-1 1.7 -4.5 -0.2 -3.4 -2 RC
+	1 -1.7 4.5 0.2 3.4 2 RC fill grestore}!
+%redéfinition de la fonte des métriques
+%N/D = beats/time
+/tsig{ M gsave/Bookman-Demi 14 selectfont 1.2 1 scale 0 1 RM currentpoint 3 -1 roll showc 12 add M showc grestore}!
+%N = only number of beats
+/stsig{	M gsave/Bookman-Demi 16 selectfont 1.2 1 scale 0 6.5 RM showc grestore}!
+% ------------------------------ doigtés ------------------------------
+% --- doigtés en noir
+%/fng{/Times-New-Roman-Bold 9 selectfont M -2 5 RM show }! def de référence !! NE PAS DECOMMENTER !! div. par 0 !!
+%-->doigtés
+/fng{/Times-New-Roman-Bold 9 selectfont M -2 1.25 RM 1 0 0 RGB show 0 0 0 RGB}! % pour MG en rouge = redef de /fng
+/fngb{/Times-New-Roman-Bold 9 selectfont M -4.5 2 RM 0 0 1  RGB show 0 0 0 RGB}! % pour MD en bleu
+% ============================= nouveaux doigtés ==================================
+% (written by David Lacroix)
+% ---doigt MG à gauche de la note deco 0i 1i 2i 3i 4i
+/dgt{3 1 roll M -5 -3.5 RM /Times-Bold 9 selectfont 1 0 0 RGB show 0 0 0 RGB}!        
+/dgt0{(0)dgt}!
+/dgt1{(1)dgt}!
+/dgt2{(2)dgt}!
+/dgt3{(3)dgt}!
+/dgt4{(4)dgt}!
+% -- doigt MG à droite dans accord (x différent) deco 0c 1c 2c 3c 4c
+/dgc{3 1 roll M 14 -3.5 RM /Times-New-Roman-Bold 9 selectfont 1 0 0 RGB show 0 0 0 RGB}!
+/dgc0{(0)dgc}!
+/dgc1{(1)dgc}!
+/dgc2{(2)dgc}!
+/dgc3{(3)dgc}!
+/dgc4{(4)dgc}!
+% ========================== déplacements deco ============================
+% (written by Hudson LACERDA)
+% --- déplacement deco Lacerda : l r u v q (left right up down reset)
+/tl_OFFSET_X 5 def   %  UNIDADE DE DESLOCAMENTO HORIZONTAL    (offset units)
+/tl_OFFSET_Y 5 def   %  UNIDADE DE DESLOCAMENTO VERTICAL
+
+% INIT:
+/tl_DESVIO_X 0 def   % Duas variáveis para armazenar as
+/tl_DESVIO_Y 0 def   % informações de deslocamento
+
+/tl_sobe       {pop pop 0  tl_OFFSET_Y  xymove currentpoint translate
+		 /tl_DESVIO_Y  tl_DESVIO_Y tl_OFFSET_Y add  def
+		 } bind def
+/tl_desce      {pop pop 0  tl_OFFSET_Y neg xymove  currentpoint translate
+		 /tl_DESVIO_Y  tl_DESVIO_Y tl_OFFSET_Y sub  def
+		 } bind def
+/tl_esquerda   {pop pop tl_OFFSET_X neg 0 xymove  currentpoint translate
+		 /tl_DESVIO_X  tl_DESVIO_X tl_OFFSET_X sub  def
+		 } bind def
+/tl_direita    {pop pop tl_OFFSET_X 0  xymove currentpoint translate
+		 /tl_DESVIO_X  tl_DESVIO_X tl_OFFSET_X add  def
+		 } bind def
+/tl_RESETPOS  {pop pop tl_DESVIO_X neg tl_DESVIO_Y neg xymove
+	         currentpoint translate
+		 /tl_DESVIO_X 0 def /tl_DESVIO_Y 0 def % reset offset
+		 /tl_OFFSET_X 5 def /tl_OFFSET_Y 5 def % reset unit
+		} bind def
+
+/tl_offset1  {pop pop /tl_OFFSET_X  1 def /tl_OFFSET_Y  1 def}!
+/tl_offset3  {pop pop /tl_OFFSET_X  3 def /tl_OFFSET_Y  3 def}!
+/tl_offset6  {pop pop /tl_OFFSET_X  6 def /tl_OFFSET_Y  6 def}!
+/tl_offset12 {pop pop /tl_OFFSET_X 12 def /tl_OFFSET_Y 12 def}!
+% ========================= LACERDA ANSHOW =========================
+% (written by Hudson LACERDA)
+/anshow{dup 0 get (:) 0 get ne
+	{show}
+	{dup length 1 sub 1 exch getinterval cvx exec}
+	ifelse}!
+% =============================== symboles ==================================
+% (written by Hudson LACERDA)
+% -- sprechgesang (croix sur la hampe) marche avec "setdefl true" dans le header
+/sprgs{gsave T
+	defl 4 and 0 eq{1.5 -9}{8.5 9}ifelse T
+	.8 dup scale 0 0 dsh0 grestore}!
+%-- pédale bartok deco pedal
+/pedal{exch 3 sub exch 0.75 SLW
+		defl 1 and 0 eq{4 add M 0 -4 RL}{M}ifelse
+		7 add 0 RL
+		defl 2 and 0 eq{0 4 RL}if
+				stroke dlw}!
+%=========================== positions et barrés ======================
+% (written by Hudson Lacerda, modified and added by David Lacroix)
+%repères de positions avec trait début / fin
+ /POS{ gsave 
+ 	exch -2 add exch 20 add 2 copy 2 copy M
+   	M -11 -5 RM /Times-New-Roman-Bold-utf8 10 selectfont (p ) showc 1 0 RM
+     TEXTO show
+ 	0 0 RM
+	/Times-New-Roman-Bold-utf8 11 selectfont () dup
+	show
+	gsave
+	0 0 RM .7 SLW
+	stringwidth exch neg 0 add exch RL stroke
+ 	M -3 -6 RM
+	-5 0 RM  
+	[4] 0 setdash .7 SLW
+	2 -3 RL
+	16 add 0 RL 2 -3 RL
+	currentpoint stroke   
+	[] 0 setdash M  grestore }!
+  /lpos1{/TEXTO (I°) def POS}!
+  /lpos2{/TEXTO (II°) def POS}!
+  /lpos3{/TEXTO (III°) def POS}!
+  /lpos4{/TEXTO (IV°) def POS}!
+  /lpos5{/TEXTO (V°) def POS}!
+  /lpos6{/TEXTO (VI°) def POS}!
+  /lpos7{/TEXTO (VII°) def POS}!
+  /lpos8{/TEXTO (VIII°) def POS}!
+  /lpos9{/TEXTO (IX°) def POS}!
+  /lpos10{/TEXTO (X°) def POS}!
+  /lpos11{/TEXTO (XI°) def POS}!
+  /lpos12{/TEXTO (XII°) def POS}!
+  /lpos13{/TEXTO (XIII°) def POS}!
+  /lpos14{/TEXTO (XIV°) def BAR}!
+% -- grands barrés avec trait début / fin
+ /BAR{ gsave 
+ 	exch -2 add exch 20 add 2 copy 2 copy M
+   	M -6 -5 RM /Times-New-Roman-Bold-utf8 10 selectfont (C ) showc 1 0 RM
+     TEXTO show
+ 	0 0 RM
+	/Times-New-Roman-Bold-utf8 11 selectfont () dup
+	show
+	gsave
+	0 0 RM  .7 SLW
+	stringwidth exch neg 0 add exch RL stroke
+	grestore
+ 	M -3 -6 RM
+	-5 0 RM  .7 SLW
+2 -3 RL
+	16 add 0 RL 2 -3 RL
+	currentpoint stroke M  grestore }!
+  /pos1{/TEXTO (I) def BAR}!
+  /pos2{/TEXTO (II) def BAR}!
+  /pos3{/TEXTO (III) def BAR}!
+  /pos4{/TEXTO (IV) def BAR}!
+  /pos5{/TEXTO (V) def BAR}!
+  /pos6{/TEXTO (VI) def BAR}!
+  /pos7{/TEXTO (VII) def BAR}!
+  /pos8{/TEXTO (VIII) def BAR}!
+  /pos9{/TEXTO (IX) def BAR}!
+  /pos10{/TEXTO (X) def BAR}!
+  /pos11{/TEXTO (XI) def BAR}!
+  /pos12{/TEXTO (XII) def BAR}!
+  /pos13{/TEXTO (XIII) def BAR}!
+  /pos14{/TEXTO (XIV) def BAR}!
+% --demi-barrés avec trait début / fin
+  /halfBAR{ gsave 
+ 	exch -2 add exch 20 add 2 copy 2 copy M
+   	M -6 -5 RM /Times-New-Roman-Bold-utf8 10 selectfont (1\/2 C ) showc 1 0 RM
+
+     TEXTO show
+ 	0 0 RM
+	/Times-New-Roman-Bold-utf8 11 selectfont () dup
+	show
+	gsave
+	0 0 RM  .7 SLW
+	stringwidth exch neg 0 add exch RL stroke
+	grestore
+ 	M -3 -6 RM
+	-5 0 RM  .7 SLW
+2 -3 RL
+	16 add 0 RL 2 -3 RL
+	currentpoint stroke M  grestore }!
+  /hpos1{/TEXTO (I) def halfBAR}!
+  /hpos2{/TEXTO (II) def halfBAR}!
+  /hpos3{/TEXTO (III) def halfBAR}!
+  /hpos4{/TEXTO (IV) def halfBAR}!
+  /hpos5{/TEXTO (V) def halfBAR}!
+  /hpos6{/TEXTO (VI) def halfBAR}!
+  /hpos7{/TEXTO (VII) def halfBAR}!
+  /hpos8{/TEXTO (VIII) def halfBAR}!
+  /hpos9{/TEXTO (IX) def halfBAR}!
+  /hpos10{/TEXTO (X) def halfBAR}!
+  /hpos11{/TEXTO (XI) def halfBAR}!
+  /hpos12{/TEXTO (XII) def halfBAR}!
+  /hpos13{/TEXTO (XIII) def halfBAR}!
+  /hpos14{/TEXTO (XIV) def halfBAR}!
+% --deux-tiers-barrés avec trait début / fin
+  /tierBAR{ gsave 
+ 	exch -2 add exch 20 add 2 copy 2 copy M
+   	M -6 -5 RM /Times-New-Roman-Bold-utf8 10 selectfont (2\/3 C ) showc 1 0 RM
+     TEXTO show
+ 	0 0 RM
+	/Times-New-Roman-Bold-utf8 11 selectfont () dup
+	show
+	gsave
+	0 0 RM  .7 SLW
+	stringwidth exch neg 0 add exch RL stroke
+	grestore
+ 	M -3 -6 RM
+	-5 0 RM  .7 SLW
+2 -3 RL
+	16 add 0 RL 2 -3 RL
+	currentpoint stroke M  grestore }!
+  /trpos1{/TEXTO (I) def tierBAR}!
+  /trpos2{/TEXTO (II) def tierBAR}!
+  /trpos3{/TEXTO (III) def tierBAR}!
+  /trpos4{/TEXTO (IV) def tierBAR}!
+  /trpos5{/TEXTO (V) def tierBAR}!
+  /trpos6{/TEXTO (VI) def tierBAR}!
+  /trpos7{/TEXTO (VII) def tierBAR}!
+  /trpos8{/TEXTO (VIII) def tierBAR}!
+  /trpos9{/TEXTO (IX) def tierBAR}!
+  /trpos10{/TEXTO (X) def tierBAR}!
+  /trpos11{/TEXTO (XI) def tierBAR}!
+  /trpos12{/TEXTO (XII) def tierBAR}!
+  /trpos13{/TEXTO (XIII) def tierBAR}!
+  /trpos14{/TEXTO (XIV) def tierBAR}!
+% =============================== symboles =========================
+% (written by Jean-François Moine)
+% -- glissendo trait
+/glist{	% usage: x2 y2 x1 y1 glist
+	gsave exch 13 add exch 2 copy T 0 0 M
+	exch 4 -1 roll exch sub 3 1 roll sub	% dx dy
+	2 copy exch atan dup rotate	% dx dy alpha
+	exch pop cos div		% len
+	0 sub 0 RL			% simple line
+	1 setlinewidth stroke grestore}!
+% -- lower glissendo-----------------------------------
+/glissdn{	% usage: x y gdwn
+	gsave T 5 0 T
+	-25 rotate 10 0 T 0 0 M
+	0 8 8{
+		2 -1.15 2.30 150 30 arcn 4 0 T
+		2 1.15 2.30 -150 -30 arc 4 0 T pop
+	}for
+	1.5 setlinewidth stroke grestore}!
+% -- wave---------------------------------------
+/wave{	% usage: x y wav
+	gsave T 0 0 T
+	2 1 T 0 0 M
+	0 8 8{
+		2 -1.15 2.30 150 30 arcn 4 0 T
+		2 1.15 2.30 -150 -30 arc 4 0 T pop
+	}for
+	1 setlinewidth stroke grestore}!
+% -- note decorations
+% (sorry for I don't know the name of these: there so many ones)
+% The convention I use here is:
+%	- t2 or t3: mordent with 2 or 3 peeks
+%	- ta or tb: turn from above or from below
+%	- b, ub or db: middle, upper or lower bar
+/tr3{		% usage: x y tr3 - mordent with 3 peeks
+	M 2.2 2.2 RL 2.1 -2.9 RL 0.7 0.7 RL
+	2.2 2.2 RL 2.1 -2.9 RL 0.7 0.7 RL
+	2.2 2.2 RL 2.1 -2.9 RL 0.7 0.7 RL
+	-2.2 -2.2 RL -2.1 2.9 RL -0.7 -0.7 RL
+	-2.2 -2.2 RL -2.1 2.9 RL -0.7 -0.7 RL
+	-2.2 -2.2 RL -2.1 2.9 RL -0.7 -0.7 RL fill}!
+/t2ub{		% usage: x y t2ub - mordent ending with an upper bar
+	2 copy umrd 0.6 SLW
+	M 5 4 RM 0 6 RL stroke}!
+/t3tab{		% usage: x y t3tab - mordent + upper turn and bar
+	4 add 2 copy exch 7.5 sub exch tr3 exch 7.5 add exch
+	2 copy 0.6 SLW M 2 6 14 6 16 0 RC
+	M 8 1 RM 0 6 RL stroke}!
+/ubt3ta{	% usage: x y ubt3ta - up bar + mordent + upper turn
+	4 add 2 copy 0.6 SLW
+	M -7.5 0 RM 0 6 RL stroke
+	2 copy exch 7.5 sub exch tr3
+	M 7.5 0 RM 2 6 14 6 16 0 RC stroke}!
+/tbt3{		% usage: x y tbt3 - low turn + long mordent
+	exch 10 sub exch 6 add 2 copy 0.6 SLW
+	M -8 0 RM 2 -6 14 -6 16 0 RC stroke
+	exch 8 add exch tr3}!
+/t2ta{		% usage: x y t2ta - mordent + upper turn
+	2 copy umrd
+	M 5 4 RM 1 5 9 5 10 0 RC stroke}!
+/t3b{		% usage: x y t3b - upper + lower mordent
+	2 copy exch -7.5 add exch 4 add tr3 0.6 SLW
+	M 2.5 0 RM 0 8 RL stroke}!
+/fictasharp{		% usage: x y sharp - sharp above note
+	4 add gsave T 0.8 dup scale 0 0 sHelvetica grestore}!
+/fictaflat{		% usage: x y flat - flat above note
+	4 add gsave T 0.8 dup scale 0 0 ft0 grestore}!
+/fictanatural{	% usage: x y natural - natural sign above note
+	4 add gsave T 0.8 dup scale 0 0 nt0 grestore}!
+% -- optional breath
+/brth{6 add /xbr 2 index def /ybr 1 index def
+	/Times-New-Roman-BoldItalic 30 selectfont M (,) show}!
+/opbrth{pop pop xbr 10 sub ybr 5 sub
+	/Times-New-Roman 20 selectfont M (\(  \)) show}!
+% -- head decorations / replacement
+% lower mordent
+/hlmrd{		% usage: x y hlmrd
+	exch 12 sub exch 4 sub lmrd}!
+% small black note head deco head-sb
+/shd{		% usage: x y shd
+	M 3 1.3 RM
+	-1 2.5 -6.5 0 -5.5 -2.5 RC
+	1 -2.5 6.5 0 5.5 2.5 RC fill}!
+% small white note head deco head-sw
+/shdw{		% usage: x y shdw
+	M 3 1.3 RM
+	-1 2.5 -6.5 0 -5.5 -2.5 RC
+	1 -2.5 6.5 0 5.5 2.5 RC stroke}!
+% -- measure bar between two staves (1 and 2)
+/hbar{		% usage: x y hbar
+	gsave -7 0 translate dlw pop dup 0 y0 M 24 y1 lineto  stroke grestore}!
+% ===================================== symboles =======================================
+% (written by Jean-François Moine, modified by David Lacroix)
+% -- draw octava indication --
+% -- 15
+/octava+{gsave exch -14 add exch 2 copy M 0 1 RM /Times-New-Roman-Italic 11 selectfont(15)show
+					%0 4.5 RM /Times-New-Roman-Italic 10 selectfont(ma)show
+		exch 10 add exch 0.5 SLW
+		defl 1 and 0 eq{14 add M 0 0 RL}{M}ifelse
+		0 add 0 RL
+		defl 2 and 0 eq{0 -6  RL}if
+			 [4] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+% -- 8
+/octava{gsave exch -14 add exch 2 copy M 0 1 RM /Times-New-Roman-Italic 12 selectfont(8)show
+					%0 4.5 RM /Times-New-Roman-Italic 10 selectfont(va)show
+		exch 14 add exch 0.5 SLW
+		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
+		0 add 0 RL
+		defl 2 and 0 eq{0 -6  RL}if
+			[4] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+% -- 8 b
+/octavab{gsave exch -14 add exch 2 copy M 0 0 RM /Times-New-Roman-Italic 12 selectfont(8)show
+					%0 -2.5 RM /Times-New-Roman-Italic 10 selectfont(ba)show
+		exch 8 add exch 0.5 SLW
+		defl 1 and 0 eq{4 add M 0 0 RL}{M}ifelse
+		0 add 0 RL
+		defl 2 and 0 eq{0 6  RL}if
+			 [4] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+% -- glissendo
+/gliss{	% usage: x2 y2 x1 y1 gliss
+	gsave exch 13 add exch 2 copy T 0 0 M
+	exch 4 -1 roll exch sub 3 1 roll sub	% dx dy
+	2 copy exch atan dup rotate	% dx dy alpha
+	exch pop cos div		% len
+% 	9 sub 0 RL			% simple line
+	9 sub 0 8 3 -1 roll{		% squiggly line
+		2 -1.15 2.30 150 30 arcn 4 0 T
+		2 1.15 2.30 -150 -30 arc 4 0 T pop
+	}for
+	1.5 setlinewidth stroke grestore}!
+% -- upper glissendo
+/glissup{	% usage: x y glissup
+	gsave T 5 0 T
+	25 rotate 10 0 T 0 0 M
+	0 8 8{
+		2 -1.15 2.30 150 30 arcn 4 0 T
+		2 1.15 2.30 -150 -30 arc 4 0 T pop
+	}for
+	1.5 setlinewidth stroke grestore}!
+% -- cresc / decresc / dimin
+/crdc{		% usage: str x y crdc - cresc, decresc, ..
+	/Times-New-Roman-Italic 14 selectfont
+	M -6 4 RM show}!
+% -- draw parenthesis around a note accidentals inside
+/opleft{ gsave
+	exch -3.5 add exch -2.5 add 2 copy 2 copy M
+			/Times-New-Roman-Bold 8.5 selectfont (\() show grestore}!
+/opright{ gsave
+	exch 20.5 add exch -.2 add 2 copy 2 copy M
+			/Times-New-Roman-Bold 8.5 selectfont (\)) show grestore}!
+/opnot{opleft opright}!
+% -- same, but inside a chord (x is not the same)  accidentals outside
+/opcleft{ gsave
+	exch -6.5 add exch -2. add 2 copy 2 copy M
+			/Times-New-Roman-Bold 8.5 selectfont (\() show grestore}!
+/opcright{ gsave
+	exch 11 add exch -.25 add 2 copy 2 copy M
+			/Times-New-Roman-Bold 8.5 selectfont (\)) show grestore }!
+/opchnot{opcleft opcright}!
+%=============================== symboles ======================================
+% (written by David Lacroix)
+% -- 5 barré (quinte diminuée)
+/5b{ gsave M 10 -22 RM
+	/Times-New-Roman 16 selectfont (5) showc
+	-7 1.5 RM
+	/Times-New-Roman 16 selectfont (/) -45 rotate showc grestore}!
+% --- séparateur de systèmes à placer au début du nouveau système (et non à la fin d'un système)
+/debsys{gsave M -2 0 RM
+/esys{gsave
+	0 0 moveto
+	25 10 rlineto
+	0 -5 rlineto
+	-25 -10 rlineto
+	closepath fill grestore}def
+		-20 0 translate esys 0 -9 translate esys grestore}def
+% --- mdBar/mgBar (position des mains au clavier)
+/mdb{ .7 setlinewidth M 0 -1.2 RM
+-6 0 RL  0 25 RL
+-8 2 RM /Times-New-Roman-Italic 10 selectfont (\(m.d.\)) show  stroke}!
+/mgb{ .7 setlinewidth M -7 7.7 RM
+6 0 RL -6 0 RM 0 -25 RL
+-8 -6 RM /Times-New-Roman-Italic 10 selectfont (\(m.g.\)) show  stroke}!
+/mdc{ .7 setlinewidth M -15 -1.2 RM
+-6 0 RL  0 25 RL
+-8 2 RM /Times-New-Roman-Italic 10 selectfont (\(m.d.\)) show  stroke}!
+/mgc{ .7 setlinewidth M -21 4 RM
+6 0 RL -6 0 RM 0 -25 RL
+-8 -6 RM /Times-New-Roman-Italic 10 selectfont (\(m.g.\)) show  stroke}!
+% -- barré partiel
+/brp{ M -2 -1.2 RM
+-6 0 RL  0 30 RL .8 SLW stroke}!
+% -- bartok pizz deco tok
+	/tok{M -3 0 RM
+	/AvantGarde 10 selectfont (O) show
+	 -4.5 4 RM .8 SLW 0 6 RL stroke }!
+% --- brisé
+/brz{
+	1 setlinewidth M -22 -12.5 RM
+	0 0 translate
+	0 38 33 0 38 33 rcurveto
+				stroke}!
+% --- cercle bézier + plus (étouffer)
+/circx{.7 setlinewidth M -10 -4.45 RM
+	0 3.999996 6 3.999996 6 0 rcurveto
+-6 0 rmoveto
+	0 -3.999996 6 -3.999996 6 0 rcurveto
+-6 0 rmoveto
+	6 0 rlineto
+-3 -3 rmoveto
+	0 6 rlineto
+		stroke}!
+% --- etoile = deco head-star
+/etoil{.5 setlinewidth  M -.45 -0 RM
+	10{	4 0 rlineto
+		-4 0 rmoveto
+		36 rotate
+			}repeat
+			stroke }def
+% --- dashed white circle = deco head-ghost
+/wdrcl{[1.5] 0 setdash .5 setlinewidth
+      -2.5 0 moveto
+      0 0 translate
+      newpath
+      3 0 360 arc stroke [] 0 setdash}!
+% whith circle
+/around{
+	.5 setlinewidth
+     -4 0 moveto
+     4 2.5 translate
+      newpath
+      3.75 0 360 arc stroke}!
+% --- black head in circle = deco head-bround
+/bround{gsave
+	exch -3.5 add exch -2.5 add 2 copy 2 copy M
+	around -.25 0 T .25 SGR shd grestore}!
+% --- ghost circle = deco head-nil
+/ghost{gsave 1 setgray
+      -2.5 0 moveto
+      0 0 translate
+      newpath
+      0 0 360 arc stroke grestore}!
+% --- curvx = deco head-curvx
+/curvx { 1 setlinewidth
+      M -4 0 RM
+	0 4 8 4 8 0 rcurveto
+-8 0 rmoveto
+	0 -4 8 -4 8 0 rcurveto
+-8 -4 rmoveto
+8 8 rlineto
+-8  0 rmoveto
+8 -8 rlineto
+	stroke}!
+% --- noire forcée = deco head-blak
+/blak { M 3.5 2 RM
+	-2 3.5 -9 -0.5 -7 -4 RC
+	2 -3.5 9 0.5 7 4 RC fill}!
+% --- noire pointée forcée = 
+/blakpt { M 10.5 -2 RM
+ /TimesNewRoman-Italic 20 selectfont (.) show
+-12 3.5 RM
+	-2 3.5 -9 -0.5 -7 -4 RC
+	2 -3.5 9 0.5 7 4 RC fill}!
+% --- blanche pointée forcée
+/blchpt { M 10.5 -2 RM
+ /TimesNewRoman-Italic 20 selectfont (.) show
+-12 3.5 RM
+	-2 3.5 -9 -0.5 -7 -4 RC
+	2 -3.5 9 0.5 7 4 RC stroke}!
+% --- blanche forcée = deco head-blch
+/blch {	M 3 1.6 RM
+	-1 1.8 -7 -1.4 -6 -3.2 RC
+	1 -1.8 7 1.4 6 3.2 RC
+	0.5 0.3 RM
+	2 -3.8 -5 -7.6 -7 -3.8 RC
+	-2 3.8 5 7.6 7 3.8 RC
+	fill}!
+% --- ronde forcée = deco head-whol
+/whol { M -2.7 1.4 RM
+	1.5 2.8 6.9 0 5.3 -2.7 RC
+	-1.5 -2.8 -6.9 0 -5.3 2.7 RC
+	8.3 -1.4 RM
+	0 1.5 -2.2 3 -5.6 3 RC
+	-3.4 0 -5.6 -1.5 -5.6 -3 RC
+	0 -1.5 2.2 -3 5.6 -3 RC
+	3.4 0 5.6 1.5 5.6 3 RC
+	fill}!
+
+% --- carré blanc = deco head-wkre
+/wkre{1.25 setlinewidth
+     M -3.75 -2.5 RM
+		0 5 rlineto
+		7 0  rlineto
+		0 -5 rlineto
+		closepath stroke }!
+% --- carré noir = deco head-bkre
+/bkre{
+     M -3.75 -2.5 RM
+		0 5 rlineto
+		7 0  rlineto
+		0 -5 rlineto
+		closepath fill }!
+% --- carré blanc + croix = deco head-krex
+/krex{.85 setlinewidth
+     M -3.75 -2.5 RM
+		0 5 rlineto
+		7 0  rlineto
+		0 -5 rlineto
+		-7 0 rlineto
+			7 5 rlineto
+			-7 0 rmoveto
+			7 -5 rlineto
+		stroke}!
+% --- carré angles noirs + losange blanc = deco head-krel
+/krel{.85 setlinewidth
+     M -3.75 -2.5 RM
+		0 5 rlineto
+		7 0  rlineto
+		0 -5 rlineto
+		-7 0 rlineto
+			3.5 5 rmoveto
+			-3.5 -2.5 rlineto
+			3.5 -2.5 rlineto
+			3.5 2.5 rlineto
+			-3.5 2.5 rlineto
+		eofill}!
+% --tirés à gauche
+% -- arc gauche haut + flêche bas
+/tiru{ 1 setlinewidth
+      M -2 1 RM
+       0 5 -14 5 -14 2.5 RC
+      2 -.5 RM
+      -2 -2 rlineto
+      -2 2 rlineto
+      closepath stroke}!
+% -- arc gauche bas + flêche haut
+/tird{ 1 setlinewidth
+      M -2 0 RM
+       2.5 -5 -14 -5 -14 0 RC
+      -2 0 RM
+      2 2 rlineto
+      2 -2 rlineto
+      closepath stroke}!
+% --- ties
+% --- tie-up = deco tiu
+/tiu {.85 setlinewidth
+      M 15 6 RM
+		0 0 translate
+	0 5 25 5 25 0 RC
+	0 5.5 -25 5.5 -25 0 RC
+			 stroke}!
+% --- tie-down = deco tid
+/tid {.85 setlinewidth
+      M 43 0 RM
+		0 0 translate
+	0 -5 -25 -5 -25 0 rcurveto
+	0 -5.5 25 -5.5 25 0 rcurveto
+			 stroke}!
+% --- tie-down au-dessus pour les ornements= deco uti
+/uti {.6 setlinewidth
+      M 14.5 9 RM
+		0 0 translate gsave .3 SGR
+	0 -2 -20 -2 -20 0 rcurveto
+	0 -2.5 20 -2.5 20 0 rcurveto
+			 stroke grestore 0 SGR}!
+% --- little tie-up = deco ltiud (pour liaison descendante de voix à autre voix par-dessus)
+/ltiud {.85 setlinewidth
+      M -11 4.5 gsave
+	currentpoint translate
+		.65 .65 scale -20 rotate tiu grestore}!
+% --- little tie-down = deco ltidd (pour liaison descendante de voix à autre voix par-dessous)
+/ltidd {.85 setlinewidth
+      M -7 0 gsave
+	currentpoint translate
+		.65 .65 scale -20 rotate tid grestore}!
+% --- little tie-up = deco ltiua (pour liaison ascendante de voix à autre voix par-dessus)
+/ltiua {.85 setlinewidth
+      M -11 4.5 gsave
+	currentpoint translate
+		.65 .65 scale 20 rotate tiu grestore}!
+% --- little tie-down = deco ltida (pour liaison ascendante de voix à autre voix par-dessous)
+/ltida {.85 setlinewidth
+      M -8 -9 gsave
+	currentpoint translate
+		.65 .65 scale 20 rotate tid grestore}!
+% --- kurtag fermata
+/kurtag {M -7.5 0 RM 
+	0 7 15 7 15 0 RC
+	0 10 -15 10 -15 0 RC
+			fill}! 
+/kurtah {M 7 9 RM 
+	0 -7 -15 -7 -15 0 RC
+	0 -10 15 -10 15 0 RC
+			fill}! 
+% --- triangles
+% --- triangle noir delta base  = deco head-btgl
+/btgl{
+     M -5.25 -2.25 RM
+		5 5 rlineto
+		5 -5  rlineto
+		closepath fill }!
+% --- triangle blanc delta  = deco head-wtgl
+/wtgl{ 1.25 setlinewidth
+     M -5.25 -2.25 RM
+		5 5 rlineto
+		5 -5 rlineto
+		closepath stroke }!
+% --- triangle noir V  = deco head-btg
+/btg{
+     M -5 2.25 RM
+		5 -5  rlineto
+		5 5 rlineto
+		closepath fill }!
+% --- triangle blanc V  = deco head-wtg
+/wtg{ 1.25 setlinewidth
+     M -5 2.25 RM
+		5 -5 rlineto
+		5 5 rlineto
+    		closepath stroke }!
+% --- triangle noir tong-ram = deco head-btrg
+/btrg{
+     M -4 3 RM
+		8 -3 rlineto
+		-8 -3 rlineto
+    		closepath fill }!
+% --- triangle blanc tong-ram = deco head-wtrg
+/wtrg{ 1.25 setlinewidth
+     M -4 3 RM
+		8 -3 rlineto
+		-8 -3 rlineto
+    		closepath stroke }!
+% --- pizz flute
+/pzfl{ 1.25 setlinewidth
+     M -4 3 RM
+		8 -3 rlineto
+		-8 -3 rlineto
+    		1.2 SLW stroke }!
+% --- harmoniques
+% --- black diamond head = deco head-bdmd
+/bdmd{
+     M 0 3 RM
+    		4.25 -3 rlineto
+		-4.25 -3 rlineto
+		-4.25 3 rlineto
+		closepath fill }!
+% --- white diamond head = deco head-wdmd
+/wdmd{ 
+       M 0 3 RM 1 SLW 
+		4.25 -3 rlineto
+		-4.25 -3 rlineto
+		-4.25 3 rlineto
+		closepath stroke}!
+/nail { 0.7 SLW
+	M -4 -3.5 RM
+		0 4 10 4 10 0 rcurveto
+	-10 0 rmoveto
+		0 8.5 10 8.5 10 0 rcurveto
+				stroke }!
+% -- accent-normal deco >
+/acct{ M 3 -1 RM
+	1.2 SLW -7 4 RM 8 2 RL -8 2 RL stroke}!
+%-- accent chapeau deco v
+/vaccent{1.2 SLW M -2 1 RM 2 6 RL 2 -6 RL stroke}!
+% -- accent chapeau-stacc deco v.
+/vstc{/Times-New-Roman-Bold 16 selectfont M -2 0 RM (.) show
+	1.2 SLW -4 3.5 RM 2 6 RL 2 -6 RL stroke}!
+% -- accent-stacc deco >.
+/acstc{/Times-New-Roman-Bold 16 selectfont M -2 2 RM (.) show
+	1.2 SLW -7 4 RM 8 2 RL -8 2 RL stroke}!
+% -- tenuto-stacc deco _.
+/tenstc{/Times-New-Roman-Bold 16 selectfont M -2 2 RM (.) show
+	1.2 SLW 1 setlinecap -4.5 5 RM 5 0 RL stroke 0 setlinecap}!
+% -- accent-tenuto deco >_
+/acten{%M 1.2 SLW 1 setlinecap -4.5 5 RM 5 0 RL stroke 0 setlinecap
+	1.2 SLW M -4 4 RM 7 0 RL	
+	1.2 SLW -7 4 RM 7 2 RL -7 2 RL stroke}!
+% -- squarefermata
+/sqf{	1.5 add 2 copy 1.5 add moveto currentpoint 1.3 0 360 .7 SLW arc fill
+	M -7.5 0 rmoveto 0 7 rmoveto
+	.5 SLW 15 0 RL 0 -.5 RL -15 0 RL 0 -.5 RL 15 0 RL -15 0 RL 0 -.5 RL 15 0 RL -15 0 RL 0 -.5 RL 15 0 RL
+	0 2 RM 0 -7 RL -15 0 RM 0 7 RL stroke} def
+% -- hatfermata
+/htf{	1.5 add 2 copy 1.5 add moveto currentpoint 1.3 0 360 .7 SLW arc fill
+	M -7.5 0 rmoveto 
+	1.5 SLW 7.5 7 RL 7.5 -7 RL stroke}def
+% -- hatfermata-inverse
+%/itf{	1.5 add 2 copy 5.5 add moveto currentpoint 1.3 0 360 .7 SLW arc fill
+%	M -7.5 5.5 rmoveto 
+%	1.5 SLW 7.5 -5 RL 7.5 5 RL stroke}def
+%
+% -- braket en haut stem up = deco bruu
+/brkuu{gsave exch 2 add exch 0.75 SLW 
+			defl 1 and 0 eq{2 add M 0 3 RL}{M} ifelse
+				11 add 0 RL
+ 			defl 2 and 0 eq{0 -3 RL}if
+				1 0 0 RGB stroke dlw  0 0 0 RGB grestore}!
+% -- braket en haut stem down = deco bru
+/brku{gsave exch -1 add exch 0.75 SLW 
+			defl 1 and 0 eq{12 add M 0 3 RL}{M} ifelse
+				11 add 0 RL
+ 			defl 2 and 0 eq{0 -3 RL}if
+				1 0 0 RGB stroke dlw  0 0 0 RGB grestore}!
+% -- agrafe en haut stem up = deco agruu
+/agrfuu{gsave exch -6 add exch 0.75 SLW 
+			defl 1 and 0 eq{2 add M 0 3 RL}{M} ifelse
+				11 add 0 RL
+ 			defl 2 and 0 eq{0 -3 RL}if
+				1 0 0 RGB stroke dlw  0 0 0 RGB grestore}!
+% -- agrafe en haut stem down = deco agru
+/agrfu{gsave exch -8 add exch 0.75 SLW 
+			defl 1 and 0 eq{12 add M 0 3 RL}{M} ifelse
+				11 add 0 RL
+ 			defl 2 and 0 eq{0 -3 RL}if
+				1 0 0 RGB stroke dlw  0 0 0 RGB grestore}!
+% -- agrafe en bas stem up = deco agrd
+/agrfd{gsave exch -4 add exch 0.75 SLW 
+			defl 1 and 0 eq{8 add M 0 -3 RL}{M} ifelse
+				11 add 0 RL
+ 			defl 2 and 0 eq{0 3 RL}if
+				1 0 0 RGB stroke dlw  0 0 0 RGB grestore}!
+% -- agrafe en bas stem down = deco agrdd
+/agrfdd{gsave exch -6 add exch 0.75 SLW 
+			defl 1 and 0 eq{7 add M 0 -3 RL}{M} ifelse
+				11 add 0 RL
+ 			defl 2 and 0 eq{0 3 RL}if
+				1 0 0 RGB stroke dlw  0 0 0 RGB grestore}!
+% =============================== dynamiques ======================
+% (written by David Lacroix)
+% più & meno
+/piu{	M -7 5 RM
+	/Times-Italic-utf8 15 selectfont(più\ )show
+	/Times-New-Roman-BoldItalic 16 selectfont show}!
+/meno{	M -7 5 RM
+	/Times-New-Roman-Italic 15 selectfont(meno\ )show
+	/Times-New-Roman-BoldItalic 16 selectfont show}!
+% -- alternate piano/forte indication between parenthesis
+/apf{	M -6 5 RM
+	/Times-New-Roman-Italic 16 selectfont(\()show
+	/Times-New-Roman-BoldItalic 16 selectfont show
+	/Times-New-Roman-Italic 16 selectfont(\))show}!
+% -- une seule fonction pour les deco sff---z (sauf sfz de /sfz deco.c)
+/apz{	M -7 5 RM
+	/Times-New-Roman-Italic 15 selectfont(s)show
+	/Times-New-Roman-BoldItalic 16 selectfont show
+	/Times-New-Roman-Italic 15 selectfont(z)show}!
+% -- une seule fonction pour les deco sf---
+/apx{	M -7 5 RM
+	/Times-New-Roman-Italic 15 selectfont(s)show
+	/Times-New-Roman-BoldItalic 16 selectfont show}!
+% ============================ more annotations forms =================================
+% (written by David Lacroix)
+% --- n'importe quel repère ou gros texte encadré
+/bl{	% usage: str bl = usage = "^:(x) bl"
+	gsave /Helvetica-Bold 12 selectfont 0 7.5 RM 1.8 1.8 scale .1 SLW showb grestore}!
+%n'importe quel texte encadré
+/btx{	% usage: str btx = usage = "^:(xxxx) btx"
+	 gsave /AvantGarde-BookOblique-utf8 8 selectfont  -5 9 RM 1.2 1.2 scale .01 SLW showb grestore}!
+%petits textes centrés sur l'x de l'objet
+/ll{	gsave /Times-New-Roman-utf8 11 selectfont  11 0 RM showc grestore}!
+%petits textes départ sur l'x de l'objet
+/ln{	gsave /Times-New-Roman-utf8 11 selectfont  0 0 RM show grestore}!
+%petits textes centrés sur l'x, en gras, par exemple pour les positions sans trait
+/lp{gsave /Times-New-Roman-Bold-utf8 10 selectfont 8 0 RM showc grestore}!
+% --- tie-down au-dessus pour les ornements= deco uti
+/uti {.6 setlinewidth
+      M 14.5 9 RM
+		0 0 translate gsave .3 SGR
+	0 -2 -20 -2 -20 0 rcurveto
+	0 -2.5 20 -2.5 20 0 rcurveto
+			 stroke grestore 0 SGR}!
+%petits textes centrés sur l'x de l'objet, pour les doigtés d'ornements avec un "tie" soulignant
+/lo {gsave /Times-New-Roman-utf8 10 selectfont 11 3.5 RM  0 0 1 RGB showc grestore 7 -7 rmoveto currentpoint uti}!
+% ============================== symboles ==========================
+% (written by David Lacroix)
+% -- eolien (triangle blanc sur la hampe)
+/eolien{gsave T
+	defl 4 and 0 eq{1.5 -9}{8.5 9}ifelse T
+	.8 dup scale 0 0 wtg grestore}!
+/espr{M -9 2 rmoveto
+	7 2 rlineto
+	-7 -2 rmoveto
+	7 -2 rlineto
+		4 4 rmoveto
+		7 -2 rlineto
+		-7 -2 rmoveto
+		7 2 rlineto
+		.7 setlinewidth stroke}!
+%-- ligne pointillée en haut horizontale sans texte
+/cjia{exch 6 sub exch 0.7 SLW 
+		defl 1 and 0 eq{3 add M 3 0 RM 0 0 RL}{M}ifelse
+		24 add [4] 0 setdash 0 RL
+		defl 2 and 0 eq{0 -4 RL}if
+				stroke dlw [] 0 setdash }!
+%-- ligne pointillée en bas horizontale sans texte
+/cjib{exch 6 sub exch 0.7 SLW 
+		defl 1 and 0 eq{3 add M 3 0 RM 0 0 RL}{M}ifelse
+		24 add [4] 0 setdash 0 RL
+		defl 2 and 0 eq{0 4 RL}if
+				stroke dlw [] 0 setdash }!
+%repères de position sans trait
+/bpos{/Times-New-Roman-Bold-utf8 10 selectfont M 0 7 RM showc}!
+% ==================== numéros de cordes de guitare [glyphes utf8] ======================
+% (written by David Lacroix)
+% === corde haut
+/c1u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2460 ] glypharray grestore}!
+/c2u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2461 ] glypharray grestore}!
+/c3u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2462 ] glypharray grestore}!
+/c4u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2463 ] glypharray grestore}!
+/c5u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2464 ] glypharray grestore}!
+/c6u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2465 ] glypharray grestore}!
+% === corde bas
+/c1d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2460 ] glypharray grestore}!
+/c2d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2461 ] glypharray grestore}!
+/c3d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2462 ] glypharray grestore}!
+/c4d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2463 ] glypharray grestore}!
+/c5d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2464 ] glypharray grestore}!
+/c6d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2465 ] glypharray grestore}!
+% === corde haut trait
+% -- 1
+/cordh1{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2460 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 -4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+% -- 2
+/cordh2{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2461 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 -4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+% -- 3
+/cordh3{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2462 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 -4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+% -- 4
+/cordh4{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2463 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 -4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+% -- 5
+/cordh5{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2464 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 -4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+% -- 6
+/cordh6{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2465 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 -4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+%=== corde bas trait
+%-- 1
+/cordb1{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2460 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+%-- 2
+/cordb2{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2461 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+%-- 3
+/cordb3{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2462 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+%-- 4
+/cordb4{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2463 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+%-- 5
+/cordb5{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2464] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+%-- 6
+/cordb6{
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2465 ] glypharray
+		exch 12 add exch 0.2 SLW
+		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
+		12 add 0 RL
+		defl 2 and 0 eq{0 4  RL}if
+			[3] 0 setdash	stroke
+				[] 0 setdash dlw grestore}!
+% ====================== longs trilles - arpèges - rasgueados - brakkets ============
+% (written by Jean-François Moine, modified and added by David Lacroix)
+% -- 'tr' + long trill
+/trtrill{	% usage: w x y trtrill
+	2 copy trl
+	3 1 roll 9 add 3 1 roll 9 sub 3 1 roll 2 add ltr}!
+% -- arpeggio variations
+/arp{gsave 90 rotate exch neg ltr grestore}! %ord
+%	arpeggio with arrow
+/arpu{	2 copy 4 index add M -6.5 0 RM 2.5 5 RL 2.5 -5 RL fill %up
+	arp}!
+/arpd{	2 copy M -6.5 0 RM 2.5 -5 RL 2.5 5 RL fill %down
+	arp}!
+/biarp{	2 copy 4 index add M -6.5 0 RM 2.5 5 RL 2.5 -5 RL fill
+	2 copy M -6.5 0 RM 2.5 -5 RL 2.5 5 RL fill %both
+	arp}!
+%
+%	arpeggio crossing the voices  or staves
+% (! this works because the decoration are drawn sorted by time !)
+/arps{		% arpeggio or line start-up
+	exch /x exch def	% memorize 'x'
+	add /y exch def}!	% memorize the upper vert offset
+/arpe{		% arpeggio end-down - stack: h x ylow
+	3 -1 roll pop		% discard 'h'
+	exch dup x gt {pop x} if exch	% have room for accidentals
+	y 1 index sub 3 1 roll	% new height
+	arp}!
+% --- définitions de base "rltr" et "rarp" dérivées de "ltr" et "arp" de syms.c
+/rltr{	gsave 4 add T
+	0 6 3 -1 roll{
+		0 1 1 {
+		0 0 M
+		4 0 lineto .8 SLW stroke
+	pop 180 rotate -6 0 T}for
+				pop 6 0 T}for
+					grestore}!
+/rarp{gsave 90 rotate exch neg rltr grestore}!
+% --- routines rasg. up / rasg. down
+/rasgu{	2 copy 4 index add M -6.5 0 RM 2.5 5 RL 2.5 -5 RL fill rarp}!
+/rasgd{	2 copy M -6.5 0 RM 2.5 -5 RL 2.5 5 RL fill rarp}!
+%-- barré partiel (accord 2 notes mini)
+/barrf{	2 copy M -4 0.5 RM 5 0 RL stroke rarp}!
+% barré partiel crossing the voices  or staves 
+%/arps = line start-up
+/brd{		% line end-down - stack: h x ylow
+	3 -1 roll pop		% discard 'h'
+	exch dup x gt {pop x} if exch	% have room for accidentals
+	y 1 index sub 3 1 roll	% new height
+	barrf}!
+% =======================
+%définition brésilienne brakket à gauche pour accord plaqué
+% (written by Hudson Lacerda)
+/brakket { M 0 1 RM
+		-4 0 RL 0 exch RL
+		 4 0 RL .8 SLW stroke dlw }!
+% ================== glyphes pédale piano =============================
+% (from CMN http://ccrma-www.stanford.edu/software/cmn/cmn/cmn.html)
+/ped{		% usage: str x y ped
+	gsave 4 add exch -10 add exch T 26 dup scale
+	0.368 0.074 moveto
+	0.341 0.121 0.335 0.147 0.371 0.203 curveto
+	0.435 0.289 0.531 0.243 0.488 0.155 curveto
+	0.472 0.117 0.434 0.096 0.414 0.080 curveto
+	0.429 0.038 0.494 -0.006 0.541 0.075 curveto
+	0.559 0.123 0.558 0.224 0.663 0.252 curveto
+	0.603 0.354 0.449 0.393 0.461 0.405 curveto
+	0.902 0.262 0.705 -0.124 0.555 0.046 curveto
+	0.488 -0.032 0.417 0.021 0.389 0.055 curveto
+	0.303 -0.018 0.303 -0.020 0.248 0.040 curveto
+	0.218 0.108 0.191 0.062 0.164 0.047 curveto
+	0.010 -0.056 0.032 0.019 0.124 0.062 curveto
+	0.229 0.117 0.200 0.091 0.228 0.195 curveto
+	0.240 0.241 0.149 0.250 0.166 0.311 curveto
+	0.207 0.493 lineto
+	-0.041 0.441 0.049 0.261 0.126 0.387 curveto
+	0.138 0.381 lineto
+	-0.020 0.119 -0.100 0.472 0.220 0.507 curveto
+	0.548 0.486 0.399 0.171 0.254 0.374 curveto
+	0.264 0.384 lineto
+	0.338 0.259 0.521 0.449 0.228 0.488 curveto
+	0.198 0.356 lineto
+	0.181 0.304 0.273 0.294 0.262 0.241 curveto
+	0.229 0.101 lineto
+	0.273 0.070 0.282 -0.038 0.368 0.074 curveto
+	0.391 0.094 moveto
+	0.456 0.130 0.476 0.171 0.468 0.213 curveto
+	0.452 0.276 0.333 0.171 0.391 0.094 curveto
+	0.627 0.019 moveto
+	0.533 0.041 0.586 0.228 0.678 0.229 curveto
+	0.729 0.170 0.712 0.025 0.627 0.019 curveto
+	eofill
+	0.8 0.04 0.04 0 360 newpath arc fill
+	pop grestore}!
+% (from CMN http://ccrma-www.stanford.edu/software/cmn/cmn/cmn.html)
+/pedoff{	% usage: str x y ped
+	gsave 4 add exch -5 add exch T 26 dup scale
+	0.219 0.198 moveto
+	0.231 0.172 0.195 0.138 0.162 0.173 curveto
+	0.149 0.219 0.206 0.231 0.219 0.198 curveto
+	0.144 0.242 moveto
+	0.166 0.223 0.193 0.230 0.181 0.267 curveto
+	0.178 0.306 0.144 0.302 0.151 0.335 curveto
+	0.160 0.381 0.225 0.377 0.224 0.330 curveto
+	0.228 0.302 0.198 0.306 0.197 0.267 curveto
+	0.194 0.237 0.213 0.222 0.237 0.247 curveto
+	0.263 0.276 0.234 0.297 0.268 0.322 curveto
+	0.314 0.347 0.354 0.297 0.316 0.259 curveto
+	0.296 0.237 0.273 0.266 0.246 0.237 curveto
+	0.223 0.217 0.232 0.194 0.266 0.197 curveto
+	0.303 0.202 0.302 0.232 0.332 0.228 curveto
+	0.381 0.232 0.388 0.156 0.332 0.152 curveto
+	0.302 0.148 0.302 0.185 0.266 0.183 curveto
+	0.231 0.186 0.228 0.169 0.245 0.143 curveto
+
+	0.273 0.116 0.297 0.141 0.316 0.117 curveto
+	0.350 0.075 0.303 0.029 0.258 0.062 curveto
+	0.237 0.082 0.261 0.102 0.233 0.133 curveto
+	0.212 0.151 0.194 0.147 0.197 0.113 curveto
+
+	0.203 0.075 0.232 0.075 0.230 0.043 curveto
+	0.223 -0.004 0.159 -0.002 0.152 0.042 curveto
+	0.148 0.075 0.185 0.076 0.183 0.113 curveto
+	0.183 0.147 0.163 0.150 0.141 0.133 curveto
+	0.113 0.104 0.140 0.079 0.113 0.059 curveto
+	0.069 0.037 0.033 0.077 0.063 0.117 curveto
+	0.082 0.141 0.104 0.117 0.132 0.142 curveto
+	0.153 0.163 0.144 0.188 0.113 0.182 curveto
+	0.073 0.182 0.075 0.147 0.046 0.152 curveto
+	-0.003 0.152 -0.003 0.227 0.048 0.227 curveto
+	0.075 0.231 0.075 0.198 0.113 0.196 curveto
+
+	0.141 0.197 0.147 0.207 0.133 0.237 curveto
+	0.102 0.264 0.082 0.237 0.062 0.261 curveto
+	0.028 0.302 0.077 0.347 0.118 0.318 curveto
+	0.138 0.297 0.116 0.275 0.144 0.242 curveto
+	fill pop grestore}!
+% ==========================
+endps
+% ==================================== DECO ==========================================
+% les deco commentées par % sont dans deco.c NE PAS DECOMMENTER !! DIVISION PAR ZERO !!
+% -- note decorations (autres ornements : voir les routines ps)
+% tremolos / batteries
+deco t2ub 3 t2ub 12 5 5
+deco t3tab 3 t3tab 12 8 24
+deco ubt3ta 3 ubt3ta 12 8 24
+deco tbt3 3 tbt3 14 14 18
+deco t2ta 3 t2ta 12 5 15
+deco t3b 3 t3b 12 5 15
+% -- Doigtés MG à gauche (par défaut rouge)de la note
+deco 0i 1 dgt0 0 2 10
+deco 1i 1 dgt1 0 2 10
+deco 2i 1 dgt2 0 2 10
+deco 3i 1 dgt3 0 2 10
+deco 4i 1 dgt4 0 2 10
+% -- Doigtés MG dans accord (par défaut rouge)
+deco 0c 1 dgc0 0 2 10
+deco 1c 1 dgc1 0 2 10
+deco 2c 1 dgc2 0 2 10
+deco 3c 1 dgc3 0 2 10
+deco 4c 1 dgc4 0 2 10
+% -- Doigtés MD (ici bleu)
+ deco dp 4 fngb 10 3 3 p
+ deco i 3 fngb 8 3 3 i 
+ deco m 3 fngb 8 3 3 m 
+ deco a 3 fngb 8 3 3 a 
+ deco e 3 fngb 8 3 3 e
+%--cordes up
+deco c1u 3 c1u 10 0 0
+deco c2u 3 c2u 10 0 0
+deco c3u 3 c3u 10 0 0
+deco c4u 3 c4u 10 0 0
+deco c5u 3 c5u 10 0 0
+deco c6u 3 c6u 10 0 0
+%--cordes down
+deco c1d 4 c1d 10 0 0
+deco c2d 4 c2d 10 0 0
+deco c3d 4 c3d 10 0 0
+deco c4d 4 c4d 10 0 0
+deco c5d 4 c5d 10 0 0
+deco c6d 4 c6d 10 0 0
+%corde avec trait en haut
+deco c1u( 5 - 10 0 0
+deco c1u) 5 cordh1 10 0 0
+deco c2u( 5 - 10 0 0
+deco c2u) 5 cordh2 10 0 0
+deco c3u( 5 - 10 0 0
+deco c3u) 5 cordh3 10 0 0
+deco c4u( 5 - 10 0 0
+deco c4u) 5 cordh4 10 0 0
+deco c5u( 5 - 10 0 0
+deco c5u) 5 cordh5 10 0 0
+deco c6u( 5 - 10 0 0
+deco c6u) 5 cordh6 10 0 0
+%corde avec trait en bas
+deco c1d( 7 - 0 0 0
+deco c1d) 7 cordb1 0 0 0
+deco c2d( 7 - 0 0 0
+deco c2d) 7 cordb2 0 0 0
+deco c3d( 7 - 0 0 0
+deco c3d) 7 cordb3 0 0 0
+deco c4d( 7 - 0 0 0
+deco c4d) 7 cordb4 0 0 0
+deco c5d( 7 - 0 0 0
+deco c5d) 7 cordb5 0 0 0
+deco c6d( 7 - 0 0 0
+deco c6d) 7 cordb6 0 0 0
+% =================================================
+%	deco D.C. 3 dacs 16 10 10 D.C. 
+%	deco D.S. 3 dacs 16 10 10 D.S. 
+%	deco fine 3 dacs 16 10 10 FINE
+%	deco arpeggio 2 arp 12 10 0
+% added and modified arpeggios
+	deco arp 2 arp 12 10 0
+ 	deco arpu 2 arpu 0 0 0 
+ 	deco arpd 2 arpd 0 0 0 
+ 	deco biarp 2 biarp 0 0 0 
+ 	deco arps 2 arps 0 0 0 
+ 	deco arpe 2 arpe 0 0 0 
+ 	deco rasgu 2 rasgu 0 0 0 
+ 	deco rasgd 2 rasgd 0 0 0 
+% cresc and dim graphics and text & coda
+%	deco <( 7 - 18 0 0 
+%	deco <) 7 cresc 18 0 0 
+%	deco >( 7 - 18 0 0 
+%	deco >) 7 dim 18 0 0
+	deco dim 6 crdc 20 8 24 dim. 
+	deco cresc 6 crdc 20 8 24 cresc.
+	deco alcoda 3 dacs 20 0 0 al Coda 
+% added accents
+	deco v 3 vaccent 8 4 4
+	deco v. 3 vstc 8 4 4
+	deco > 0 acct 8 4 4
+	deco >. 0 acstc 13 4 4
+	deco _ 0 emb 5 2 2
+	deco _. 0 tenstc 13 4 4
+	deco >_ 0 acten 16 4 4
+% optional notes ( )
+	deco () 1 opnot 0 0 0
+	deco op 1 opchnot 0 0 0
+	deco opbrth 3 opbrth 0 0 0 
+% octavas
+	deco 8( 5 - 14 0 0 
+	deco 8) 5 octava 14 0 0 
+	deco 15( 5 - 14 0 0 
+	deco 15) 5 octava+ 14 0 0 
+	deco 8b( 7 - 8 0 0 
+	deco 8b) 7 octavab 8 0 0
+% gliss
+	deco -( 1 - 0 0 0 
+	deco -) 1 gliss 0 0 0 
+	deco gt( 1 - 0 0 0 
+	deco gt) 1 glist 0 0 0 
+	deco - 1 glissup 0 2 10 
+	deco gdwn 1 glissdn 0 2 10 
+	deco wav 3 wave 8 0 0
+% ficta
+	deco # 3 fictasharp 8 0 0 
+	deco b 3 fictaflat 8 0 0 
+	deco = 3 fictanatural 8 0 0
+% long trill
+	deco tr( 5 - 11 0 0 
+	deco tr) 5 trtrill 11 0 0 
+% diverse brackets
+deco brkuu( 5 - 12 0 0 
+deco brkuu) 5 brkuu 12 0 0
+deco brku( 5 - 17 0 0 
+deco brku) 5 brku 17 0 0
+deco agruu( 5 - 12 0 0 
+deco agruu) 5 agrfuu 12 0 0
+deco agru( 5 - 17 0 0 
+deco agru) 5 agrfu 17 0 0
+deco agrd( 7 - 12 0 0 
+deco agrd) 7 agrfd 12 0 0
+deco agrdd( 7 - 12 0 0 
+deco agrdd) 7 agrfdd 12 0 0
+deco brkd( 7 - 12 0 0 
+deco brkd) 7 agrfd 12 0 0
+deco brkdd( 7 - 12 0 0 
+deco brkdd) 7 agrfdd 12 0 0
+deco brakket 2 brakket 6 0 0
+	deco cjia( 5 - 3 0 0
+	deco cjia) 5 cjia 3 0 0
+	deco cjib( 5 - 3 0 0 
+	deco cjib) 5 cjib 3 0 0 
+	deco barrf 2 barrf 0 0 0 
+% added fermatas
+	deco sqf 3 sqf 12 5 5 
+	deco htf 3 htf 12 5 5 
+	deco kurtag 3 kurtag 8 0 0 
+	deco kurtah 3 kurtah 8 0 0 
+% added ties
+	deco tiu 2 tiu 0 0 0 
+	deco tid 2 tid 0 0 0
+	deco ltiud 2 ltiud 0 0 0 
+	deco ltidd 2 ltidd 0 0 0
+	deco ltiua 2 ltiua 0 0 0 
+	deco ltida 2 ltida 0 0 0 
+	deco uti 3 uti 12 7 7 
+	deco tiru 0 tiru 0 0 0 
+	deco tird 0 tird 0 0 0
+% note-heads
+deco head-sb 0 shd 0 0 0
+deco head-sw 0 shdw 0 0 0
+	deco head-x 0 dsh0 0 0 0 
+	deco head-bdmd 0 bdmd 0 0 0 
+	deco head-wdmd 0 wdmd 0 0 0 
+	deco head-nail 0 nail 0 0 0 
+	deco head-btrg 0 btrg 0 0 0 
+	deco head-wtrg 0 wtrg 0 0 0 
+	deco head-pzfl 0 pzfl 0 0 0 
+	deco head-btg 0 btg 0 0 0 
+	deco head-wtg 0 wtg 0 0 0 
+	deco head-btgl 0 btgl 0 0 0 
+	deco head-wtgl 0 wtgl 0 0 0 
+	deco head-wkre 0 wkre 0 0 0 
+	deco head-bkre 0 bkre 0 0 0 
+	deco head-krex 0 krex 0 0 0 
+	deco head-krel 0 krel 0 0 0
+	deco head-ghost 0 wdrcl 0 0 0 
+	deco head-nil 0 ghost 0 0 0 
+	deco head-curvx 0 curvx 0 0 0 
+	deco head-star 0 etoil 0 0 0 
+	deco circx 4 circx 0 0 0 
+	deco head-blak 0 blak 0 0 0
+	deco head-bround 0 bround 0 0 0
+ 	deco head-blakpt 0 blakpt 0 0 0
+	deco head-blch 0 blch 0 0 0
+ 	deco head-blchpt 0 blchpt 0 0 0 
+	deco head-whol 0 whol 0 0 0
+	deco sprgs 1 sprgs 0 0 0 
+	deco eolien 1 eolien 0 0 0 
+% diverse
+deco 5b 6 5b 8 4 4
+ 	deco hbar 3 hbar 0 0 0 
+	deco pedal( 7 - 5 0 0 
+	deco pedal) 7 pedal 5 0 0
+	deco ped 6 ped 20 0 0 
+	deco ped-end 6 pedoff 20 0 0 
+	deco espr 6 espr 6 0 0
+	deco et 4 circx 0 0 0
+	deco tok 3 tok 14 3 3
+	deco brz 0 brz 0 0 0 
+	deco mdb 2 mdb 0 0 0 
+	deco mgb 2 mgb 0 0 0 
+	deco mdc 2 mdc 0 0 0 
+	deco mgc 2 mgc 0 0 0 
+	deco brp 2 brp 0 0 0 
+	deco esys 7 debsys 0 0 0 
+%	deco invisible 32 0 0 0 0 
+	deco brd 2 brd 0 0 0
+% dynamiques
+	deco f 6 pf 18 4 4 
+	deco ff 6 pf 18 5 11 
+	deco fff 6 pf 18 7 17 
+	deco ffff 6 pf 18 8 24 
+	deco mf 6 pf 18 5 11 
+	deco mp 6 pf 18 5 11
+	deco p 6 pf 18 5 11
+	deco pp 6 pf 18 5 11
+	deco ppp 6 pf 18 5 11
+	deco pppp 6 pf 18 5 11
+	deco mfp 6 pf 18 5 11 mfp 
+	deco mfpp 6 pf 18 5 11 mfpp
+	deco fp 6 pf 18 5 11 fp 
+	deco fpp 6 pf 18 5 11 fpp 
+	deco ffp 6 pf 18 5 11 ffp 
+	deco fffp 6 pf 18 5 11 fffp 
+	deco fffpp 6 pf 18 5 11 fffpp 
+	deco ffpp 6 pf 18 5 11 ffpp 
+	deco fmp 6 pf 18 5 11 fmp 
+	deco ffmp 6 pf 18 5 11 ffmp 
+	deco fffmp 6 pf 18 5 11 fffmp
+	deco smfp 6 apx 18 5 11 mfp 
+	deco smfpp 6 apx 18 5 11 mfpp
+	deco sfp 6 apx 18 5 11 fp 
+	deco sfpp 6 apx 18 5 11 fpp 
+	deco sffp 6 apx 18 5 11 ffp 
+	deco sfffp 6 apx 18 5 11 fffp 
+	deco sfffpp 6 apx 18 5 11 fffpp 
+	deco sffpp 6 apx 18 5 11 ffpp 
+	deco sfmp 6 apx 18 5 11 fmp 
+	deco sffmp 6 apx 18 5 11 ffmp 
+	deco sfffmp 6 apx 18 5 11 fffmp
+deco (ppp-pp) 6 apf 20 8 16 ppp-pp 
+deco (pp-p) 6 apf 20 8 16 pp-p 
+deco (p-mp) 6 apf 20 8 16 p-mp
+deco (mp-mf) 6 apf 20 8 16 mp-mf 
+deco (mf-f) 6 apf 20 8 16 mf-f
+deco (f-ff) 6 apf 20 8 16 f-ff
+	deco (pppp) 6 apf 20 8 16 pppp 
+	deco (ppp) 6 apf 20 8 16 ppp 
+	deco (pp) 6 apf 20 8 16 pp 
+	deco (p) 6 apf 20 8 16 p 
+	deco (mp) 6 apf 20 8 16 mp 
+	deco (mf) 6 apf 20 8 16 mf 
+	deco (f) 6 apf 20 8 16 f 
+	deco (ff) 6 apf 20 8 24 ff 
+	deco (fff) 6 apf 20 8 24 fff 
+	deco (ffff) 6 apf 20 8 24 ffff 
+	deco sffff 6 apx 20 8 24 ffff 
+	deco sfff 6 apx 20 8 24 fff 
+	deco sff 6 apx 20 8 24 ff 
+	deco sf 6 apx 20 8 24 f 
+	deco smf 6 apx 20 8 24 mf 
+	deco smp 6 apx 20 8 24 mp 
+	deco smpz 6 apz 20 8 24 mp 
+	deco smfz 6 apz 20 8 24 mf 
+	deco sfz 6 sfz 20 8 24 f 
+	deco sffz 6 apz 20 8 24 ff 
+	deco sfffz 6 apz 20 8 24 fff 
+	deco sffffz 6 apz 20 8 24 ffff 
+	deco pip 6 piu 20 8 24 p
+	deco pif 6 piu 20 8 24 f
+	deco mnp 6 meno 20 8 24 p
+	deco mnf 6 meno 20 8 24 f
+	deco pipp 6 piu 20 8 24 pp
+	deco piff 6 piu 20 8 24 ff
+	deco mnpp 6 meno 20 8 24 pp
+	deco mnff 6 meno 20 8 24 ff
+% positions sans trait
+	deco pI 3 bpos 15 3 3 p I°
+	deco pII 3 bpos 15 3 3 p II°
+	deco pIII 3 bpos 15 3 3 p III°
+	deco pIV 3 bpos 15 3 3 p IV°
+	deco pV 3 bpos 15 3 3 p V°
+	deco pVI 3 bpos 15 3 3 p VI°
+	deco pVII 3 bpos 15 3 3 p VII°
+	deco pVIII 3 bpos 15 3 3 p VIII°
+	deco pIX 3 bpos 15 3 3 p IX°
+	deco pX 3 bpos 15 3 3 p X°
+	deco pXI 3 bpos 15 3 3 p XI°
+	deco pXII 3 bpos 15 3 3 p XII°
+	deco pXIII 3 bpos 15 3 3 p XIII°
+	deco pXIV 3 bpos 15 3 3 p XIV°
+% positions avec trait
+	deco pI( 5 - 24 0 0 
+	deco pI) 5 lpos1 27 0 0 
+	deco pII( 5 - 24 0 0 
+	deco pII) 5 lpos2 27 0 0 
+	deco pIII( 5 - 24 0 0 
+	deco pIII) 5 lpos3 27 0 0 
+	deco pIV( 5 - 24 0 0 
+	deco pIV) 5 lpos4 27 0 0 
+	deco pV( 5 - 24 0 0 
+	deco pV) 5 lpos5 27 0 0 
+	deco pVI( 5 - 24 0 0 
+	deco pVI) 5 lpos6 27 0 0 
+	deco pVII( 5 - 24 0 0 
+	deco pVII) 5 lpos7 27 0 0 
+	deco pVIII( 5 - 24 0 0 
+	deco pVIII) 5 lpos8 27 0 0 
+	deco pIX( 5 - 24 0 0 
+	deco pIX) 5 lpos9 27 0 0 
+	deco pX( 5 - 24 0 0 
+	deco pX) 5 lpos10 27 0 0 
+	deco pXI( 5 - 24 0 0 
+	deco pXI) 5 lpos11 27 0 0 
+	deco pXII( 5 - 24 0 0 
+	deco pXII) 5 lpos12 27 0 0
+	deco pXIII( 5 - 24 0 0 
+	deco pXIII) 5 lpos13 27 0 0
+	deco pXIV( 5 - 24 0 0 
+	deco pXIV) 5 lpos14 27 0 0
+% - GRANDS BARRES
+	deco I( 5 - 24 0 0 
+	deco I) 5 pos1 27 0 0 
+	deco II( 5 - 24 0 0 
+	deco II) 5 pos2 27 0 0 
+	deco III( 5 - 24 0 0 
+	deco III) 5 pos3 27 0 0 
+	deco IV( 5 - 24 0 0 
+	deco IV) 5 pos4 27 0 0 
+	deco V( 5 - 24 0 0 
+	deco V) 5 pos5 27 0 0 
+	deco VI( 5 - 24 0 0 
+	deco VI) 5 pos6 27 0 0 
+	deco VII( 5 - 24 0 0 
+	deco VII) 5 pos7 27 0 0 
+	deco VIII( 5 - 24 0 0 
+	deco VIII) 5 pos8 27 0 0 
+	deco IX( 5 - 24 0 0 
+	deco IX) 5 pos9 27 0 0 
+	deco X( 5 - 24 0 0 
+	deco X) 5 pos10 27 0 0 
+	deco XI( 5 - 24 0 0 
+	deco XI) 5 pos11 27 0 0 
+	deco XII( 5 - 24 0 0 
+	deco XII) 5 pos12 27 0 0 
+% - demi-barrés
+deco /I( 5 - 24 0 0
+deco /I) 5 hpos1 27 0 0
+deco /II( 5 - 24 0 0
+deco /II) 5 hpos2 27 0 0
+deco /III( 5 - 24 0 0
+deco /III) 5 hpos3 27 0 0
+deco /IV( 5 - 24 0 0
+deco /IV) 5 hpos4 27 0 0
+deco /V( 5 - 24 0 0
+deco /V) 5 hpos5 27 0 0
+deco /VI( 5 - 24 0 0
+deco /VI) 5 hpos6 27 0 0
+deco /VII( 5 - 24 0 0
+deco /VII) 5 hpos7 27 0 0
+deco /VIII( 5 - 24 0 0
+deco /VIII) 5 hpos8 27 0 0
+deco /IX( 5 - 24 0 0
+deco /IX) 5 hpos9 27 0 0
+deco /X( 5 - 24 0 0
+deco /X) 5 hpos10 27 0 0
+deco /XI( 5 - 24 0 0
+deco /XI) 5 hpos11 27 0 0
+deco /XII( 5 - 24 0 0
+deco /XII) 5 hpos12 27 0 0
+deco /XIII( 5 - 24 0 0
+deco /XIII) 5 hpos13 27 0 0
+deco /XIV( 5 - 24 0 0
+deco /XIV) 5 hpos14 27 0 0
+% -- 2/3 de barré
+deco //I( 5 - 24 0 0
+deco //I) 5 trpos1 27 0 0
+deco //II( 5 - 24 0 0
+deco //II) 5 trpos2 27 0 0
+deco //III( 5 - 24 0 0
+deco //III) 5 trpos3 27 0 0
+deco //IV( 5 - 24 0 0
+deco //IV) 5 trpos4 27 0 0
+deco //V( 5 - 24 0 0
+deco //V) 5 trpos5 27 0 0
+deco //VI( 5 - 24 0 0
+deco //VI) 5 trpos6 27 0 0
+deco //VII( 5 - 24 0 0
+deco //VII) 5 trpos7 27 0 0
+deco //VIII( 5 - 24 0 0
+deco //VIII) 5 trpos8 27 0 0
+deco //IX( 5 - 24 0 0
+deco //IX) 5 trpos9 27 0 0
+deco //X( 5 - 24 0 0
+deco //X) 5 trpos10 27 0 0
+deco //XI( 5 - 24 0 0
+deco //XI) 5 trpos11 27 0 0
+deco //XII( 5 - 24 0 0
+deco //XII) 5 trpos12 27 0 0
+deco //XIII( 5 - 24 0 0
+deco //XIII) 5 trpos13 27 0 0
+deco //XIV( 5 - 24 0 0
+deco //XIV) 5 trpos14 27 0 0
+% ============= Lacerda deco-displacement ========================
+deco mu 3 tl_sobe 0 0 0 % U:u !mu!
+deco md 3 tl_desce 0 0 0 % U:v !md!
+deco ml 3 tl_esquerda 0 0 0 % U:l !ml!
+deco mr 3 tl_direita 0 0 0 % U:r !mr!
+deco rs 3 tl_RESETPOS 0 0 0 % U:q !rs!
+%
+deco 1p  3 tl_offset1  0 0 0
+deco 3p  3 tl_offset3  0 0 0
+deco 6p  3 tl_offset6  0 0 0
+deco 12p 3 tl_offset12 0 0 0
+% ================== USER deco-displacement
+user u !mu!
+user v !md!
+user l !ml!
+user r !mr!
+user q !rs!
+% ====================== header ========================
+pageheight 29.7cm
+pagewidth 21.0cm
+topmargin 0.8cm
+bootmargin 0.5cm
+leftmargin 0.9cm
+rightmargin 1.1cm
+titlespace 0cm
+subtitlespace 0cm
+composerspace 0.5cm
+measurenb 0
+indent 1.0cm
+freegchord 1
+timewarn 1
+slurheight 1.20
+footer "$F		"
+% ------------------fontes --------------
+font Bookman-Demi
+font AvantGarde
+font AvantGarde-Book
+font AvantGarde-BookOblique
+%------------------ texte et repères ------------------------
+textfont Helvetica 14
+setfont-1 Helvetica-Oblique 14
+setfont-2 Helvetica-Bold 14
+setfont-3 Helvetica-Bold-Oblique 14
+setfont-4 Times-New-Roman-Bold-Italic 14 %nuances dans le texte
+titlefont Helvetica-Bold 20
+titlecaps 0
+subtitlefont Helvetica-Narrow 20
+composerfont Helvetica-Narrow-Bold 20
+vocalfont Helvetica-Narrow 14
+partsfont Helvetica-Bold 22 box
+annotationfont Times-New-Roman-Italic-utf8 14
+gchordfont Times-New-Roman 11
+tempofont Times-New-Roman-Bold 16
+footerfont Courier 11
+%-------------------------------------------
+%stretchlast 0.9
+breakoneoln 0
+splittune 1
+%cancelkey
+dynalign 0
+%dynamic 2
+%volume 2
+setdefl true
+%========= end of ps.fmt ===================
