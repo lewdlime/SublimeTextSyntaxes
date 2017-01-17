@@ -48,8 +48,8 @@ contexts:
       push:
         - meta_content_scope: variable.parameter.directive.fmt
         - include: midi-keywords
-        - scope: constant.numeric.float.fmt
-          match: '(\d*(?:\.\d*)?)'
+        - scope: storage.type.numeric.fmt
+          match: '\b(\d*(?:\.\d*)?)(?!pt|in|cm)'
         - scope: constant.numeric.float.length-unit.fmt
           match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)'
         - match: '(?i)\b(true|false|yes|no|on|off)\b'
