@@ -891,23 +891,23 @@ beginps
 % ==================== numéros de cordes de guitare [glyphes utf8] ======================
 % (written by David Lacroix)
 % === corde haut
-/c1u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2460 ] glypharray grestore}!
-/c2u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2461 ] glypharray grestore}!
-/c3u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2462 ] glypharray grestore}!
-/c4u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2463 ] glypharray grestore}!
-/c5u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2464 ] glypharray grestore}!
-/c6u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2465 ] glypharray grestore}!
+/c1u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2460] glypharray grestore}!
+/c2u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2461] glypharray grestore}!
+/c3u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2462] glypharray grestore}!
+/c4u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2463] glypharray grestore}!
+/c5u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2464] glypharray grestore}!
+/c6u{gsave /DejaVuSans 14.0 selectfont M -7 2 RM .15 SGR [/uni2465] glypharray grestore}!
 % === corde bas
-/c1d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2460 ] glypharray grestore}!
-/c2d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2461 ] glypharray grestore}!
-/c3d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2462 ] glypharray grestore}!
-/c4d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2463 ] glypharray grestore}!
-/c5d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2464 ] glypharray grestore}!
-/c6d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2465 ] glypharray grestore}!
+/c1d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2460] glypharray grestore}!
+/c2d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2461] glypharray grestore}!
+/c3d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2462] glypharray grestore}!
+/c4d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2463] glypharray grestore}!
+/c5d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2464] glypharray grestore}!
+/c6d{gsave /DejaVuSans 14.0 selectfont M -7 -2 RM .15 SGR [/uni2465] glypharray grestore}!
 % === corde haut trait
 % -- 1
 /cordh1{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2460 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2460] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
 		12 add 0 RL
@@ -916,7 +916,7 @@ beginps
 				[] 0 setdash dlw grestore}!
 % -- 2
 /cordh2{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2461 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2461] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
 		12 add 0 RL
@@ -925,7 +925,7 @@ beginps
 				[] 0 setdash dlw grestore}!
 % -- 3
 /cordh3{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2462 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2462] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
 		12 add 0 RL
@@ -934,7 +934,7 @@ beginps
 				[] 0 setdash dlw grestore}!
 % -- 4
 /cordh4{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2463 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2463] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
 		12 add 0 RL
@@ -943,7 +943,7 @@ beginps
 				[] 0 setdash dlw grestore}!
 % -- 5
 /cordh5{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2464 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2464] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
 		12 add 0 RL
@@ -952,7 +952,7 @@ beginps
 				[] 0 setdash dlw grestore}!
 % -- 6
 /cordh6{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2465 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2465] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{8 add M 0 0 RL}{M}ifelse
 		12 add 0 RL
@@ -962,7 +962,7 @@ beginps
 %=== corde bas trait
 %-- 1
 /cordb1{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2460 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2460] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
 		12 add 0 RL
@@ -971,7 +971,7 @@ beginps
 				[] 0 setdash dlw grestore}!
 %-- 2
 /cordb2{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2461 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2461] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
 		12 add 0 RL
@@ -980,7 +980,7 @@ beginps
 				[] 0 setdash dlw grestore}!
 %-- 3
 /cordb3{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2462 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2462] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
 		12 add 0 RL
@@ -989,7 +989,7 @@ beginps
 				[] 0 setdash dlw grestore}!
 %-- 4
 /cordb4{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2463 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2463] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
 		12 add 0 RL
@@ -1007,7 +1007,7 @@ beginps
 				[] 0 setdash dlw grestore}!
 %-- 6
 /cordb6{
-	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2465 ] glypharray
+	gsave exch -6 add exch 2 copy /DejaVuSans 14.0 selectfont M 0 1 RM .15 SGR [/uni2465] glypharray
 		exch 12 add exch 0.2 SLW
 		defl 1 and 0 eq{3.5 add M 0 0 RL}{M}ifelse
 		12 add 0 RL

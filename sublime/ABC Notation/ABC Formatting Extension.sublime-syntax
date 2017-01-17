@@ -1,65 +1,86 @@
 %YAML 1.2
 ---
-# See http://www.sublimetext.com/docs/3/syntax.html
+name: ABC Formatting Extension
 file_extensions:
   - fmt
 scope: source.fmt
+
 variables:
   field_value: '[^%\n\r]'
 
 contexts:
-  main:
+  prototype:
     - include: comments
-    - include: embedded-content
+
+  main:
     - include: directive
+    - include: embedded-content
 
   comments:
-    # line comments
-    - match: '(?:^\s*)?(%(?!%|abc))'
+    - match: '(?:^\s*)?(%(?!abc))'
       captures:
         1: punctuation.definition.comment.fmt
       push:
         - meta_scope: comment.line.percentage.fmt
         - match: $
           pop: true
-    # namespace comment
     - match: '(?:^\s*)?(?>(%)(abc(?:-\d\.\d)?))'
       scope: comment.line.namespace.fmt
       captures:
         1: punctuation.definition.comment.fmt
         2: keyword.other.special-method.namespace.fmt
 
+  escape:
+    - scope: constant.character.escape.fmt
+      match: (\\(?:\\|%|[^ \n\r]|u\h{4}|u\h{8}|\\[[:punct:]&&[\w]&&[^[ \t\v\f]]]{2}))
+    - scope: constant.character.escape.fmt
+      match: '(?:&\w+;)'
+    - scope: constant.character.escape.fmt
+      match: '(?:&#\d+;)'
+    - scope: constant.character.escape.fmt
+      match: '(?:&#x\h+;)'
+
   directive:
-    - match: '(^\s*(?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps)\w+)\b'
-      scope: meta.directive.abc comment.line.percentage.directive.fmt
+    - match: '^\s*((?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps)\w+)\b'
+      scope: meta.directive.abc
       captures:
         1: keyword.operator.word.directive.fmt
       push:
         - meta_content_scope: variable.parameter.directive.fmt
         - include: midi-keywords
+        - scope: constant.numeric.float.fmt
+          match: '(\d*(?:\.\d*)?)'
         - scope: constant.numeric.float.length-unit.fmt
           match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)'
         - match: '(?i)\b(true|false|yes|no|on|off)\b'
           scope: storage.type.directive.fmt
-        # TODO: include more keywords to be highlighted
-        - match: '^\s*(%(?!%|abc))'
-          captures:
-            1: punctuation.definition.comment.fmt
-          push:
-            - meta_scope: comment.line.percentage.fmt
-            - match: $
-              pop: true
+        - include: comments
         - match: $
           pop: true
     - comment: Inline Postscript Instructions
-      match: '^\s*(postscript|ps)\b'
+      match: '(%%)\s*(postscript|ps)\b'
       captures:
-        1: support.function.directive.fmt
-      set: 'scope:source.ps'
+        1: comment.line.percentage.fmt
+        2: support.function.directive.fmt
+      push: 'scope:source.ps'
       with_prototype:
+        - include: comments
         - match: $
           pop: true
-        - include: comments
+
+  midi-keywords:
+    - scope: keyword.operator.word.directive.midi.fmt
+      match: |-
+        (?x)
+          (MIDI\b +
+            (?:no)?barlines|bassprog|(?:no)?beataccents|beat(?:mod|string)?|
+            bend(?:velocity|string)|chord(?:attack|name|program)|
+            control(?:combo|string)?|deltaloudness|droneo(?:n|ff)|
+            drum(?:on|off|bars|map)|expand|fermata(?:fixed|proportional)?|
+            gchord(?:on|off)?|grace(?:divider)?|makechordchannels|pitchbend|
+            portamento|program|ptstress|randomchordattack|ratio|stressmodel|
+            snt|rtranspose|temperament(?:linear|equal|normal)|transpose|
+            trim|vol(inc)?)\b
 
   embedded-content:
     - comment: Typeset Text
@@ -113,7 +134,7 @@ contexts:
       captures:
         1: support.function.directive.fmt
         2: variable.parameter.directive.fmt
-      set: 'scope:source.ps'
+      push: 'scope:source.ps'
       with_prototype:
         - include: comments
         - match: '^\s*(endps)'
@@ -135,17 +156,4 @@ contexts:
           captures:
             1: support.function.directive.fmt
           pop: true
-
-  midi-keywords:
-    - scope: keyword.operator.word.directive.midi.fmt
-      match: |-
-        (?x)
-          (MIDI\b +
-            (?:no)?barlines|bassprog|(?:no)?beataccents|beat(?:mod|string)?|
-            bend(?:velocity|string)|chord(?:attack|name|program)|
-            control(?:combo|string)?|deltaloudness|droneo(?:n|ff)|
-            drum(?:on|off|bars|map)|expand|fermata(?:fixed|proportional)?|
-            gchord(?:on|off)?|grace(?:divider)?|makechordchannels|pitchbend|
-            portamento|program|ptstress|randomchordattack|ratio|stressmodel|
-            snt|rtranspose|temperament(?:linear|equal|normal)|transpose|
-            trim|vol(inc)?)\b
+...
