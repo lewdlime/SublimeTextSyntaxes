@@ -281,7 +281,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>^\s*(beginps)(\s+(?:nosvg))?\b</string>
+					<string>^\s*(beginps)(\s+(?:nosvg))?</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -297,6 +297,8 @@
 					</dict>
 					<key>comment</key>
 					<string>Embedded PostScript</string>
+					<key>contentName</key>
+					<string>source.postscript</string>
 					<key>end</key>
 					<string>^\s*(endps)</string>
 					<key>endCaptures</key>
@@ -315,10 +317,6 @@
 							<key>include</key>
 							<string>source.postscript</string>
 						</dict>
-						<dict>
-							<key>include</key>
-							<string>#comments</string>
-						</dict>
 					</array>
 				</dict>
 				<dict>
@@ -335,7 +333,7 @@
 					<key>comment</key>
 					<string>Embedded Markdown</string>
 					<key>end</key>
-					<string>^\s*(endmd)</string>
+					<string>^\s*(endmd)\b</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>

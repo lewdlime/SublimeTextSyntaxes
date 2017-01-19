@@ -102,21 +102,21 @@ repository:
           - include: '#comments'
       - comment: Embedded PostScript
         name: meta.ps.abc
-        begin: '^\s*(beginps)(\s+(?:nosvg))?\b'
+        begin: '^\s*(beginps)(\s+(?:nosvg))?'
         beginCaptures:
           '1': {name: support.function.directive.abc}
           '2': {name: variable.parameter.directive.abc}
+        contentName: source.postscript
         end: '^\s*(endps)'
         endCaptures:
           '1': {name: support.function.directive.abc}
         patterns:
           - include: source.postscript
-          - include: '#comments'
       - comment: Embedded Markdown
         begin: '^\s*(beginmd)\b'
         beginCaptures:
           '1': {name: support.function.directive.abc}
-        end: '^\s*(endmd)'
+        end: '^\s*(endmd)\b'
         endCaptures:
           '1': {name: support.function.directive.abc}
         patterns:
