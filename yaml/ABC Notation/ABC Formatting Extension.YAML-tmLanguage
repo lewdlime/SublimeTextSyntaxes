@@ -1,0 +1,135 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: ABC Formatting Extension
+scopeName: source.fmt
+fileTypes: ['fmt']
+uuid: 972d5050-f5bb-4d36-b94e-b00079652038
+
+patterns:
+  - include: '#comments'
+  - include: '#directive'
+  - include: '#embedded-content'
+
+repository:
+  comments:
+    patterns:
+      - name: comment.line.percentage.fmt
+        begin: '(?:^\s*)?(%(?!abc))'
+        beginCaptures:
+          '1': {name: punctuation.definition.comment.fmt}
+        end: $
+      - name: comment.line.namespace.fmt
+        match: '(?:^\s*)?(?>(%)(abc(?:-\d\.\d)?))'
+        captures:
+          '1': {name: punctuation.definition.comment.fmt}
+          '2': {name: keyword.other.special-method.namespace.fmt}
+
+  directive:
+    name: meta.directive.abc
+    begin: '^\s*((?!(?:begin|end(?:text|svg|ps|js|md|ml))|postscript|ps)\w*)\b'
+    beginCaptures:
+      '1': {name: keyword.operator.word.directive.abc}
+    contentName: variable.parameter.directive.abc
+    end: $
+    patterns:
+      # MIDI keywords
+      - name: keyword.operator.word.directive.midi.abc
+        match: |-
+          (?x)
+            (MIDI +
+              (?:no)?barlines|bassprog|(?:no)?beataccents|beat(?:mod|string)?|
+              bend(?:velocity|string)|chord(?:attack|name|program)|
+              control(?:combo|string)?|deltaloudness|droneo(?:n|ff)|
+              drum(?:on|off|bars|map)|expand|fermata(?:fixed|proportional)?|
+              gchord(?:on|off)?|grace(?:divider)?|makechordchannels|pitchbend|
+              portamento|program|ptstress|randomchordattack|ratio|stressmodel|
+              snt|rtranspose|temperament(?:linear|equal|normal)|transpose|
+              trim|vol(inc)?)\b
+      - name: constant.numeric.float.length-unit.abc
+        match: '(\d*(?:\.\d*)?(?:pt|in|cm)?)'
+      - name: storage.type.directive.abc
+        match: '(?i)\b(true|false|yes|no|on|off)\b'
+      # TODO: include more keywords to be highlighted
+      - include: '#comments'
+
+  embedded-content:
+    patterns:
+      - comment: Typeset Text
+        name: meta.typeset.abc
+        begin: '^\s*(begintext)\b(\s+(?:obeylines|fill|ragged|justify|align|skip))?\b'
+        beginCaptures:
+          '1': {name: support.function.directive.abc}
+          '2': {name: variable.parameter.directive.abc}
+        contentName: string.unquoted.typeset.abc
+        end: '^\s*(endtext)'
+        endCaptures:
+          '1': {name: support.function.directive.abc}
+        patterns:
+          - include: '#comments'
+      - comment: Embedded HTML
+        name: meta.html.abc
+        begin: '^\s*(beginml)\b'
+        beginCaptures:
+          '1': {name: support.function.directive.abc}
+        end: '^\s*(endml)'
+        endCaptures:
+          '1': {name: support.function.directive.abc}
+        patterns:
+          - include: text.html.basic
+          - include: '#comments'
+      - comment: Embedded JavaScript
+        name: meta.js.abc
+        begin: '^\s*(beginjs)\b'
+        beginCaptures:
+          '1': {name: support.function.directive.abc}
+        end: '^\s*(endjs)'
+        endCaptures:
+          '1': {name: support.function.directive.abc}
+        patterns:
+          - include: source.js
+          - include: '#comments'
+      - comment: Embedded SVG
+        name: meta.svg.abc
+        begin: '^\s*(beginsvg)\b'
+        beginCaptures:
+          '1': {name: support.function.directive.abc}
+        end: '^\s*(endsvg)'
+        endCaptures:
+          '1': {name: comment.line.percentage.abc}
+          '2': {name: support.function.directive.abc}
+        patterns:
+          - include: text.xml
+          - include: '#comments'
+      - comment: Embedded PostScript
+        name: meta.ps.abc
+        begin: '^\s*(beginps)(\s+(?:nosvg))?\b'
+        beginCaptures:
+          '1': {name: support.function.directive.abc}
+          '2': {name: variable.parameter.directive.abc}
+        end: '^\s*(endps)'
+        endCaptures:
+          '1': {name: support.function.directive.abc}
+        patterns:
+          - include: source.postscript
+          - include: '#comments'
+      - comment: Embedded Markdown
+        begin: '^\s*(beginmd)\b'
+        beginCaptures:
+          '1': {name: support.function.directive.abc}
+        end: '^\s*(endmd)'
+        endCaptures:
+          '1': {name: support.function.directive.abc}
+        patterns:
+          - include: text.html.markdown
+          - include: '#comments'
+      - comment: Inline Postscript Instructions
+        patterns:
+          - name: meta.ps.abc
+            begin: '^\s*(postscript|ps)\b'
+            beginCaptures:
+              '1': {name: support.function.directive.abc}
+            end: $
+            patterns:
+              - include: source.postscript
+              - include: '#comments'
+...
